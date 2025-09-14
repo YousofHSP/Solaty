@@ -1,0 +1,120 @@
+﻿@page "/Setting/Index"
+@using Common.Utilities
+@using Domain.Entities
+@using global::Shared.DTOs
+@rendermode InteractiveServer
+
+<PageTitle>لیست تنظیمات</PageTitle>
+
+<SettingModal Done="DoneForm" ModalTitle="@_modalTitle" Data="_data" />
+
+@if (_isLoading)
+{
+    <LoadingList></LoadingList>
+}
+else
+{
+    <div class="flex gap-3 mb-5">
+        <label class="input w-1/3">
+            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </g>
+            </svg>
+            <input type="search" @oninput="OnSearchChanged" required placeholder="جستجو..." />
+        </label>
+    </div>
+
+    <div class="sm:overflow-visible overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+        <table class="table table-zebra">
+            <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>@(ModelExtensions.ToDisplay<SettingResDto>(i => i.Description))</th>
+                <th>@(ModelExtensions.ToDisplay<SettingResDto>(i => i.Value))</th>
+                <th>@(ModelExtensions.ToDisplay<SettingResDto>(i => i.IsSecurity))</th>
+                <th>@(ModelExtensions.ToDisplay<SettingResDto>(i => i.Enable))</th>
+                <th>عملیات</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                var index = 0;
+            }
+            @foreach (var item in _list)
+            {
+                <tr>
+                    <td class="w-14 text-center">@(++index)</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <span class="cursor-pointer text-blue-600"
+                              @onclick='() => ShowFullText(item.Value, "مقدار")'>
+                            @(item.Value?.Length > 20 ? item.Value.Substring(0, 20) + "…" : item.Value)
+                        </span>
+                    </td>
+                    <td>@(item.IsSecurity == 1 ? "بله" : "خیر")</td>
+                    <td>
+                        @if (!item.Enable)
+                        {
+                            <div class="inline-grid *:[grid-area:1/1]">
+                                <div class="status status-error animate-ping"></div>
+                                <div class="status status-error"></div>
+                            </div>
+                            <span>غیرفعال</span>
+                        }
+                        else
+                        {
+                            <div class="inline-grid *:[grid-area:1/1]">
+                                <div class="status status-success animate-ping"></div>
+                                <div class="status status-success"></div>
+                            </div>
+                            <span>فعال</span>
+                        }
+                    </td>
+                    <td class="w-14 text-center">
+                        <div class="dropdown dropdown-left">
+                            <div tabindex="0" role="button" class="btn btn-sm btn-ghost">⋮</div>
+                            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 p-1 w-32 shadow">
+                                <li>
+                                    <button type="button" @onclick="() => ShowEditModal(item)">ویرایش</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <Pagination Page="_indexDto.Page" Limit="_indexDto.Limit" Total="_total" PageChanged="PageChanged"></Pagination>
+}
+<!-- Modal -->
+@if (_showModal)
+{
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg w-1/2 p-4">
+            <h3 class="font-bold mb-2">@_modalTitle</h3>
+            <div class="whitespace-pre-wrap break-words max-h-96 overflow-auto border p-2 rounded">
+                @_modalText
+            </div>
+            <div class="mt-4 flex justify-end">
+                <button class="btn btn-sm" @onclick="() => _showModal = false">بستن</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool _showModal = false;
+    private string? _modalText;
+    private string? _modalTitleText;
+
+    private void ShowFullText(string? text, string title)
+    {
+        _modalText = text;
+        _modalTitleText = title;
+        _showModal = true;
+    }
+}

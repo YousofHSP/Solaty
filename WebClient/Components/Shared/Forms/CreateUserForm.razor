@@ -1,0 +1,16 @@
+<div>
+    <input @bind="_firstName">
+    <input @bind="_lastName">
+</div>
+
+@code {
+    private string _firstName = "";
+    private string _lastName = "";
+    [Parameter] public EventCallback<string> Done { get; set; }
+
+    private async Task HandleForm()
+    {
+        await Done.InvokeAsync("done");
+
+    }
+}

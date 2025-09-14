@@ -1,0 +1,32 @@
+@page "/License"
+@using WebClient.Components.Layout
+@using WebClient.Services.Common
+@using WebClient.Services.Components
+@layout AuthLayout
+@inject IBaseService BaseService
+@inject ToastService ToastService
+@rendermode InteractiveServer
+
+<div class="p-32 grid grid-cols-2 gap-2">
+    <img src="images/undraw_warning_tl76.svg" alt="" width="500">
+    <span class="text-5xl font-bold">لایسنس معتبر نیست</span>
+</div>
+
+<div>
+    <input type="text" @bind="_days" class="input">
+    <LoadingBtn OnClick="SetLicense" IsLoading="_isLoadingBtn"/>
+</div>
+@code {
+    private int _days;
+    private bool _isLoadingBtn;
+
+    private async Task SetLicense()
+    {
+        _isLoadingBtn = true;
+        var result = await BaseService.Post($"v1/System/SetLicense?days={_days}");
+        if(result)
+            ToastService.ShowSuccess("لایسنس تمدید شد");
+        _isLoadingBtn = false;
+    }
+
+}

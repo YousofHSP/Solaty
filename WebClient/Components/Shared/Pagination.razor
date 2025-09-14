@@ -1,0 +1,76 @@
+<div class="flex gap-2 items-end">
+    <div class="join mt-4">
+        @foreach (var p in GetPages())
+        {
+            if (p is int pageNum)
+            {
+                <button class="join-item btn @(pageNum == Page ? "btn-primary" : "")"
+                        @onclick="() => GoToPage(pageNum)">
+                    @pageNum
+                </button>
+            }
+            else
+            {
+                <button class="join-item btn btn-disabled">...</button>
+            }
+        }
+    </div>
+    <select class="select w-32" value="@Limit" @onchange="OnLimitChanged">
+        <option value="10" selected>10</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select>
+
+</div>
+
+@code {
+    [Parameter] public int Page { get; set; }
+    [Parameter] public int Limit { get; set; }
+    [Parameter] public int Total { get; set; }
+    [Parameter] public EventCallback<(int Page, int Limit)> PageChanged { get; set; }
+    private int TotalPage => (int)Math.Ceiling((double)Total / Limit);
+
+    private async Task OnLimitChanged(ChangeEventArgs e)
+    {
+        Limit = int.Parse(e.Value.ToString());
+        await GoToPage(Page); // صفحه فعلی رو رفرش کن
+    }
+
+    private List<object> GetPages()
+    {
+        var pages = new List<object>();
+
+        if (TotalPage <= 7) // صفحات کم، همه رو نمایش بده
+        {
+            for (int i = 1; i <= TotalPage; i++)
+                pages.Add(i);
+        }
+        else
+        {
+            pages.Add(1);
+
+            if (Page > 4)
+                pages.Add("...");
+
+            int start = Math.Max(2, Page - 1);
+            int end = Math.Min(TotalPage - 1, Page + 1);
+
+            for (int i = start; i <= end; i++)
+                pages.Add(i);
+
+            if (Page < TotalPage - 3)
+                pages.Add("...");
+
+            pages.Add(TotalPage);
+        }
+
+        return pages;
+    }
+
+    private async Task GoToPage(int page)
+    {
+        Page = page;
+        await PageChanged.InvokeAsync((Page, Limit));
+    }
+
+}

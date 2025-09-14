@@ -1,0 +1,82 @@
+﻿.page-transition {
+    animation: spinOut 0.6s ease-in-out forwards;
+}
+
+@keyframes spinOut {
+    0% {
+        opacity: 1;
+        transform: rotateY(0deg) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: rotateY(360deg) scale(0.8);
+    }
+}
+
+/* کپچا */
+.recaptcha-google-style {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between; /* متن و لوگو در دو طرف */
+    align-items: center;
+    border: 1px solid #d3d6db;
+    border-radius: 8px;
+    padding: 10px 12px;
+    max-width: 350px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    .recaptcha-google-style:hover {
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+    }
+
+/* بخش چک‌باکس + متن */
+.recaptcha-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* فاصله بین چک‌باکس و متن */
+}
+
+/* خود چک‌باکس */
+.recaptcha-box {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #5f6368;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+}
+
+/* متن "من ربات نیستم" */
+.recaptcha-label {
+    font-size: 14px;
+    color: #333;
+}
+
+/* بخش لوگو */
+.recaptcha-logo {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #555;
+}
+
+.recaptcha-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ccc;
+    border-top: 2px solid #4285f4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

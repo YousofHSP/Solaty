@@ -1,0 +1,218 @@
+@page "/User/Index"
+@using Common.Utilities
+@using Domain.Entities
+@using global::Shared.DTOs
+@using WebClient.Services.Components
+@rendermode InteractiveServer
+
+
+<PageTitle>لیست کاربران</PageTitle>
+
+<DeleteWarning OnClick="Delete"></DeleteWarning>
+<dialog class="modal" id="dataModal">
+    <div class="modal-box w-11/12 max-w-5xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute left-2 top-2">✕</button>
+        </form>
+        <h3 class="text-lg font-bold">@_userModalTitle</h3>
+
+        @if (_modalIsBusy)
+        {
+            <LoadingList></LoadingList>
+        }
+        else
+        {
+            <EditForm Model="@_data" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator/>
+                <div class="grid grid-cols-3 gap-4 mt-3">
+
+                    <fieldset class="fieldset w-full">
+                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.FirstName))</legend>
+                        <InputText @bind-Value="_data.FirstName" class="input" placeholder="نام را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.FirstName)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.LastName))</legend>
+                        <InputText @bind-Value="_data.LastName" class="input"
+                                   placeholder="نام خانوادگی را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.LastName)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.BirthDate))</legend>
+                        <InputText @bind-Value="_data.BirthDate" class="input" data-jdp
+                                   placeholder="تاریخ تولد را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.BirthDate)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.UserName))</legend>
+                        <InputText @bind-Value="_data.UserName" class="input"
+                                   placeholder="نام کاربری را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.UserName)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.Password))</legend>
+                        <InputText @bind-Value="_data.Password" type="password" class="input"
+                                   placeholder="رمزعبور را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.Password)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend
+                            class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.PhoneNumber))</legend>
+                        <InputText @bind-Value="_data.PhoneNumber" class="input" placeholder="موبایل را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.PhoneNumber)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend
+                            class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.NationalCode))</legend>
+                        <InputText @bind-Value="_data.NationalCode" class="input" placeholder="کدملی را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.NationalCode)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.Email))</legend>
+                        <InputText @bind-Value="_data.Email" type="email" class="input input-error"
+                                   placeholder="ایمیل را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.Email)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend
+                            class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.RoleIds))</legend>
+                        <InputSelectMultiple TItem="SelectDto" TValue="int"
+                                             Items="_roles"
+                                             Placeholder="انتخاب نقش"
+                                             ShowPlaceholder="true"
+                                             class="select select-bordered w-full"
+                                             @bind-Value="_data.RoleIds"/>
+                        <ValidationMessage For="@(() => _data.RoleIds)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.Status))</legend>
+                        <SelectInput @bind-Value="_data.Status" Options="@(EnumExtensions.ToSelectDto<UserStatus>())" />
+                        <ValidationMessage For="@(() => _data.Status)"></ValidationMessage>
+                    </fieldset>
+                </div>
+                <div class="modal-action">
+
+                    <form method="dialog">
+                        <button class="btn">بستن</button>
+                    </form>
+                    <LoadingBtn ButtonText="ثبت" CssClass="btn btn-primary" IsLoading="_isBusy"
+                                Type="submit"></LoadingBtn>
+                </div>
+            </EditForm>
+        }
+
+    </div>
+</dialog>
+@if (_isLoading)
+{
+    <LoadingList></LoadingList>
+}
+else
+{
+    <div class="flex gap-3">
+        <button class="btn btn-primary  mb-5" @onclick="ShowCreateModal">ایجاد</button>
+        <label class="input">
+            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-width="2.5"
+                    fill="none"
+                    stroke="currentColor"
+                >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </g>
+            </svg>
+            <input type="search" @oninput="OnSearchChanged" required placeholder="جسنجو"/>
+        </label>
+    </div>
+    <div class="sm:overflow-visible overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+        <table class="table table-zebra">
+            <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>پروفایل</th>
+                <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.FirstName))</th>
+                    <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.Roles))</th>
+                    <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.UserName))</th>
+                    <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.Status))</th>
+                <th>عملیات</th>
+            </tr>
+            </thead>
+            <tbody class="h-full">
+            @{
+                var index = 0;
+            }
+            @foreach (var item in _list)
+            {
+                <tr>
+                    <td class="w-14 text-center">@(++index)</td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="avatar">
+                                <div class="mask mask-squircle h-12 w-12">
+                                    <img
+                                        src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                                        alt="Avatar Tailwind CSS Component"/>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>@item.FirstName @item.LastName</td>
+                    <td>@item.Roles</td>
+                    <td>@item.UserName</td>
+                    <td>
+                        @if (item.Status == UserStatus.Disable)
+                        {
+                            <div class="inline-grid *:[grid-area:1/1]">
+                                <div class="status status-error animate-ping"></div>
+                                <div class="status status-error"></div>
+                            </div>
+                            <span>غیرفعال</span>
+                        }
+                        else if (item.Status == UserStatus.Imperfect)
+                        {
+                            <div class="inline-grid *:[grid-area:1/1]">
+                                <div class="status status-warning animate-ping"></div>
+                                <div class="status status-warning"></div>
+                            </div>
+                            <span>اطلاعات ناقص</span>
+                        }
+                        else
+                        {
+                            <div class="inline-grid *:[grid-area:1/1]">
+                                <div class="status status-success animate-ping"></div>
+                                <div class="status status-success"></div>
+                            </div>
+                            <span>فعال</span>
+                        }
+                    </td>
+
+                    <td class="w-14 text-center">
+                        <div class="dropdown dropdown-left">
+                            <div tabindex="0" role="button" class="btn btn-sm btn-ghost">⋮</div>
+                            <ul tabindex="0"
+                                class="dropdown-content menu bg-base-100 rounded-box z-50 p-1 w-32 shadow">
+                                <li>
+                                    <button type="button" @onclick="() => ShowEditModal(item.Id)">ویرایش</button>
+                                </li>
+                                <hr class="-mx-1 my-1">
+                                <li>
+                                    <button class="text-red-600 hover:bg-red-100" type="button"
+                                            @onclick="() => ShowDeleteWarning(item.Id)">حذف
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+            </tbody>
+        </table>
+    </div>
+    
+    <Pagination Page="_indexDto.Page" Limit="_indexDto.Limit" Total="_total" PageChanged="PageChanged"></Pagination>
+}
+

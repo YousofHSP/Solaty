@@ -1,0 +1,63 @@
+﻿/* حالت پیشفرض */
+#sidebar {
+    transition: all 0.3s ease;
+    min-width: 16rem; /* w-64 */
+    max-width: 16rem;
+    overflow: hidden;
+}
+
+/* حالت بسته */
+#layoutWrapper.sidebar-collapsed #sidebar {
+    min-width: 4rem;
+    max-width: 4rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+    /* متن و لوگو در حالت بسته مخفی شود */
+    #layoutWrapper.sidebar-collapsed #sidebar h2,
+    #layoutWrapper.sidebar-collapsed #sidebar .menu li a {
+        justify-content: center; /* فقط آیکون وسط بیاد */
+    }
+
+        #layoutWrapper.sidebar-collapsed #sidebar h2 span,
+        #layoutWrapper.sidebar-collapsed #sidebar .menu li a span {
+            display: none; /* متن‌ها مخفی */
+        }
+
+/* آیکون‌ها همیشه نمایش داده شوند */
+/*#sidebar svg {
+    min-width: 24px;
+    min-height: 24px;
+}*/
+
+/* ===== حالت اکتیو و هاور ===== */
+#sidebar .menu li a {
+    border-radius: 0.5rem; /* پیشفرض */
+    transition: all 0.2s ease;
+}
+
+
+        /* آیکون در حالت اکتیو/هاور بزرگ‌تر شود */
+        #sidebar .menu li a:hover svg,
+        #sidebar .menu li a.menu-active svg {
+            transform: scale(1.2);
+            transition: transform 0.2s ease;
+        }
+
+/* حالت رسپانسیو */
+@media (max-width: 768px) {
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 1000;
+        background: #fff;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    #layoutWrapper.sidebar-collapsed #sidebar {
+        transform: translateX(-100%);
+    }
+}

@@ -1,0 +1,55 @@
+﻿@using global::Shared.DTOs
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+@using WebClient.Services.Components
+
+<dialog class="modal" id="archiveModal">
+    <div class="modal-box w-96">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute left-2 top-2">✕</button>
+        </form>
+
+        <h3 class="text-lg font-bold">آرشیو جدید</h3>
+
+        @if (ModalIsBusy)
+        {
+            <LoadingList></LoadingList>
+        }
+        else
+        {
+            <EditForm Model="ArchiveRequest" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+                <fieldset class="fieldset w-full mt-3">
+                    <legend class="fieldset-legend">تاریخ آرشیو تا</legend>
+                    <InputText @bind-Value="ArchiveRequest.UntilDate"
+                               class="input"
+                               data-jdp
+                               placeholder="مثلاً 1404/01/01" />
+                    <ValidationMessage For="@(() => ArchiveRequest.UntilDate)"></ValidationMessage>
+                </fieldset>
+
+                <div class="modal-action">
+                    <form method="dialog">
+                        <button class="btn">بستن</button>
+                    </form>
+                    <LoadingBtn ButtonText="ثبت"
+                                CssClass="btn btn-primary"
+                                IsLoading="IsBusy"
+                                Type="submit">
+                    </LoadingBtn>
+                </div>
+            </EditForm>
+        }
+    </div>
+</dialog>
+
+@code {
+    // اگر نام دقیق DTO متفاوت است، نوع را مطابق پروژه‌ات اصلاح کن.
+    [Parameter] public ArchiveRequestDto ArchiveRequest { get; set; } = default!;
+    [Parameter] public bool ModalIsBusy { get; set; }
+    [Parameter] public bool IsBusy { get; set; }
+
+    // امضای OnValidSubmit در EditForm از نوع EventCallback<EditContext> است.
+    // اگر متد صفحه‌ات پارامتر نگیرد هم مشکلی نیست؛ Blazor هندل می‌کند.
+    [Parameter] public EventCallback<EditContext> OnValidSubmit { get; set; }
+}

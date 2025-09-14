@@ -1,0 +1,53 @@
+﻿@page "/Log/Audit"
+@using Common.Utilities
+@using Domain.Entities
+@using global::Shared.DTOs
+@using WebClient.Services.Components
+@rendermode InteractiveServer
+@inherits WebClient.Components.Pages.Log.AuditLogIndex
+
+<PageTitle>لاگ ممیزی</PageTitle>
+
+@if (_isLoading)
+{
+    <LoadingList></LoadingList>
+}
+else
+{
+    <div class="sm:overflow-visible overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+        <table class="table table-zebra">
+            <thead>
+                <tr>
+                    <th>ردیف</th>
+                    <th>@(ModelExtensions.ToDisplay<AuditDto>(i => i.CreatedDate))</th>
+                    <th>@(ModelExtensions.ToDisplay<AuditDto>(i => i.Ip))</th>
+                    <th>@(ModelExtensions.ToDisplay<AuditDto>(i => i.CurrentLink))</th>
+                    <th>@(ModelExtensions.ToDisplay<AuditDto>(i => i.ReferrerLink))</th>
+                    <th>@(ModelExtensions.ToDisplay<AuditDto>(i => i.Model))</th>
+                    <th>@(ModelExtensions.ToDisplay<AuditDto>(i => i.Method))</th>
+                    <th>@(ModelExtensions.ToDisplay<AuditDto>(i => i.UserId))</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var index = 0;
+                }
+                @foreach (var item in _list)
+                {
+                    <tr>
+                        <td>@(++index)</td>
+                        <td>@item.CreatedDate</td>
+                        <td>@item.Ip</td>
+                        <td>@item.CurrentLink</td>
+                        <td>@item.ReferrerLink</td>
+                        <td>@item.Model</td>
+                        <td>@item.Method</td>
+                        <td>@item.UserId</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <Pagination Page="_indexDto.Page" Limit="_indexDto.Limit" Total="_total" PageChanged="PageChanged"></Pagination>
+}

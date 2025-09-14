@@ -1,0 +1,35 @@
+﻿services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-lts
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "1qaz@WSX3edc"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+  api:
+    image: api
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    depends_on:
+      - sqlserver
+    environment:
+      - ConnectionStrings__Default=Server=sqlserver;Database=TenderDb;User Id=sa;Password=1qaz@WSX3edc;
+    ports:
+      - "5000:8080"
+
+  ui:
+    image: ui
+    build:
+      context: .
+      dockerfile: UI/Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "5001:8080"
+
+volumes:
+  sql_data:

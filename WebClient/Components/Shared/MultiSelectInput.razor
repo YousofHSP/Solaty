@@ -1,0 +1,171 @@
+@using System.Globalization
+@using System.Text.Json
+@using Common
+@typeparam TValue
+
+<div class="">
+    <button type="button" class="select" popovertarget="@_popoverId" style="anchor-name:@_anchorName">
+        @BtnText
+    </button>
+
+    <ul class="dropdown menu min-w-52 rounded-box bg-base-100 shadow-sm"
+        popover id="@_popoverId" style="position-anchor:@_anchorName">
+        <input type="text" class="input focus:outline-none"
+               placeholder="جستجو ..." @bind="_searchText" @bind:event="oninput"/>
+
+        <div style="max-height: 200px;" class="overflow-x-auto">
+
+            @foreach (var item in Options.Where(i => MatchesSearch(i.Title)).ToList())
+            {
+                <li>
+
+                    <a class="flex justify-between" @onclick="e => OnToggle(item.Id, item.Title)"
+                       disabled="@item.Disabled">
+                        <span>@item.Title</span>
+                        @if (IsSelected(item.Id))
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                                 class="size-4">
+                                <path fill-rule="evenodd"
+                                      d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        }
+                    </a>
+                </li>
+            }
+        </div>
+    </ul>
+</div>
+
+@code {
+    [Parameter] public List<TValue> Values { get; set; } = new();
+    [Parameter] public EventCallback<List<TValue>> ValuesChanged { get; set; }
+    [Parameter] public List<SelectDto> Options { get; set; } = [];
+    [Parameter] public string BtnText { get; set; } = "انتخاب کنید ...";
+
+    private string _searchText = "";
+    private readonly string _popoverId = $"popover-{Guid.NewGuid()}";
+    private readonly string _anchorName = $"--anchor-{Guid.NewGuid()}";
+
+    protected override void OnParametersSet()
+    {
+        Values ??= [];
+        UpdateBtnText();
+    }
+
+    private TValue GetValue(object rawId)
+    {
+        TValue? itemValue = default(TValue);
+
+        if (rawId is JsonElement jsonElement)
+        {
+            if (jsonElement.ValueKind == JsonValueKind.Number)
+            {
+                rawId = jsonElement.GetInt32(); // یا GetInt64() بسته به نیاز
+            }
+            else if (jsonElement.ValueKind == JsonValueKind.String)
+            {
+                rawId = jsonElement.GetString();
+            }
+        }
+
+        if (typeof(TValue).IsEnum)
+        {
+            itemValue = (TValue)Enum.ToObject(typeof(TValue), rawId);
+        }
+        else if (rawId is string strValue && typeof(TValue) == typeof(string))
+        {
+            itemValue = (TValue)(object)strValue;
+        }
+        else if (typeof(TValue) == typeof(int))
+        {
+            int intValue = rawId is int i ? i : Convert.ToInt32(rawId);
+            itemValue = (TValue)(object)intValue;
+        }
+        else
+        {
+            itemValue = (TValue)Convert.ChangeType(rawId, typeof(TValue), CultureInfo.InvariantCulture);
+        }
+
+        return itemValue;
+    }
+
+    private bool IsSelected(object rawId)
+    {
+        var value = GetValue(rawId);
+        if (Values.Contains(value))
+            return true;
+        return false;
+    }
+
+    private async Task OnToggle(object rawId, string title)
+    {
+        var value = GetValue(rawId);
+
+        if (!Values.Contains(value))
+            Values.Add(value);
+        else
+            Values.Remove(value);
+
+        await ValuesChanged.InvokeAsync(Values);
+    }
+
+    private TValue ConvertToTValue(object rawId)
+    {
+        if (rawId is JsonElement jsonElement)
+        {
+            if (jsonElement.ValueKind == JsonValueKind.Number)
+                rawId = jsonElement.GetInt32();
+            else if (jsonElement.ValueKind == JsonValueKind.String)
+                rawId = jsonElement.GetString();
+        }
+
+        if (typeof(TValue).IsEnum)
+            return (TValue)Enum.ToObject(typeof(TValue), rawId);
+
+        if (typeof(TValue) == typeof(string))
+            return (TValue)(object)rawId.ToString()!;
+
+        if (typeof(TValue) == typeof(int))
+            return (TValue)(object)Convert.ToInt32(rawId);
+
+        return (TValue)Convert.ChangeType(rawId, typeof(TValue), CultureInfo.InvariantCulture);
+    }
+
+    private async Task ToggleSelection(TValue value, string text)
+    {
+        if (Values.Contains(value))
+            Values.Remove(value);
+        else
+            Values.Add(value);
+
+        UpdateBtnText();
+        await ValuesChanged.InvokeAsync(Values);
+    }
+
+    private void UpdateBtnText()
+    {
+        if (Values is null || Values.Count == 0)
+        {
+            BtnText = "انتخاب کنید ...";
+        }
+        else
+        {
+            var selectedTitles = Options
+                .Where(o => Values.Contains(ConvertToTValue(o.Id)))
+                .Select(o => o.Title)
+                .ToList();
+
+            BtnText = string.Join(", ", selectedTitles.Select(t =>
+                t.Length > 20 ? t.Substring(0, 20) + "…" : t
+            ));
+        }
+    }
+
+    public bool MatchesSearch(string text)
+    {
+        return string.IsNullOrWhiteSpace(_searchText) || text.Contains(_searchText, StringComparison.OrdinalIgnoreCase);
+    }
+
+}

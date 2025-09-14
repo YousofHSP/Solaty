@@ -1,0 +1,99 @@
+﻿@page "/Log/Index"
+@using Common.Utilities
+@using Domain.Entities
+@using global::Shared.DTOs
+@using WebClient.Services.Components
+@rendermode InteractiveServer
+
+<PageTitle>لیست لاگ‌ها</PageTitle>
+
+@if (_isLoading)
+{
+    <LoadingList></LoadingList>
+}
+else
+{
+    <div class="w-full overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+        <table class="table table-zebra table-fixed w-full">
+            <thead>
+                <tr>
+                    <th>ردیف</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.TimeStamp))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.Level))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.Message))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.Exception))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.CallSite))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.ThreadId))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.UserName))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.IpAddress))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.RequestId))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.UserAgent))</th>
+                    <th>@(ModelExtensions.ToDisplay<LogResDto>(i => i.CreateDate))</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var index = 0;
+                }
+                @foreach (var item in _list)
+                {
+                    <tr>
+                        <td>@(++index)</td>
+                        <td>@item.TimeStamp</td>
+                        <td>@item.Level</td>
+                        <td>
+                            <span class="cursor-pointer text-blue-600"
+                                  @onclick='() => ShowFullText(item.Message, "پیام")'>
+                                @(item.Message?.Length > 15 ? item.Message.Substring(0, 15) + "…" : item.Message)
+                            </span>
+                        </td>
+                        <td>@item.Exception</td>
+                        <td>
+                            <span class="cursor-pointer text-blue-600"
+                                  @onclick='() => ShowFullText(item.CallSite, "محل فراخوانی")'>
+                                @(item.CallSite?.Length > 15 ? item.CallSite.Substring(0, 15) + "…" : item.CallSite)
+                            </span>
+                        </td>
+                        <td>@item.ThreadId</td>
+                        <td>@item.UserName</td>
+                        <td>@item.IpAddress</td>
+                        <td>@item.RequestId</td>
+                        <td>@item.UserAgent</td>
+                        <td>@item.CreateDate</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <Pagination Page="_indexDto.Page" Limit="_indexDto.Limit" Total="_total" PageChanged="PageChanged"></Pagination>
+}
+
+<!-- Modal -->
+@if (_showModal)
+{
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg w-1/2 p-4">
+            <h3 class="font-bold mb-2">@_modalTitle</h3>
+            <div class="whitespace-pre-wrap break-words max-h-96 overflow-auto border p-2 rounded">
+                @_modalText
+            </div>
+            <div class="mt-4 flex justify-end">
+                <button class="btn btn-sm" @onclick="() => _showModal = false">بستن</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool _showModal = false;
+    private string? _modalText;
+    private string? _modalTitle;
+
+    private void ShowFullText(string? text, string title)
+    {
+        _modalText = text;
+        _modalTitle = title;
+        _showModal = true;
+    }
+}

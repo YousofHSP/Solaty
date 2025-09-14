@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
+
+<Toasts></Toasts>
+<div id="layoutWrapper" class="flex min-h-screen bg-background">
+    <NavMenu/>
+
+    <main class="bg-white w-full shadow-sm m-5 mr-2 rounded-xl">
+        <header class="flex h-12 shrink-0 items-center gap-2 border-b border-neutral-400 ease-linear">
+            <div class="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
+                <SidebarToggleBtn></SidebarToggleBtn>
+                <div data-orientation="vertical" role="none" data-slot="separator"
+                     class="shrink-0 h-4 w-px mx-2h-4 bg-border"></div>
+                <h1 class="text-base font-medium" id="pageTitle"></h1>
+            </div>
+            <div>
+                <NavLink class="btn btn-ghost btn-circle btn-sm" href="/Notification/Index">
+                    <div class="indicator">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                        <span class="badge badge-xs badge-primary indicator-item"></span>
+                    </div>
+                </NavLink>
+            </div>
+            <div class="dropdown dropdown-end pl-4">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle btn-sm avatar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"/>
+                    </svg>
+                </div>
+                <div tabindex="0"
+                    class="dropdown-content bg-base-100 rounded-box z-1 mt-3 w-96 p-2 shadow">
+                        <CalendarComponent/>
+                </div>
+            </div>
+            <div class="dropdown dropdown-end pl-4">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle btn-sm avatar">
+                    <UserProfileImage/>
+                </div>
+                <ul tabindex="0"
+                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-32 p-2 shadow">
+                    <li>
+                        <NavLink href="/Profile/Index" class="text-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                 class="size-5">
+                                <path fill-rule="evenodd"
+                                      d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                            پروفایل
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink href="/SessionsUser/Index" class="text-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                 class="size-5">
+                                <path fill-rule="evenodd"
+                                      d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
+                                      clip-rule="evenodd"/>
+                                <path fill-rule="evenodd"
+                                      d="M19 10a.75.75 0 0 0-.75-.75H8.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 19 10Z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                            نشست
+                        </NavLink>
+                    </li>
+                    <li>
+                        <LogoutBtn></LogoutBtn>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <div class="p-6">
+            @Body
+        </div>
+
+    </main>
+</div>

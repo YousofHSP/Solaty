@@ -1,0 +1,143 @@
+@using System.Globalization
+@rendermode InteractiveServer
+
+<div class="max-w-md mx-auto  bg-white rounded-2xl shadow p-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <button class="p-2 rounded-full hover:bg-gray-200" @onclick="PrevMonth">‹</button>
+        <div class="flex items-center gap-16">
+            <div>
+                <div class="text-sm font-semibold text-gray-500">ماه</div>
+                <div class="text-xl font-bold">@PersianMonthName(CurrentMonth)</div>
+            </div>
+            <div>
+                <div class="text-sm font-semibold text-gray-500">سال</div>
+                <div class="text-xl font-bold">@CurrentYear</div>
+            </div>
+        </div>
+        <button class="p-2 rounded-full hover:bg-gray-200" @onclick="NextMonth">›</button>
+    </div>
+
+    <!-- Days of week -->
+    <div class="grid grid-cols-7 text-center text-base font-semibold text-gray-700 mb-4">
+        @* <div>شنبه</div> *@
+        @* <div>یکشنبه</div> *@
+        @* <div>دوشنبه</div> *@
+        @* <div>سه‌شنبه</div> *@
+        @* <div>چهارشنبه</div> *@
+        @* <div>پنجشنبه</div> *@
+        @* <div>جمعه</div> *@
+        <div>ش</div>
+        <div>ی</div>
+        <div>د</div>
+        <div>س</div>
+        <div>چ</div>
+        <div>پ</div>
+        <div>ج</div>
+    </div>
+
+    <!-- Calendar days -->
+    <div class="grid grid-cols-7 gap-4 justify-center">
+        @foreach (var day in Days)
+        {
+            if (day.Day == 0)
+            {
+                <div></div>
+            }
+            else
+            {
+                <div
+                    class="indicator rounded-xl bg-gray-100 text-gray-800 w-10 h-10 mx-auto">
+                    @if (day.Day is 16)
+                    {
+                        <span class="indicator-item badge badge-primary badge-xs"></span>
+                    }
+                    <div class="grid place-items-center w-full font-bold">@day.Day</div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+
+    public record DayInfo(int Day, string Text);
+
+    private List<DayInfo> Days { get; set; } = new();
+    private int CurrentMonth;
+    private int CurrentYear;
+    private readonly PersianCalendar pc = new PersianCalendar();
+
+    protected override void OnInitialized()
+    {
+        var now = DateTime.Now;
+        CurrentYear = pc.GetYear(now);
+        CurrentMonth = pc.GetMonth(now);
+        LoadDays();
+    }
+
+    private void LoadDays()
+    {
+        Days.Clear();
+        int daysInMonth = pc.GetDaysInMonth(CurrentYear, CurrentMonth);
+
+        // روز اول ماه شمسی به میلادی
+        var firstDay = pc.ToDateTime(CurrentYear, CurrentMonth, 1, 0, 0, 0, 0);
+        int firstDayOfWeek = ((int)firstDay.DayOfWeek + 1) % 7; // شروع از شنبه
+
+        for (int i = 0; i < firstDayOfWeek; i++)
+        {
+            Days.Add(new DayInfo(0, ""));
+        }
+
+        for (int i = 1; i <= daysInMonth; i++)
+        {
+            var date = pc.ToDateTime(CurrentYear, CurrentMonth, i, 0, 0, 0, 0);
+            var isFriday = date.DayOfWeek == DayOfWeek.Friday;
+            var text = "3";
+
+            Days.Add(new DayInfo(i, text));
+        }
+    }
+
+    private void PrevMonth()
+    {
+        if (CurrentMonth == 1)
+        {
+            CurrentMonth = 12;
+            CurrentYear--;
+        }
+        else
+        {
+            CurrentMonth--;
+        }
+
+        LoadDays();
+    }
+
+    private void NextMonth()
+    {
+        if (CurrentMonth == 12)
+        {
+            CurrentMonth = 1;
+            CurrentYear++;
+        }
+        else
+        {
+            CurrentMonth++;
+        }
+
+        LoadDays();
+    }
+
+    private string PersianMonthName(int month)
+    {
+        string[] names =
+        {
+            "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+            "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+        };
+        return names[month - 1];
+    }
+
+}

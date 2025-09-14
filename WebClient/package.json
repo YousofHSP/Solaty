@@ -1,0 +1,27 @@
+{
+  "name": "webclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "npx @tailwindcss/cli -i ./wwwroot/css/input.css -o ./wwwroot/app.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@majidh1/jalalidatepicker": "^0.9.12",
+    "@tailwindcss/cli": "^4.1.11",
+    "autoprefixer": "^10.4.21",
+    "cally": "^0.8.0",
+    "choices.js": "^11.1.0",
+    "daisyui": "^5.0.50",
+    "postcss": "^8.5.6",
+    "tail.select.js": "^1.1.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.11"
+  }
+}

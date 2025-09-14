@@ -1,0 +1,86 @@
+﻿@using Common
+@using Common.Utilities
+@using Domain.Entities
+@using global::Shared.DTOs
+@using WebClient.Services.Common
+
+<dialog class="modal" id="dataModal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute left-2 top-2">✕</button>
+        </form>
+        <h3 class="text-lg font-bold">@ModalTitle</h3>
+
+        @if (_modalIsBusy)
+        {
+            <LoadingList></LoadingList>
+        }
+        else
+        {
+            <EditForm Model="@Data" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="grid grid-cols-2 gap-4 mt-3">
+                    <fieldset class="fieldset w-full">
+                        <legend class="fieldset-legend">
+                            @(ModelExtensions.ToDisplay<SettingDto>(i => i.Value))
+                        </legend>
+                        <InputText @bind-Value="Data.Value" class="input" placeholder="مقدار را وارد کنید" />
+                        <ValidationMessage For="@(() => Data.Value)"></ValidationMessage>
+                    </fieldset>
+
+                    <fieldset class="fieldset w-full">
+                        <legend class="fieldset-legend">
+                            @(ModelExtensions.ToDisplay<SettingDto>(i => i.Enable))
+                        </legend>
+                        <SelectInput @bind-Value="Data.Enable"
+                                     Options="@(new List<SelectDto> { new(true, "فعال"), new(false, "غیرفعال")})" />
+                        <ValidationMessage For="@(() => Data.Enable)"></ValidationMessage>
+                    </fieldset>
+                </div>
+
+                <div class="modal-action">
+                    <form method="dialog">
+                        <button class="btn">بستن</button>
+                    </form>
+                    <LoadingBtn ButtonText="ثبت"
+                                CssClass="btn btn-primary"
+                                IsLoading="_isBusy"
+                                Type="submit"></LoadingBtn>
+                </div>
+            </EditForm>
+        }
+    </div>
+</dialog>
+
+@code {
+    private bool _modalIsBusy;
+    private bool _isBusy;
+
+    [Parameter] public string ModalTitle { get; set; } = "";
+    [Parameter] public SettingDto Data { get; set; } = new();
+
+    [Inject] public IBaseService BaseService { get; set; } = default!;
+    [Parameter] public EventCallback Done { get; set; }
+
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            _isBusy = true;
+
+            // طبق کنترلری که فرستادی Update با HttpPost صدا می‌خوره
+            SettingResDto? result =
+                await BaseService.Post<SettingDto, SettingResDto>("v1/Setting/Update", Data);
+
+            if (result is not null)
+            {
+                await Done.InvokeAsync();
+            }
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+}

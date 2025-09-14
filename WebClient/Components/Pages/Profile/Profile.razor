@@ -1,0 +1,135 @@
+﻿@page "/Profile/Index"
+@using Common.Utilities
+@using Domain.Entities
+@using global::Shared.DTOs
+@using WebClient.Services.Components
+@rendermode InteractiveServer
+
+<PageTitle>پروفایل کاربری</PageTitle>
+
+@if (_isLoading)
+{
+    <LoadingList></LoadingList>
+}
+else
+{
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- فرم اطلاعات شخصی -->
+        <EditForm Model="_profileDto" OnValidSubmit="UpdateProfile">
+            <DataAnnotationsValidator />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <fieldset class="fieldset w-full">
+                    <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserProfileDto>(i => i.FirstName))</legend>
+                    <InputText @bind-Value="_profileDto.FirstName" class="input" placeholder="نام" />
+                    <ValidationMessage For="@(() => _profileDto.FirstName)"></ValidationMessage>
+                </fieldset>
+
+                <fieldset class="fieldset w-full">
+                    <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserProfileDto>(i => i.LastName))</legend>
+                    <InputText @bind-Value="_profileDto.LastName" class="input" placeholder="نام خانوادگی" />
+                    <ValidationMessage For="@(() => _profileDto.LastName)"></ValidationMessage>
+                </fieldset>
+
+                <fieldset class="fieldset w-full">
+                    <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserProfileDto>(i => i.BirthDate))</legend>
+                    <InputText @bind-Value="_profileDto.BirthDate" class="input" data-jdp placeholder="تاریخ تولد" />
+                    <ValidationMessage For="@(() => _profileDto.BirthDate)"></ValidationMessage>
+                </fieldset>
+            </div>
+            <div class="mt-4">
+                <LoadingBtn ButtonText="بروزرسانی پروفایل" CssClass="btn btn-primary" IsLoading="_isBusy"
+                            Type="submit"></LoadingBtn>
+            </div>
+        </EditForm>
+
+        <!-- فرم تغییر ایمیل / موبایل / رمزعبور -->
+        <div class="flex flex-col gap-4">
+            <button class="btn btn-outline flex items-center justify-between" @onclick='() => OpenModal("emailModal")'>
+                <span>ایمیل</span>
+                <span>@_profile.Email</span>
+            </button>
+            <button class="btn btn-outline flex items-center justify-between" @onclick='() => OpenModal("phoneModal")'>
+                <span>موبایل</span>
+                <span>@_profile.PhoneNumber</span>
+            </button>
+            <button class="btn btn-outline flex items-center justify-between" @onclick='() => OpenModal("passwordModal")'>
+                <span>رمز عبور</span>
+                <span>********</span>
+            </button>
+        </div>
+
+        <!-- فرم تغییر عکس پروفایل -->
+        <EditForm Model="_imageModel" OnValidSubmit="UpdateProfileImage">
+            <DataAnnotationsValidator />
+            <div class="flex flex-col items-center gap-4">
+                <div class="avatar">
+                    <div class="mask mask-squircle h-24 w-24">
+                        <img src="@_profile.ProfileImage" alt="profile" />
+                    </div>
+                </div>
+                <InputFile OnChange="OnFileSelected" />
+                <LoadingBtn ButtonText="بروزرسانی عکس پروفایل" CssClass="btn btn-secondary" IsLoading="_isUploading"
+                            Type="submit"></LoadingBtn>
+            </div>
+        </EditForm>
+    </div>
+}
+
+<!-- مودال تغییر ایمیل -->
+<dialog class="modal" id="emailModal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute left-2 top-2">✕</button>
+        </form>
+        <h3 class="font-bold text-lg">تغییر ایمیل</h3>
+        <EditForm Model="_changeEmail" OnValidSubmit="ChangeEmail">
+            <DataAnnotationsValidator />
+            <InputText @bind-Value="_changeEmail.NewEmail" class="input w-full mt-3" placeholder="ایمیل جدید" />
+            <ValidationMessage For="@(() => _changeEmail.NewEmail)" />
+            <div class="modal-action">
+                <LoadingBtn ButtonText="تأیید" CssClass="btn btn-primary" IsLoading="_isBusy" Type="submit"></LoadingBtn>
+            </div>
+        </EditForm>
+    </div>
+</dialog>
+
+<!-- مودال تغییر موبایل -->
+<dialog class="modal" id="phoneModal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute left-2 top-2">✕</button>
+        </form>
+        <h3 class="font-bold text-lg">تغییر موبایل</h3>
+        <EditForm Model="_changePhone" OnValidSubmit="ChangePhone">
+            <DataAnnotationsValidator />
+            <InputText @bind-Value="_changePhone.NewPhoneNumber" class="input w-full mt-3" placeholder="موبایل جدید" />
+            <ValidationMessage For="@(() => _changePhone.NewPhoneNumber)" />
+            <div class="modal-action">
+                <LoadingBtn ButtonText="تأیید" CssClass="btn btn-primary" IsLoading="_isBusy" Type="submit"></LoadingBtn>
+            </div>
+        </EditForm>
+    </div>
+</dialog>
+
+<!-- مودال تغییر رمز عبور -->
+<dialog class="modal" id="passwordModal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute left-2 top-2">✕</button>
+        </form>
+        <h3 class="font-bold text-lg">تغییر رمز عبور</h3>
+        <EditForm Model="_changePassword" OnValidSubmit="ChangePassword">
+            <DataAnnotationsValidator />
+            <InputText @bind-Value="_changePassword.CurrentPassword" class="input w-full mt-3" placeholder="رمز قبلی" type="password" />
+            <ValidationMessage For="@(() => _changePassword.CurrentPassword)" />
+
+            <InputText @bind-Value="_changePassword.NewPassword" class="input w-full mt-3" placeholder="رمز جدید" type="password" />
+            <ValidationMessage For="@(() => _changePassword.NewPassword)" />
+
+            <div class="modal-action">
+                <LoadingBtn ButtonText="تأیید" CssClass="btn btn-primary" IsLoading="_isBusy" Type="submit"></LoadingBtn>
+            </div>
+        </EditForm>
+    </div>
+</dialog>

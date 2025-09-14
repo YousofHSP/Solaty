@@ -1,0 +1,30 @@
+﻿@using global::Shared.DTOs
+@using WebClient.Services.Common
+@inject IBaseService BaseService
+@rendermode InteractiveServer
+
+
+<div class="w-10 rounded-full">
+    @if (string.IsNullOrEmpty(_profileImage))
+    {
+        <img src="https://img.daisyui.com/images/profile/demo/2@94.webp" alt="User Profile" />
+    }
+    else
+    {
+        <img src="@_profileImage" alt="User Profile" />
+    }
+</div>
+
+@code {
+    private string? _profileImage;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var result = await BaseService.Get<UserProfileResDto>("v1/User/GetProfile");
+
+        if (result is not null)
+        {
+            _profileImage = result.ProfileImage;
+        }
+    }
+    
+}

@@ -1,0 +1,36 @@
+@using WebClient.Services.Components
+
+@rendermode InteractiveServer
+@inject ToastService ToastService
+
+<div class="toast toast-top toast-end z-[9999]" style="direction: ltr;">
+    @foreach (var toast in ToastService.ToastList)
+    {
+        if (toast.Type == "error")
+        {
+            <div class="alert alert-error">
+                <span>@toast.Message</span>
+            </div>
+        }
+        else if (toast.Type == "success")
+        {
+            <div class="alert alert-success">
+                <span>@toast.Message</span>
+            </div>
+        }
+    }
+</div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        ToastService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ToastService.OnChange -= StateHasChanged;
+    }
+
+}

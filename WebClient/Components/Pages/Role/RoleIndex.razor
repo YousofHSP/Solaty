@@ -1,0 +1,150 @@
+@page "/Role/Index"
+@using Common.Utilities
+@using global::Shared.DTOs
+@rendermode InteractiveServer
+
+
+<PageTitle>لیست نقش ها</PageTitle>
+<DeleteWarning OnClick="Delete"></DeleteWarning>
+
+<dialog class="modal" id="dataModal">
+    <div class="modal-box w-10/12 max-w-5xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute left-2 top-2">✕</button>
+        </form>
+        <h3 class="text-lg font-bold">@_modalTitle</h3>
+
+        @if (_modalIsBusy)
+        {
+            <LoadingList></LoadingList>
+        }
+        else
+        {
+            <EditForm Model="@_data" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator/>
+                <div class="grid grid-cols-2 gap-4 mt-3">
+
+                    <fieldset class="fieldset w-full">
+                        <legend
+                            class="fieldset-legend">@(ModelExtensions.ToDisplay<RoleDto>(i => i.Name))</legend>
+                        <InputText @bind-Value="_data.Name" class="input" placeholder="نام را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.Name)"></ValidationMessage>
+                    </fieldset>
+                    <fieldset class="fieldset w-full">
+                        <legend
+                            class="fieldset-legend">@(ModelExtensions.ToDisplay<RoleDto>(i => i.Title))</legend>
+                        <InputText @bind-Value="_data.Title" class="input" placeholder="عنوان را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.Title)"></ValidationMessage>
+                    </fieldset>
+                </div>
+                <div class="w-full">
+                    @foreach (var items in _permissions.GroupBy(i => i.Controller))
+                    {
+                        <div class="collapse collapse-arrow bg-base-100 border border-base-300 mt-3">
+                            <input type="radio" name="my-accordion-2" checked="checked"/>
+                            <div class="collapse-title font-semibold">@items.First().ControllerLabel</div>
+                            <div class="collapse-content text-sm">
+                                <div class="grid grid-cols-4">
+                                    @foreach (var item in items)
+                                    {
+                                        var value = $"{item.Controller}.{item.Action}";
+                                        <label class="label mt-2">
+                                            <input type="checkbox" 
+                                                   checked="@_data.Permissions.Contains(value)"
+                                                   @onchange="e => OnPermissionChanged(e, value)"
+                                                   class="toggle"
+                                                   value="@value"/>
+                                            @item.ActionLabel
+                                        </label>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <div class="modal-action">
+
+                    <form method="dialog">
+                        <button class="btn">بستن</button>
+                    </form>
+                    <LoadingBtn ButtonText="ثبت" CssClass="btn btn-primary" IsLoading="_isBusy"
+                                Type="submit"></LoadingBtn>
+                </div>
+            </EditForm>
+        }
+
+    </div>
+</dialog>
+@if (_isLoading)
+{
+    <LoadingList></LoadingList>
+}
+else
+{
+    <div class="flex gap-3">
+        <button class="btn btn-primary  mb-5" @onclick="ShowCreateModal">ایجاد</button>
+        <label class="input">
+            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-width="2.5"
+                    fill="none"
+                    stroke="currentColor"
+                >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </g>
+            </svg>
+            <input type="search" @oninput="OnSearchChanged" required placeholder="جسنجو"/>
+        </label>
+    </div>
+
+    <div class="sm:overflow-visible overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+        <table class="table table-zebra">
+            <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>نام</th>
+                <th>عنوان</th>
+                <th>عملیات</th>
+            </tr>
+            </thead>
+            <tbody class="h-full">
+            @{
+                var index = 0;
+            }
+            @foreach (var item in _list)
+            {
+                <tr>
+                    <td class="w-14 text-center">@(++index)</td>
+                    <td>@item.Name</td>
+                    <td>@item.Title</td>
+                    <td class="w-14 text-center">
+                        <div class="dropdown dropdown-left">
+                            <div tabindex="0" role="button" class="btn btn-sm btn-ghost">⋮</div>
+                            <ul tabindex="0"
+                                class="dropdown-content menu bg-base-100 rounded-box z-50 p-1 w-32 shadow">
+                                <li>
+                                    <button type="button" @onclick="() => ShowEditModal(item.Id)">ویرایش</button>
+                                </li>
+                                <hr class="-mx-1 my-1">
+                                <li>
+                                    <button class="text-red-600 hover:bg-red-100" type="button"
+                                            @onclick="() => ShowDeleteWarning(item.Id)">حذف
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+            </tbody>
+        </table>
+    </div>
+
+    <Pagination Page="_indexDto.Page" Limit="_indexDto.Limit" Total="_total" PageChanged="PageChanged"></Pagination>
+}
