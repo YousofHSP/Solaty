@@ -8,7 +8,7 @@ namespace Domain.Entities;
 public class ImportedRecord : BaseEntity
 {
     public string Title { get; set; }
-    public int ImportedFileId { get; set; }
+    public long ImportedFileId { get; set; }
     public ImportedRecordStatus Status { get; set; }
     public string Data { get; set; }
     public ImportedFile ImportedFile { get; set; }

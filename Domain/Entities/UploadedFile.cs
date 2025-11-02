@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class UploadedFile : BaseEntity, IHashedEntity
+    public class UploadedFile : BaseEntity
     {
         public string SavedName { get; set; }
         public string OriginalName { get; set; }
@@ -19,7 +19,7 @@ namespace Domain.Entities
         public UploadedFileType Type { get; set; }
         public bool Enable{ get; set; }
         public string ModelType { get; set; }
-        public int ModelId { get; set; }
+        public long ModelId { get; set; }
         public string Hash { get; set; }
         public string SaltCode { get; set; }
 

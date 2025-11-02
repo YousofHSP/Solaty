@@ -29,7 +29,6 @@ namespace Api.Controllers.v1
         UserManager<User> userManager,
         IUserRepository repository,
         IPasswordHistoryService passwordHistoryService,
-        IHashEntityValidator hashEntityValidator,
         IUploadedFileService uploadedFileService,
         ISettingService settingService,
         IOtpService _otpService,
@@ -52,7 +51,6 @@ namespace Api.Controllers.v1
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است.");
             }
 
-            await hashEntityValidator.IsValidAsync(user, user.Id, cancellationToken);
             if (user.LockoutEnd > DateTime.UtcNow || user.Status == UserStatus.Disable)
             {
                 throw new BadRequestException($"کاربر ({user.UserName}) غیرفعال است");
@@ -103,7 +101,6 @@ namespace Api.Controllers.v1
             {
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است.");
             }
-            await hashEntityValidator.IsValidAsync(user, user.Id, ct);
             if (user.LockoutEnd > DateTime.UtcNow || user.Status == UserStatus.Disable)
             {
                 throw new BadRequestException($"کاربر ({user.UserName}) غیرفعال است");
@@ -157,13 +154,12 @@ namespace Api.Controllers.v1
             var user = await CheckUserNameAndPassword(loginRequest.UserName, loginRequest.Password, loginType, checkOtp, loginRequest.OtpCode, ct);
             var jwt = await jwtService.GenerateAsync(user, ct);
 
-            var profileImage = await uploadedFileService.GetFilePath(nameof(UserInfo), user.Info?.Id ?? 0, UploadedFileType.UserProfile, ct);
+            var profileImage = await uploadedFileService.GetFilePath(nameof(UserInfo), user.Info.Id, UploadedFileType.UserProfile, ct);
             var result = new LoginResDto()
             {
                 Token = jwt.access_token,
                 AccessCode = jwt.access_code,
-                UserFirstName =  user.Info?.FirstName ?? "",
-                UserLastName =  user.Info?.LastName ?? "",
+                UserFullName =  user.Info?.FullName ?? "",
                 ProfileImage = profileImage,
                 UserName = user.UserName
             };
@@ -196,11 +192,10 @@ namespace Api.Controllers.v1
         public async Task<ActionResult> VerifyOtp(VerifyOtpRequest dto, CancellationToken ct)
         {
             var user = await repository.TableNoTracking
-                .FirstOrDefaultAsync(i => i.UserName == dto.UserName || i.PhoneNumber == dto.UserName);
+                .FirstOrDefaultAsync(i => i.UserName == dto.UserName || i.PhoneNumber == dto.UserName, ct);
             if (user is null)
                 throw new NotFoundException($"کاربر {dto.UserName} پیدا نشد");
 
-            await hashEntityValidator.IsValidAsync(user, user.Id, ct);
             if (!_otpService.VerifyOtp(user.PhoneNumber, dto.OtpCode))
             {
                 throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");
@@ -219,7 +214,6 @@ namespace Api.Controllers.v1
             var user = await repository.TableNoTracking.FirstOrDefaultAsync(i => i.UserName == dto.UserName);
             if(user is null)
                 return Ok(new { message = "OTP sent." });
-            await hashEntityValidator.IsValidAsync(user, user.Id, ct);
             var code = await _otpService.GenerateOtpAsync(user.PhoneNumber);
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
             //var result = await messageService.SendMessageAsync(dto.PhoneNumber, $"code: {code}");
@@ -234,11 +228,10 @@ namespace Api.Controllers.v1
         {
             var user = await repository.TableNoTracking
                 .Include(i => i.Info)
-                .FirstOrDefaultAsync(i => i.UserName == dto.UserName || i.PhoneNumber == dto.UserName);
+                .FirstOrDefaultAsync(i => i.UserName == dto.UserName || i.PhoneNumber == dto.UserName, ct);
             if (user is null)
                 throw new NotFoundException($"کاربر {dto.UserName} پیدا نشد");
 
-            await hashEntityValidator.IsValidAsync(user, user.Id, ct);
             if (!_otpService.VerifyOtp(user.PhoneNumber, dto.OtpCode))
             {
                 throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");

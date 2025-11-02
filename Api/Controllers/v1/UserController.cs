@@ -58,7 +58,7 @@ public class UserController(
             return query;
         query = query
             .Where(i => i.UserName.Contains(search)
-                        || (i.Info.FirstName + " " + i.Info.LastName).Contains(search)
+                        || (i.Info.FullName).Contains(search)
                         || i.PhoneNumber.Contains(search)
                         || i.Email.Contains(search)
             )
@@ -75,26 +75,13 @@ public class UserController(
         if (string.IsNullOrEmpty(dto.Password))
             throw new BadRequestException("رمز را وارد کنید");
         var isExists =
-            await repository.TableNoTracking.AnyAsync(i => i.UserName == dto.UserName, cancellationToken);
+            await repository.TableNoTracking.AnyAsync(i => i.PhoneNumber == dto.PhoneNumber, cancellationToken);
         if (isExists)
-            throw new BadRequestException("این نام کاربری قبلا استفاده شده");
-        if (string.IsNullOrEmpty(dto.PhoneNumber))
-        {
-            dto.PhoneNumber = "";
-            userEnable = UserStatus.Imperfect;
-        }
-        else
-        {
-            isExists =
-                await repository.TableNoTracking.AnyAsync(i => i.PhoneNumber == dto.PhoneNumber, cancellationToken);
-            if (isExists)
                 throw new BadRequestException("این  موبایل قبلا استفاده شده");
-        }
 
         if (string.IsNullOrEmpty(dto.Email))
         {
             dto.Email = "";
-            userEnable = UserStatus.Imperfect;
         }
         else
         {
@@ -104,12 +91,6 @@ public class UserController(
             if (isExists)
                 throw new BadRequestException("این  ایمیل قبلا استفاده شده");
         }
-
-        isExists =
-            await userInfoRepository.TableNoTracking.AnyAsync(i => i.NationalCode == dto.NationalCode,
-                cancellationToken);
-        if (isExists)
-            throw new BadRequestException("این کدملی قبلا استفاده شده");
 
         if (dto.Status == UserStatus.Disable)
             userEnable = UserStatus.Disable;
@@ -138,10 +119,8 @@ public class UserController(
         model.Status = userEnable;
         model.Info = new UserInfo()
         {
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            BirthDate = birthDate,
-            NationalCode = dto.NationalCode,
+            FullName= dto.FullName,
+            BirthDate = birthDate
         };
         var result = await userManager.CreateAsync(model, dto.Password);
         if (!result.Succeeded)
@@ -171,16 +150,11 @@ public class UserController(
             throw new NotFoundException("کاربر پیدا نشد");
 
         var userId = User.Identity!.GetUserId<int>();
-        await hashEntityValidator.IsValidAsync(user, userId, cancellationToken);
-        if (repository.TableNoTracking.Any(i => i.UserName == dto.UserName && i.Id != dto.Id))
-            throw new BadRequestException("این نام کاربری قبلا استفاده شده");
         if (repository.TableNoTracking.Any(i => i.PhoneNumber == dto.PhoneNumber && i.Id != dto.Id))
             throw new BadRequestException("این موبایل قبلا استفاده شده");
         var normalizeEmail = userManager.NormalizeEmail(dto.Email);
         if (repository.TableNoTracking.Any(i => i.NormalizedEmail == normalizeEmail && i.Id != dto.Id))
             throw new BadRequestException("این ایمیل قبلا استفاده شده");
-        if (userInfoRepository.TableNoTracking.Any(i => i.UserId != user.Id && i.NationalCode == dto.NationalCode))
-            throw new BadRequestException("این کدملی قبلا استفاده شده");
 
         await repository.UpdateAsync(user, cancellationToken);
 
@@ -213,16 +187,13 @@ public class UserController(
             }, cancellationToken);
         }
 
-        user.UserName = dto.UserName;
         user.PhoneNumber = dto.PhoneNumber;
         user.Email = dto.Email;
         user.Status = dto.Status;
         var info = user.Info;
         if (info is not null)
         {
-            info.FirstName = dto.FirstName;
-            info.LastName = dto.LastName;
-            info.NationalCode = dto.NationalCode;
+            info.FullName = dto.FullName;
             info.BirthDate = birthDate;
         }
 
@@ -246,13 +217,12 @@ public class UserController(
             throw new NotFoundException("کاربر پیدا نشد");
 
         var userId = User.Identity!.GetUserId<int>();
-        await hashEntityValidator.IsValidAsync(user, userId, ct);
         user.Status = dto.Status;
         return Ok();
     }
 
     [Display(Name = "حذف")]
-    public override async Task<ApiResult> Delete(int id, CancellationToken cancellationToken)
+    public override async Task<ApiResult> Delete(long id, CancellationToken cancellationToken)
     {
         var isAdmin =
             await repository.TableNoTracking.AnyAsync(i => i.Id == id && i.UserName == "admin", cancellationToken);
@@ -271,7 +241,6 @@ public class UserController(
         var model = await Repository.GetByIdAsync(cancellationToken, id!);
         if (model is null) throw new NotFoundException();
         var userId = User.Identity!.GetUserId<int>();
-        await HashEntityValidator.IsValidAsync(model, userId, cancellationToken);
         await Repository.DeleteAsync(model, cancellationToken);
 
         return Ok();
@@ -295,12 +264,9 @@ public class UserController(
             roles = user.Roles.Select(i => i.Title).Aggregate((curr, next) => $"{curr}, {next}");
         var result = new UserProfileResDto
         {
-            FirstName = user.Info.FirstName,
-            LastName = user.Info.LastName,
+            FullName= user.Info.FullName,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
-            UserName = user.UserName,
-            NationalCode = user.Info.NationalCode,
             BirthDate = user.Info.BirthDate == null ? "" : user.Info.BirthDate.Value.ToShamsi(false),
             ProfileImage = profileImagePath,
             Roles = roles
@@ -318,8 +284,6 @@ public class UserController(
             .FirstOrDefaultAsync(i => i.UserId == user.Id, cancellationToken);
         if (user is null || userInfo is null)
             throw new NotFoundException("اطلاعات کاربر پیدا نشد");
-        await hashEntityValidator.IsValidAsync(user, userId, cancellationToken);
-        await hashEntityValidator.IsValidAsync(userInfo, userId, cancellationToken);
         if (dto.BirthDate.Length != 10)
             throw new BadRequestException("فیلد تاریخ تولد معتبر نیست");
 
@@ -329,8 +293,7 @@ public class UserController(
         int day = int.Parse(parts[2]);
 
         var pc = new System.Globalization.PersianCalendar();
-        userInfo.FirstName = dto.FirstName;
-        userInfo.LastName = dto.LastName;
+        userInfo.FullName = dto.FullName;
         userInfo.BirthDate = pc.ToDateTime(year, month, day, 0, 0, 0, 0);
 
 
@@ -379,10 +342,9 @@ public class UserController(
     public async Task<ApiResult> SetNewPhoneNumber(SetNewPhoneNumberDto dto, CancellationToken ct)
     {
         var userId = User.Identity!.GetUserId<int>();
-        var user = await repository.Table.FirstOrDefaultAsync(i => i.Id == userId);
+        var user = await repository.Table.FirstOrDefaultAsync(i => i.Id == userId, ct);
         if (user is null)
             throw new AppException(ApiResultStatusCode.UnAuthorized, "کاربر پیدا نشد");
-        await hashEntityValidator.IsValidAsync(user, userId, ct);
 
         if (user.PhoneNumber is not null)
         {
@@ -422,7 +384,6 @@ public class UserController(
         var user = await repository.GetByIdAsync(ct, userId);
         if (user is null)
             throw new AppException(ApiResultStatusCode.UnAuthorized, "کاربر پیدا نشد");
-        await hashEntityValidator.IsValidAsync(user, userId, ct);
 
         if (!_otpService.VerifyOtp(dto.NewPhoneNumber, dto.OtpCode))
         {
@@ -449,7 +410,7 @@ public class UserController(
     public async Task<ApiResult> SendEmailOtp(CancellationToken ct)
     {
         var userId = User.Identity?.GetUserId<int>() ?? 0;
-        var user = await repository.TableNoTracking.FirstOrDefaultAsync(i => i.Id == userId);
+        var user = await repository.TableNoTracking.FirstOrDefaultAsync(i => i.Id == userId, ct);
         if (user is null)
             throw new NotFoundException("کاربر پیدا نشد");
         if (user.Email is not null)
@@ -469,7 +430,6 @@ public class UserController(
         if (user is null)
             throw new AppException(ApiResultStatusCode.UnAuthorized, "کاربر پیدا نشد");
 
-        await hashEntityValidator.IsValidAsync(user, userId, ct);
 
         if (user.Email is not null)
         {
@@ -503,7 +463,6 @@ public class UserController(
         if (user is null)
             throw new AppException(ApiResultStatusCode.UnAuthorized, "کاربر پیدا نشد");
 
-        await hashEntityValidator.IsValidAsync(user, userId, ct);
         if (!_otpService.VerifyOtp(dto.NewEmail, dto.OtpCode))
         {
             throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");
@@ -533,7 +492,6 @@ public class UserController(
         var user = await Repository.GetByIdAsync(ct, userId);
         if (user is null) throw new NotFoundException("کاربر پیدا نشد");
 
-        await hashEntityValidator.IsValidAsync(user, userId, ct);
 
         var hasPassword = await userManager.HasPasswordAsync(user);
         if (hasPassword)
@@ -588,7 +546,7 @@ public class UserController(
         if (!string.IsNullOrEmpty(dto.Search))
         {
             query = query.Where(i => i.User.UserName.Contains(dto.Search)
-                                     || $"{i.User.Info.FirstName} {i.User.Info.LastName}".Contains(dto.Search)
+                                     || i.User.Info.FullName.Contains(dto.Search)
                                      || i.Ip.Contains(dto.Search));
         }
 
@@ -601,12 +559,12 @@ public class UserController(
             query = setSort(dto.Sort, query);
         }
 
-        var total = await query.CountAsync();
+        var total = await query.CountAsync(ct);
         var models = await query
             .Skip((dto.Page - 1) * dto.Limit)
             .Take(dto.Limit)
             .ProjectTo<ApiTokenResDto>(Mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ToListAsync(ct);
 
         return Ok(new IndexResDto<ApiTokenResDto>
         {
@@ -649,7 +607,7 @@ public class UserController(
         if (!string.IsNullOrEmpty(dto.Search))
         {
             query = query.Where(i => i.User.UserName.Contains(dto.Search)
-                                     || $"{i.User.Info.FirstName} {i.User.Info.LastName}".Contains(dto.Search)
+                                     || i.User.Info.FullName.Contains(dto.Search)
                                      || i.Ip.Contains(dto.Search));
         }
 
@@ -790,7 +748,7 @@ public class UserController(
         return models.Select(i => new SelectDto
         {
             Id = i.Id,
-            Title = $"{i.Info.FirstName} {i.Info.LastName}"
+            Title = i.Info.FullName
         }).ToList();
     }
 

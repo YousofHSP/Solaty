@@ -10,10 +10,10 @@ namespace Service.Model.Contracts
 {
     public interface IUploadedFileService
     {
-        Task SetDisableFilesAsync(CancellationToken ct, string modelType, int modelId, UploadedFileType? type);
-        Task<string> UploadFileAsync(IFormFile file, UploadedFileType type, string modelType, int modelId, int userId, CancellationToken ct);
-        Task<string> GetFilePath(string modelType, int modelId, UploadedFileType type, CancellationToken ct);
+        Task SetDisableFilesAsync(CancellationToken ct, string modelType, long modelId, UploadedFileType? type);
+        Task<string> UploadFileAsync(IFormFile file, UploadedFileType type, string modelType, long modelId, long userId, CancellationToken ct);
+        Task<string> GetFilePath(string modelType, long modelId, UploadedFileType type, CancellationToken ct);
         string GetFilePath(UploadedFile model, CancellationToken ct);
-        Task<List<UploadedFile>> GetFiles(string modelType, List<int> modelIds, UploadedFileType? type, CancellationToken ct);
+        Task<List<UploadedFile>> GetFiles(string modelType, List<long> modelIds, UploadedFileType? type, CancellationToken ct);
     }
 }

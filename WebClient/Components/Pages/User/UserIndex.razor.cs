@@ -95,7 +95,7 @@ public partial class UserIndex : ComponentBase
         await Js.InvokeVoidAsync("openModal", "dataModal");
     }
 
-    private async Task ShowEditModal(int id)
+    private async Task ShowEditModal(long id)
     {
         await Js.InvokeVoidAsync("openModal", "dataModal");
         _userModalTitle = "ویرایش";
@@ -107,13 +107,10 @@ public partial class UserIndex : ComponentBase
             {
                 _data.RoleIds = result.RoleIds;
                 _data.BirthDate = result.BirthDate;
-                _data.NationalCode = result.NationalCode;
-                _data.FirstName = result.FirstName;
-                _data.LastName = result.LastName;
+                _data.FullName= result.FullName;
                 _data.Email = result.Email;
                 _data.Status = result.Status;
                 _data.PhoneNumber = result.PhoneNumber;
-                _data.UserName = result.UserName;
                 _data.Id = result.Id;
                 _modalIsBusy = false;
                 StateHasChanged();
@@ -125,7 +122,7 @@ public partial class UserIndex : ComponentBase
         }
     }
 
-    private async Task ShowDeleteWarning(int id)
+    private async Task ShowDeleteWarning(long id)
     {
         await Js.InvokeVoidAsync("openModal", "deleteModal");
         _data = new UserDto { Id = id };

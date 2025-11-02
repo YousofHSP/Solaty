@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class Province : IEntity<int>
+    public class Province : IEntity<long>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Title { get; set; }
 
         public List<City> Cities { get; set; }

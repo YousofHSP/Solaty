@@ -6,17 +6,17 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities;
 
-public class Audit : IEntity<int>
+public class Audit : IEntity<long>
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string Ip { get; set; }
     public string ReferrerLink { get; set; }
     public string Protocol { get; set; }
     public string PhysicalPath { get; set; }
     public string RequestId { get; set; }
     public string Model { get; set; }
-    public int ModelId { get; set; }
-    public int? UserId { get; set; }
+    public long ModelId { get; set; }
+    public long? UserId { get; set; }
     public string Method { get; set; }
     public string NewValue { get; set; }
     public string? OldHash { get; set; }

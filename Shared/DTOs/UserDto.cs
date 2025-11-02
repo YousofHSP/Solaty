@@ -9,21 +9,13 @@ namespace Shared.DTOs;
 
 public class UserDto : BaseDto<UserDto, User>
 {
-    [Display(Name = "نام")]
+    [Display(Name = "نام و نام خانوادگی")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    public string FirstName { get; set; } = null!;
-    [Display(Name = "نام خانوادگی")]
-    [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    public string LastName { get; set; } = null!;
+    public string FullName { get; set; } = null!;
 
-    [Display(Name = "نام کاربری")]
-    [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    public string UserName { get; set; } = null!;
     [Display(Name = "موبایل")]
-    public string? PhoneNumber { get; set; } = null!;
-    [Display(Name = "کدملی")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    public string NationalCode { get; set; } = null!;
+    public string PhoneNumber { get; set; } = null!;
 
     [Display(Name = "تاریخ تولید")]
     public string? BirthDate { get; set; } = null!;
@@ -38,7 +30,7 @@ public class UserDto : BaseDto<UserDto, User>
     [Display(Name = "گروه کاری")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
     //[ExistsInDatabase<UserGroup>(nameof(UserGroup.Id), ErrorMessage = "{0} پیدا نشد")]
-    public List<int> RoleIds { get; set; } = [];
+    public List<long> RoleIds { get; set; } = [];
 
     [Display(Name = "رمز")]
     public string? Password { get; set; }
@@ -46,33 +38,25 @@ public class UserDto : BaseDto<UserDto, User>
 
 public class UserResDto : BaseDto<UserResDto, User>
 {
-    [Display(Name = "نام")]
-    public string FirstName { get; set; }
-    [Display(Name = "نام خانوادگی")]
-    public string LastName { get; set; }
-    public string NationalCode { get; set; }
-    [Display(Name = "نام کاربری")]
-    public string UserName { get; set; } = null!;
+    [Display(Name = "نام و نام خانوادگی")]
+    public string FullName { get; set; }
+    [Display(Name = "موبایل")]
     public string PhoneNumber { get; set; }
+    [Display(Name = "ایمیل")]
     public string Email { get; set; }
+    [Display(Name = "تاریخ تولد")]
     public string BirthDate { get; set; }
     [Display(Name = "نقش ها")]
     public string Roles{ get; set; }
-    public List<int> RoleIds{ get; set; }
+    public List<long> RoleIds{ get; set; }
     [Display(Name = "وضعیت")]
     public UserStatus Status { get; set; }
 
     protected override void CustomMappings(IMappingExpression<User, UserResDto> mapping)
     {
         mapping.ForMember(
-            d => d.FirstName,
-            s => s.MapFrom(m => m.Info.FirstName));
-        mapping.ForMember(
-            d => d.LastName,
-            s => s.MapFrom(m => m.Info.LastName));
-        mapping.ForMember(
-            d => d.NationalCode,
-            s => s.MapFrom(m => m.Info.NationalCode));
+            d => d.FullName,
+            s => s.MapFrom(m => m.Info.FullName));
         mapping.ForMember(
             d => d.BirthDate,
             s => s.MapFrom(m => m.Info.BirthDate == null ? "" : m.Info.BirthDate.Value.ToShamsi(default)));
@@ -88,24 +72,18 @@ public class UserResDto : BaseDto<UserResDto, User>
 
 public class UserProfileResDto
 {
-    public string UserName { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
+    public string FullName { get; set; }
     public string PhoneNumber { get; set; }
     public string BirthDate { get; set; }
     public string Email { get; set; }
-    public string NationalCode { get; set; }
     public string ProfileImage { get; set; }
     public string Roles { get; set; }
 }
 public class UserProfileDto
 {
-    [Display(Name = "نام")]
+    [Display(Name = "نام و نام خانوادگی")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    public string FirstName { get; set; }
-    [Display(Name = "نام خانوادگی")]
-    [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    public string LastName { get; set; }
+    public string FullName { get; set; }
     [Display(Name = "تاریخ تولد")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
     public string BirthDate { get; set; }
@@ -148,12 +126,12 @@ public class CheckTokenDto
 }
 public class ChangeUserStatusDto
 {
-    public int UserId { get; set; }
+    public long UserId { get; set; }
     public UserStatus Status { get; set; }
 }
 
 public class DisableTokensDto
 {
     [Required]
-    public int Id{ get; set; }
+    public long Id{ get; set; }
 }

@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class ApiToken : IBaseEntity<int>
+    public class ApiToken : IBaseEntity<long>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Ip { get; set; }
         public string UserAgent { get; set; }
         public DateTimeOffset CreateDate { get; set; }
         public string Code { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public bool Enable { get; set; }
         public DateTimeOffset LastUsedDate { get; set; }
 

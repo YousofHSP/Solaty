@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Domain.Entities;
 
 [Display(Name = "نقش")]
-public class Role : IdentityRole<int>, IBaseEntity<int>, ISoftDelete, IHashedEntity
+public class Role : IdentityRole<long>, IBaseEntity<long>
 {
     public string? Title { get; set; }
     public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.Now;

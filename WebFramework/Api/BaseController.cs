@@ -78,5 +78,5 @@ namespace WebFramework.Api
     [ApiController]
     [ApiResultFilter]
     [Route("api/v{version:ApiVersion}/[controller]")]
-    public class BaseController : BaseController<int> { }
+    public class BaseController : BaseController<long> { }
 }

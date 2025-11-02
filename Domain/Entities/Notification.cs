@@ -15,7 +15,7 @@ namespace Domain.Entities
     {
         public string Title { get; set; }
         public DateTimeOffset? SeenDate { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
         public User User { get; set; }
         public NotificationStatus Status { get; set; }

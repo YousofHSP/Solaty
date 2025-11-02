@@ -10,17 +10,17 @@ namespace Domain.Entities
 
         public List<AuditCheckDetail> AuditCheckDetails { get; set; }
     }
-    public class AuditCheckDetail : IBaseEntity<int>
+    public class AuditCheckDetail : IBaseEntity<long>
     {
         public DateTimeOffset CreateDate { get; set; }
-        public int AuditCheckId { get; set; }
-        public int ModelId { get; set; }
+        public long AuditCheckId { get; set; }
+        public long ModelId { get; set; }
         public string Model { get; set; }
         public AuditCheckDetailStatus Status { get; set; }
         public DateTimeOffset? AuditCreateDate { get; set; }
 
         public AuditCheck AuditCheck { get; set; }
-        public int Id { get; set; }
+        public long Id { get; set; }
     }
 
     public class AuditCheckConfiguration : IEntityTypeConfiguration<AuditCheck>

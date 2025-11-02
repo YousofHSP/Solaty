@@ -8,10 +8,10 @@ using Domain.Entities.Common;
 
 namespace Domain.Entities
 {
-    public class Log: IEntity<int>
+    public class Log: IEntity<long>
     {
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public DateTime TimeStamp { get; set; }
         public string Level { get; set; }

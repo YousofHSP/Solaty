@@ -20,7 +20,9 @@ namespace Service.Model
         private readonly IServiceProvider _serviceProvider;
         private readonly ApplicationDbContext _context;
 
-        public HashEntityValidator(IRepository<Audit> auditRepository, ILogger<HashEntityValidator> logger, ApplicationDbContext dbContext, IServiceProvider serviceProvider, IRepository<AuditCheck> auditCheckRepository, IRepository<Setting> settingRepository)
+        public HashEntityValidator(IRepository<Audit> auditRepository, ILogger<HashEntityValidator> logger,
+            ApplicationDbContext dbContext, IServiceProvider serviceProvider,
+            IRepository<AuditCheck> auditCheckRepository, IRepository<Setting> settingRepository)
         {
             _auditRepository = auditRepository;
             _logger = logger;
@@ -30,10 +32,11 @@ namespace Service.Model
             _settingRepository = settingRepository;
         }
 
-        public async Task<bool> IsValidAsync(IHashedEntity entity, int userId, CancellationToken ct, bool stopApp = true)
+        public async Task<bool> IsValidAsync(IHashedEntity entity, long userId, CancellationToken ct,
+            bool stopApp = true)
         {
             var checkAudit = await _settingRepository.TableNoTracking
-                .FirstOrDefaultAsync(i => i.Id == (int)SettingKey.AuditLogEnabled);
+                .FirstOrDefaultAsync(i => i.Id == (long)SettingKey.AuditLogEnabled);
             if (checkAudit.Value != "1")
                 return true;
             var hash = GetPropertiesHas(entity);
@@ -50,22 +53,26 @@ namespace Service.Model
                     CreatorUserId = userId,
                     AuditCheckDetails = new List<AuditCheckDetail>
                     {
-                        new AuditCheckDetail{ Model = model, ModelId = entity.Id, Status= AuditCheckDetailStatus.Invalid, AuditCreateDate = result}
+                        new AuditCheckDetail
+                        {
+                            Model = model, ModelId = entity.Id, Status = AuditCheckDetailStatus.Invalid,
+                            AuditCreateDate = result
+                        }
                     }
                 };
                 await _auditCheckRepository.AddAsync(auditCheck, ct);
                 if (stopApp)
                 {
-                    var appModeSetting = await _settingRepository.GetByIdAsync(ct, (int)SettingKey.AppMode);
+                    var appModeSetting = await _settingRepository.GetByIdAsync(ct, (long)SettingKey.AppMode);
                     appModeSetting.Value = "0";
                     await _settingRepository.UpdateAsync(appModeSetting, ct);
                     _logger.LogWarning("App stoped becuses Entity is not valid");
-
                 }
             }
-            return isValid;
 
+            return isValid;
         }
+
         private string GetPropertiesHas(IHashedEntity entity)
         {
             var entityType = _context.Model.FindEntityType(entity.GetType());
@@ -88,10 +95,12 @@ namespace Service.Model
             var json = JsonSerializer.Serialize(dict);
             return SecurityHelpers.GetSha256Hash(json, entity.SaltCode);
         }
+
         public async Task<DateTimeOffset> RestoreEncryptedFieldsAsync(IHashedEntity entity)
         {
             var modelName = entity.GetType().Name;
-            var audit = await _auditRepository.TableNoTracking.OrderBy(i => i.Id).FirstOrDefaultAsync(i => i.Model == modelName && i.ModelId == entity.Id);
+            var audit = await _auditRepository.TableNoTracking.OrderBy(i => i.Id)
+                .FirstOrDefaultAsync(i => i.Model == modelName && i.ModelId == entity.Id);
             if (audit is null)
                 throw new ApplicationException($"Audit Not Found model name: {modelName}, model id: {entity.Id}");
 
@@ -131,17 +140,20 @@ namespace Service.Model
                     }
                     catch (Exception ex)
                     {
-                        throw new ApplicationException($"خطا در تبدیل پراپرتی {kv.Key} به نوع {propertyType.Name}: مقدار = {kv.Value}", ex);
+                        throw new ApplicationException(
+                            $"خطا در تبدیل پراپرتی {kv.Key} به نوع {propertyType.Name}: مقدار = {kv.Value}", ex);
                     }
                 }
             }
+
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            _logger.LogWarning($"Entity Restored EntityName: {modelName} , EntityId: {entity.Id}, With AuditId: {audit.Id}");
+            _logger.LogWarning(
+                $"Entity Restored EntityName: {modelName} , EntityId: {entity.Id}, With AuditId: {audit.Id}");
             return audit.CreateDate;
         }
 
-        public async Task<AuditCheck> ValidateAllHashedEntitiesAsync(int userId, CancellationToken ct)
+        public async Task<AuditCheck> ValidateAllHashedEntitiesAsync(long userId, CancellationToken ct)
         {
             var auditCheckModel = new AuditCheck
             {
@@ -182,7 +194,6 @@ namespace Service.Model
                         Model = entity.GetType().Name,
                         ModelId = entity.Id,
                         Status = AuditCheckDetailStatus.Valid
-
                     };
                     var hash = GetPropertiesHas(entity);
 
@@ -191,9 +202,11 @@ namespace Service.Model
                         auditCheckDetail.Status = AuditCheckDetailStatus.Invalid;
                         auditCheckDetail.AuditCreateDate = await RestoreEncryptedFieldsAsync(entity);
                     }
+
                     auditCheckModel.AuditCheckDetails.Add(auditCheckDetail);
                 }
             }
+
             await _auditCheckRepository.AddAsync(auditCheckModel, ct);
             return auditCheckModel;
         }

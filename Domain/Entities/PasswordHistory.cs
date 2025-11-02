@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class PasswordHistory : BaseEntity, IHashedEntity
+    public class PasswordHistory : BaseEntity 
     {
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public string PasswordHash { get; set; }
         public string Hash { get; set; }
         public string SaltCode { get; set; }

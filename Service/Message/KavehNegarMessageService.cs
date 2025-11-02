@@ -16,7 +16,7 @@ namespace Service.Message
             _repository = repository;
         }
 
-        public async Task<bool> SendMessageAsync(string phoneNumber, string message,int? userId, int? creatorUserId, CancellationToken ct)
+        public async Task<bool> SendMessageAsync(string phoneNumber, string message,long? userId, long? creatorUserId, CancellationToken ct)
         {
             var requestBody = new
             {

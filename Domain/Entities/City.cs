@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class City : IEntity<int>
+    public class City : IEntity<long>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Title { get; set; }
-        public int ProvinceId { get; set; }
+        public long ProvinceId { get; set; }
 
 
         public Province Province { get; set; }

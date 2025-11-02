@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class Setting : IEntity<int>, IHashedEntity
+    public class Setting : IEntity<long>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Title { get; set; }
         public string Value { get; set; }
         public int IsSecurity { get; set; }

@@ -61,7 +61,7 @@ public partial class SessionsIndex : ComponentBase
         await GetData();
     }
 
-    private async Task Disable(int id)
+    private async Task Disable(long id)
     {
         try
         {

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class IpRule : BaseEntity, IHashedEntity
+    public class IpRule : BaseEntity
     {
         public string Ip { get; set; }
         public string? EndIp { get; set; }

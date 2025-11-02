@@ -27,27 +27,16 @@
                 <div class="grid grid-cols-3 gap-4 mt-3">
 
                     <fieldset class="fieldset w-full">
-                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.FirstName))</legend>
-                        <InputText @bind-Value="_data.FirstName" class="input" placeholder="نام را وارد کنید"/>
-                        <ValidationMessage For="@(() => _data.FirstName)"></ValidationMessage>
+                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.FullName))</legend>
+                        <InputText @bind-Value="_data.FullName" class="input" placeholder="نام را وارد کنید"/>
+                        <ValidationMessage For="@(() => _data.FullName)"></ValidationMessage>
                     </fieldset>
-                    <fieldset class="fieldset w-full">
-                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.LastName))</legend>
-                        <InputText @bind-Value="_data.LastName" class="input"
-                                   placeholder="نام خانوادگی را وارد کنید"/>
-                        <ValidationMessage For="@(() => _data.LastName)"></ValidationMessage>
-                    </fieldset>
+                    
                     <fieldset class="fieldset w-full">
                         <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.BirthDate))</legend>
                         <InputText @bind-Value="_data.BirthDate" class="input" data-jdp
                                    placeholder="تاریخ تولد را وارد کنید"/>
                         <ValidationMessage For="@(() => _data.BirthDate)"></ValidationMessage>
-                    </fieldset>
-                    <fieldset class="fieldset w-full">
-                        <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.UserName))</legend>
-                        <InputText @bind-Value="_data.UserName" class="input"
-                                   placeholder="نام کاربری را وارد کنید"/>
-                        <ValidationMessage For="@(() => _data.UserName)"></ValidationMessage>
                     </fieldset>
                     <fieldset class="fieldset w-full">
                         <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.Password))</legend>
@@ -61,12 +50,7 @@
                         <InputText @bind-Value="_data.PhoneNumber" class="input" placeholder="موبایل را وارد کنید"/>
                         <ValidationMessage For="@(() => _data.PhoneNumber)"></ValidationMessage>
                     </fieldset>
-                    <fieldset class="fieldset w-full">
-                        <legend
-                            class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.NationalCode))</legend>
-                        <InputText @bind-Value="_data.NationalCode" class="input" placeholder="کدملی را وارد کنید"/>
-                        <ValidationMessage For="@(() => _data.NationalCode)"></ValidationMessage>
-                    </fieldset>
+                    
                     <fieldset class="fieldset w-full">
                         <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.Email))</legend>
                         <InputText @bind-Value="_data.Email" type="email" class="input input-error"
@@ -76,7 +60,7 @@
                     <fieldset class="fieldset w-full">
                         <legend
                             class="fieldset-legend">@(ModelExtensions.ToDisplay<UserDto>(i => i.RoleIds))</legend>
-                        <InputSelectMultiple TItem="SelectDto" TValue="int"
+                        <InputSelectMultiple TItem="SelectDto" TValue="long"
                                              Items="_roles"
                                              Placeholder="انتخاب نقش"
                                              ShowPlaceholder="true"
@@ -133,9 +117,9 @@ else
             <tr>
                 <th>ردیف</th>
                 <th>پروفایل</th>
-                <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.FirstName))</th>
+                <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.FullName))</th>
                     <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.Roles))</th>
-                    <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.UserName))</th>
+                <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.PhoneNumber))</th>
                     <th>@(ModelExtensions.ToDisplay<UserResDto>(i => i.Status))</th>
                 <th>عملیات</th>
             </tr>
@@ -159,9 +143,9 @@ else
                             </div>
                         </div>
                     </td>
-                    <td>@item.FirstName @item.LastName</td>
+                    <td>@item.FullName</td>
                     <td>@item.Roles</td>
-                    <td>@item.UserName</td>
+                    <td>@item.PhoneNumber</td>
                     <td>
                         @if (item.Status == UserStatus.Disable)
                         {

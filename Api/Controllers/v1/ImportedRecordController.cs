@@ -70,8 +70,8 @@ public class ImportedRecordController : BaseController
         });
     }
 
-    [HttpPost("[action]/{id:int}")]
-    public async Task<ApiResult> Adapt([FromRoute] int id, AdaptImportedRecordDto dto, CancellationToken ct)
+    [HttpPost("[action]/{id:long}")]
+    public async Task<ApiResult> Adapt([FromRoute] long id, AdaptImportedRecordDto dto, CancellationToken ct)
     {
         var model = await _repository.TableNoTracking
             .Include(i => i.ImportedFile)
@@ -84,8 +84,8 @@ public class ImportedRecordController : BaseController
         return Ok();
     }
 
-    [HttpGet("[action]/{id:int}")]
-    public async Task<ApiResult> Ignore([FromRoute] int id, CancellationToken ct)
+    [HttpGet("[action]/{id:guid}")]
+    public async Task<ApiResult> Ignore([FromRoute] Guid id, CancellationToken ct)
     {
         var model = await _repository.GetByIdAsync(ct, id);
         if (model is null)

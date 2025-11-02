@@ -9,15 +9,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class ArchiveLog : BaseEntity, ISoftDelete
+    public class ArchiveLog : BaseEntity 
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string ArchiveFileName { get; set; }
         public DateTimeOffset ArchivedUntilDate { get; set; }
         public DateTimeOffset ArchivedAt { get; set; }
         public int LogCount { get; set; }
         public int AuditCount { get; set; }
-        public DateTimeOffset? DeleteDate { get; set; }
     }
 
     public class ArivhiveLogConfiguration : IEntityTypeConfiguration<ArchiveLog>

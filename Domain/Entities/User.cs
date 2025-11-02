@@ -16,7 +16,7 @@ public enum UserStatus
 }
 
 [Display(Name = "کاربران")]
-public class User : IdentityUser<int>, IBaseEntity<int>, IHashedEntity, ISoftDelete
+public class User : IdentityUser<long>, IBaseEntity<long> 
 {
     public DateTimeOffset LastLoginDate { get; set; } = DateTimeOffset.Now;
     public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.Now;
@@ -56,13 +56,11 @@ public class User : IdentityUser<int>, IBaseEntity<int>, IHashedEntity, ISoftDel
     #endregion
 }
 
-public class UserInfo : IBaseEntity<int>, IHashedEntity, ISoftDelete
+public class UserInfo : IBaseEntity<long> 
 {
-    public int Id { get; set; }
-    public int UserId { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string NationalCode { get; set; }
+    public long Id { get; set; }
+    public long UserId { get; set; }
+    public string FullName { get; set; }
     public string Address { get; set; }
 
     public DateTime? BirthDate { get; set; }

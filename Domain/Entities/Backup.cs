@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class Backup : BaseEntity<int>
+    public class Backup : BaseEntity<long>
     {
         public string FileName { get; set; }
     }

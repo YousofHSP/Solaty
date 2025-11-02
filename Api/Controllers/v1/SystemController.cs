@@ -31,7 +31,9 @@ namespace Api.Controllers.v1
         private readonly ILicenseService _licenseService;
         private readonly IMapper _mapper;
 
-        public SystemController(IConfiguration configuration, IRepository<Backup> repository, IMapper mapper, IHashEntityValidator hashEntityValidator, IRepository<AuditCheck> auditCheckRepository, IRepository<AuditCheckDetail> auditCheckDetailRepository, ILicenseService licenseService)
+        public SystemController(IConfiguration configuration, IRepository<Backup> repository, IMapper mapper,
+            IHashEntityValidator hashEntityValidator, IRepository<AuditCheck> auditCheckRepository,
+            IRepository<AuditCheckDetail> auditCheckDetailRepository, ILicenseService licenseService)
         {
             _connectionString = configuration.GetConnectionString("SqlServer") ?? "";
             _repository = repository;
@@ -41,6 +43,7 @@ namespace Api.Controllers.v1
             _auditCheckDetailRepository = auditCheckDetailRepository;
             _licenseService = licenseService;
         }
+
         [Display(Name = "بکآپ دیتابیس")]
         [HttpGet("BackupDatabase")]
         public async Task<ApiResult> BackupDatabase(CancellationToken ct)
@@ -51,7 +54,7 @@ namespace Api.Controllers.v1
             var backupFileName = $"Backup_{DateTime.Now:yyyyMMdd_HHmmss}.bak";
             var backupZipFileName = $"Backup_{DateTime.Now:yyyyMMdd_HHmmss}.zip";
             var backupFilePath = Path.Combine(backupFolderPath, backupFileName);
-            var backupZipFilePath = Path.Combine(backupFolderPath, backupZipFileName); 
+            var backupZipFilePath = Path.Combine(backupFolderPath, backupZipFileName);
 
             var databaseName = new SqlConnectionStringBuilder(_connectionString).InitialCatalog;
 
@@ -72,7 +75,7 @@ namespace Api.Controllers.v1
                         await command.ExecuteNonQueryAsync();
                     }
                 }
-                
+
                 var backupFile = Path.Combine(backupFolderPath, backupFileName);
 
                 using (var archive = ZipFile.Open(backupZipFilePath, ZipArchiveMode.Create))
@@ -106,9 +109,10 @@ namespace Api.Controllers.v1
             query = query.Where(i =>
                 i.FileName.Contains(search)
                 || i.CreatorUser.UserName.Contains(search)
-                );
+            );
             return query;
         }
+
         [Display(Name = "لیست بکآپ ها")]
         [HttpPost("[action]")]
         public async Task<IndexResDto<BackupDto>> BackupsList(IndexDto dto, CancellationToken ct)
@@ -126,6 +130,7 @@ namespace Api.Controllers.v1
             {
                 query = setSort(dto.Sort, query);
             }
+
             var total = await query.CountAsync(ct);
             var list = await query
                 .Skip((dto.Page - 1) * dto.Limit)
@@ -142,6 +147,7 @@ namespace Api.Controllers.v1
             };
             return result;
         }
+
         [Display(Name = "دانلود بکآپ")]
         [Produces("application/octet-stream")]
         [HttpGet("download/{id}")]
@@ -151,7 +157,8 @@ namespace Api.Controllers.v1
             if (backup is null)
                 throw new NotFoundException("فایل پیدا نشد");
             var fileName = backup.FileName;
-            if (string.IsNullOrWhiteSpace(fileName) || fileName.Contains("..") || Path.GetExtension(fileName).ToLower() != ".zip")
+            if (string.IsNullOrWhiteSpace(fileName) || fileName.Contains("..") ||
+                Path.GetExtension(fileName).ToLower() != ".zip")
             {
                 throw new BadRequestException("اسم فایل معتبر نیست");
             }
@@ -170,23 +177,22 @@ namespace Api.Controllers.v1
 
         protected IQueryable<AuditCheck> setSearch(string? search, IQueryable<AuditCheck> query)
         {
-
             if (string.IsNullOrEmpty(search)) return query;
             query = query.Where(i => i.CreatorUser.UserName.Contains(search));
             return query;
         }
+
         protected IQueryable<AuditCheckDetail> setSearch(string? search, IQueryable<AuditCheckDetail> query)
         {
-
             if (string.IsNullOrEmpty(search)) return query;
             query = query.Where(i => i.Model.Contains(search));
             return query;
         }
+
         [Display(Name = "لیست بررسی جداول")]
         [HttpPost("[action]")]
         public async Task<ApiResult<IndexResDto<AuditCheckResDto>>> AuditsCheckIndex(IndexDto dto, CancellationToken ct)
         {
-            
             dto.Page = Math.Max(1, dto.Page);
             dto.Limit = Math.Max(10, dto.Limit);
             var query = _auditCheckRepository.TableNoTracking.AsQueryable();
@@ -200,6 +206,7 @@ namespace Api.Controllers.v1
             {
                 query = setSort(dto.Sort, query);
             }
+
             var total = await query.CountAsync(ct);
             var list = await query
                 .Skip((dto.Page - 1) * dto.Limit)
@@ -219,9 +226,9 @@ namespace Api.Controllers.v1
 
         [Display(Name = "جزيیات لیست بررسی جداول")]
         [HttpPost("[action]/{auditCheckId}")]
-        public async Task<ApiResult<IndexResDto<AuditCheckDetailResDto>>> AuditsCheckDetailIndex(IndexDto dto, [FromRoute] int auditCheckId, CancellationToken ct)
+        public async Task<ApiResult<IndexResDto<AuditCheckDetailResDto>>> AuditsCheckDetailIndex(IndexDto dto,
+            [FromRoute] long auditCheckId, CancellationToken ct)
         {
-            
             dto.Page = Math.Max(1, dto.Page);
             dto.Limit = Math.Max(10, dto.Limit);
             var query = _auditCheckDetailRepository.TableNoTracking.AsQueryable();
@@ -234,6 +241,7 @@ namespace Api.Controllers.v1
             {
                 query = setSort(dto.Sort, query);
             }
+
             var total = await query.CountAsync(ct);
             var list = await query
                 .Skip((dto.Page - 1) * dto.Limit)
@@ -250,6 +258,7 @@ namespace Api.Controllers.v1
             };
             return result;
         }
+
         [Display(Name = "چک کردن جداول")]
         [HttpGet("[action]")]
         public async Task<ApiResult<AuditCheckResDto>> AuditsCheck(CancellationToken ct)
@@ -270,17 +279,19 @@ namespace Api.Controllers.v1
             if (file == "issueTemplate")
             {
                 filePath = Path.Combine(path, "issueTemplate.xlsx");
-            }else if (file == "bankTransactionTemplate")
+            }
+            else if (file == "bankTransactionTemplate")
             {
                 filePath = Path.Combine(path, "bankTransactionTemplate.xlsx");
             }
+
             if (!System.IO.File.Exists(filePath))
             {
                 throw new NotFoundException("فایل پیدا نشد.");
             }
+
             var contentType = "application/octet-stream"; // فایل باینری
             return PhysicalFile(filePath, contentType, file + ".xlsx");
-            
         }
 
         [Display(Name = "تنظیم لایسنس")]
@@ -295,6 +306,5 @@ namespace Api.Controllers.v1
 
             return Ok();
         }
-        
     }
 }

@@ -26,7 +26,7 @@ namespace Service.Model
             _settingService = settingService;
         }
 
-        public async Task<string> GetFilePath(string modelType, int modelId, UploadedFileType type,
+        public async Task<string> GetFilePath(string modelType, long modelId, UploadedFileType type,
             CancellationToken ct)
         {
             var model = await _repository.TableNoTracking
@@ -48,7 +48,7 @@ namespace Service.Model
             return "";
         }
 
-        public async Task<List<UploadedFile>> GetFiles(string modelType, List<int> modelIds, UploadedFileType? type,
+        public async Task<List<UploadedFile>> GetFiles(string modelType, List<long> modelIds, UploadedFileType? type,
             CancellationToken ct)
         {
             var query = _repository.Table
@@ -56,10 +56,10 @@ namespace Service.Model
                 .AsQueryable();
             if (type is not null)
                 query = query.Where(i => i.Type == type);
-            return await query.ToListAsync();
+            return await query.ToListAsync(ct);
         }
 
-        public async Task SetDisableFilesAsync(CancellationToken ct, string modelType, int modelId,
+        public async Task SetDisableFilesAsync(CancellationToken ct, string modelType, long modelId,
             UploadedFileType? type)
         {
             var query = _repository.Table
@@ -67,7 +67,7 @@ namespace Service.Model
                 .AsQueryable();
             if (type is not null)
                 query = query.Where(i => i.Type == type);
-            var list = await query.ToListAsync();
+            var list = await query.ToListAsync(ct);
             list = list.Select(i =>
             {
                 i.Enable = false;
@@ -77,7 +77,7 @@ namespace Service.Model
         }
 
         public async Task<string> UploadFileAsync(IFormFile file, UploadedFileType type
-            , string modelType, int modelId, int userId, CancellationToken ct)
+            , string modelType, long modelId, long userId, CancellationToken ct)
         {
             if (file == null || file.Length == 0)
                 throw new BadRequestException("فایل وارد نشد");

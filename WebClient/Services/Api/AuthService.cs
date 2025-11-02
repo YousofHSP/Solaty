@@ -44,8 +44,7 @@ public class AuthService
 
         Token = result.Token;
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "jwt_token", Token);
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", nameof(result.UserFirstName), result.UserFirstName);
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", nameof(result.UserLastName), result.UserLastName);
+        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", nameof(result.UserFullName), result.UserFullName);
         return true;
     }
 

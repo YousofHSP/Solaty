@@ -12,7 +12,6 @@ public class UserDataInitializer(UserManager<User> userManager, IRepository<User
         var isExists = await userManager.FindByNameAsync("admin");
         if (isExists is null)
         {
-            
             var user = new User
             {
                 UserName = "admin",
@@ -21,7 +20,7 @@ public class UserDataInitializer(UserManager<User> userManager, IRepository<User
             };
             await userManager.CreateAsync(user, "1qaz@WSX3edc");
             await userManager.AddToRoleAsync(user, "Administrator");
-            var info = new UserInfo { FirstName = "سیستم", BirthDate = DateTime.Today, LastName = "", UserId = user.Id, NationalCode = "1234567890"};
+            var info = new UserInfo { FullName = "سیستم", BirthDate = DateTime.Today, UserId = user.Id };
             await userInfoRepository.AddAsync(info, default);
         }
     }

@@ -7,9 +7,9 @@ using Domain.Entities.Common;
 
 namespace Domain.Entities
 {
-    public class LogCategory : IEntity<int>
+    public class LogCategory : IEntity<long>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string ControllerName { get; set; }
         public string ControllerFaName { get; set; }
         public string ActionName { get; set; }

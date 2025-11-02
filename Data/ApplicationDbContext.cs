@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, int>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, long>
     {
 
         public ApplicationDbContext(DbContextOptions options)
@@ -32,11 +32,11 @@ namespace Data
 
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<Role>().ToTable("Roles");
-            modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
-            modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
-            modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
-            modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");
-            modelBuilder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
+            modelBuilder.Entity<IdentityUserRole<long>>().ToTable("UserRoles");
+            modelBuilder.Entity<IdentityUserClaim<long>>().ToTable("UserClaims");
+            modelBuilder.Entity<IdentityUserLogin<long>>().ToTable("UserLogins");
+            modelBuilder.Entity<IdentityRoleClaim<long>>().ToTable("RoleClaims");
+            modelBuilder.Entity<IdentityUserToken<long>>().ToTable("UserTokens");
 
             var entitiesAssembly = typeof(IEntity).Assembly;
             modelBuilder.RegisterAllEntities<IEntity>(entitiesAssembly);

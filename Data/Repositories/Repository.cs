@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 namespace Data.Reprositories
 {
     public class Repository<TEntity> : IRepository<TEntity>
-        where TEntity : class, IEntity<int>
+        where TEntity : class, IEntity<long>
     {
         protected readonly ApplicationDbContext dbContext;
         public DbSet<TEntity> Entities { get; }

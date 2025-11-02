@@ -51,8 +51,7 @@ public partial class Profile : ComponentBase
                 _profileDto = new()
                 {
                     BirthDate = result.BirthDate,
-                    FirstName = result.FirstName,
-                    LastName = result.LastName
+                    FullName= result.FullName,
                 };
             }
         }

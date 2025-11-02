@@ -89,7 +89,7 @@ namespace WebClient.Components.Pages.Sys
             }
         }
 
-        protected void GoToDetails(int id)
+        protected void GoToDetails(long id)
         {
             Navigation.NavigateTo($"/System/AuditsCheck/{id}");
         }

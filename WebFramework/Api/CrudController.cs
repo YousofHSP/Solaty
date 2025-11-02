@@ -229,15 +229,15 @@ public class CrudController<TDto, TResDto, TEntity>(
     IMapper mapper,
     IHashEntityValidator hashEntityValidator
     )
-    : CrudController<TDto, TResDto, TEntity, int>(repository, mapper, hashEntityValidator)
-    where TEntity : class, IEntity<int>
-    where TDto : BaseDto<TDto, TEntity, int>
-    where TResDto : BaseDto<TResDto, TEntity, int>;
+    : CrudController<TDto, TResDto, TEntity, long>(repository, mapper, hashEntityValidator)
+    where TEntity : class, IEntity<long>
+    where TDto : BaseDto<TDto, TEntity, long>
+    where TResDto : BaseDto<TResDto, TEntity, long>;
 
 public class CrudController<TDto, TEntity>(
     IRepository<TEntity> repository,
     IMapper mapper,
     IHashEntityValidator hashEntityValidator)
-    : CrudController<TDto, TDto, TEntity, int>(repository, mapper, hashEntityValidator)
-    where TEntity : class, IEntity<int>
-    where TDto : BaseDto<TDto, TEntity, int>;
+    : CrudController<TDto, TDto, TEntity, long>(repository, mapper, hashEntityValidator)
+    where TEntity : class, IEntity<long>
+    where TDto : BaseDto<TDto, TEntity, long>;

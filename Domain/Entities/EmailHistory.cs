@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class EmailHistory : BaseEntity, IHashedEntity
+    public class EmailHistory : BaseEntity 
     {
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public string Email { get; set; }
         public string OtpCode { get; set; }
         public bool IsConfirmed { get; set; }

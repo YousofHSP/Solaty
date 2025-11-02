@@ -29,7 +29,7 @@ namespace Api.Controllers.v1
             query = query.Where(i => i.Title.Contains(search) || i.Name.Contains(search));
             return query;
         }
-        public override async Task<ApiResult<RoleResDto>> Get(int id, CancellationToken cancellationToken)
+        public override async Task<ApiResult<RoleResDto>> Get(long id, CancellationToken cancellationToken)
         {
             var model = await _roleManager.FindByIdAsync(id.ToString());
             if (model is null)
@@ -93,7 +93,7 @@ namespace Api.Controllers.v1
         }
 
         [Display(Name = "حذف")]
-        public override async Task<ApiResult> Delete(int id, CancellationToken cancellationToken)
+        public override async Task<ApiResult> Delete(long id, CancellationToken cancellationToken)
         {
             var model = await _roleRepository.GetByIdAsync(cancellationToken, id);
             if (model is null)

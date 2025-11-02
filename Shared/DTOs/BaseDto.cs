@@ -65,9 +65,9 @@ namespace Shared.DTOs
         }
 
     }
-    public abstract class BaseDto<TDto, TEntity> : BaseDto<TDto, TEntity, int>
+    public abstract class BaseDto<TDto, TEntity> : BaseDto<TDto, TEntity, long>
         where TDto : class
-        where TEntity : class, IEntity<int>
+        where TEntity : class, IEntity<long>
     {
     }
 }

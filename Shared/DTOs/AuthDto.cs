@@ -63,8 +63,7 @@ namespace Shared.DTOs
         public int Id { get; set; }
         public string Token { get; set; }
         public string AccessCode { get; set; }
-        public string UserFirstName { get; set; }
-        public string UserLastName { get; set; }
+        public string UserFullName { get; set; }
         public string ProfileImage { get; set; }
         public string UserName { get; set; }
     }

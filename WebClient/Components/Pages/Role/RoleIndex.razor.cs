@@ -145,7 +145,7 @@ public partial class RoleIndex : ComponentBase
         await Js.InvokeVoidAsync("openModal", "dataModal");
     }
 
-    private async Task ShowEditModal(int id)
+    private async Task ShowEditModal(long id)
     {
         await Js.InvokeVoidAsync("openModal", "dataModal");
         _modalTitle = "ویرایش";
@@ -169,7 +169,7 @@ public partial class RoleIndex : ComponentBase
         }
     }
 
-    private async Task ShowDeleteWarning(int id)
+    private async Task ShowDeleteWarning(long id)
     {
         await Js.InvokeVoidAsync("openModal", "deleteModal");
         _data = new() { Id = id };

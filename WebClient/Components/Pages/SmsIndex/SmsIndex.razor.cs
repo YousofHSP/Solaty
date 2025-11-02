@@ -60,7 +60,7 @@ public partial class SmsIndex : ComponentBase
         await GetData();
     }
 
-    private async Task ReSend(int id)
+    private async Task ReSend(long id)
     {
         try
         {

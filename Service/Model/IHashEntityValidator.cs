@@ -10,8 +10,8 @@ namespace Domain.Model
 {
     public interface IHashEntityValidator
     {
-        Task<bool > IsValidAsync(IHashedEntity entity, int userId, CancellationToken ct, bool stopApp = true);
+        Task<bool > IsValidAsync(IHashedEntity entity, long userId, CancellationToken ct, bool stopApp = true);
         Task<DateTimeOffset> RestoreEncryptedFieldsAsync(IHashedEntity entity);
-        Task<AuditCheck> ValidateAllHashedEntitiesAsync(int userId, CancellationToken ct);
+        Task<AuditCheck> ValidateAllHashedEntitiesAsync(long userId, CancellationToken ct);
     }
 }

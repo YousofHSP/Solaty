@@ -37,7 +37,7 @@ namespace Service.Model
         }
 
 
-        public async Task<PasswordHistory> CheckPasswordHistoryAsync(string password, User user, int createrUserId, CancellationToken ct)
+        public async Task<PasswordHistory> CheckPasswordHistoryAsync(string password, User user, long createrUserId, CancellationToken ct)
         {
             var passwordHistoryCount = await _settingService.GetValueAsync<int>(SettingKey.PasswordHistoryCount);
             if (passwordHistoryCount > 0)
@@ -45,7 +45,7 @@ namespace Service.Model
                 var passwordHistories = await _repository.TableNoTracking
                     .Where(i => i.UserId == user.Id)
                     .Take(passwordHistoryCount)
-                    .ToListAsync();
+                    .ToListAsync(ct);
                 foreach (var item in passwordHistories)
                 {
                     var result = _passwordHasher.VerifyHashedPassword(user, item.PasswordHash, password);

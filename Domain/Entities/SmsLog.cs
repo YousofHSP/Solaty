@@ -9,13 +9,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class SmsLog : IBaseEntity<int>
+    public class SmsLog : IBaseEntity<long>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Text { get; set; }
         public string Mobile { get; set; }
-        public int? ReceiverUserId { get; set; }
-        public int? CreatorUserId { get; set; }
+        public long? ReceiverUserId { get; set; }
+        public long? CreatorUserId { get; set; }
 
 
         public User? ReceiverUser { get; set; }

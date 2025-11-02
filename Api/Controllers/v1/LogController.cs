@@ -197,7 +197,7 @@ namespace Api.Controllers.v1
                 ArchivedAt = DateTimeOffset.Now,
                 LogCount = logs.Count,
                 AuditCount = audits.Count,
-                CreatorUserId = User.Identity?.GetUserId<int>() ?? 0
+                CreatorUserId = User.Identity!.GetUserId<long>()
             };
             await _archiveLogRepository.AddAsync(archiveLog, ct);
 

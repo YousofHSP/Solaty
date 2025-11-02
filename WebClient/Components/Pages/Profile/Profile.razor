@@ -20,15 +20,9 @@ else
             <DataAnnotationsValidator />
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <fieldset class="fieldset w-full">
-                    <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserProfileDto>(i => i.FirstName))</legend>
-                    <InputText @bind-Value="_profileDto.FirstName" class="input" placeholder="نام" />
-                    <ValidationMessage For="@(() => _profileDto.FirstName)"></ValidationMessage>
-                </fieldset>
-
-                <fieldset class="fieldset w-full">
-                    <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserProfileDto>(i => i.LastName))</legend>
-                    <InputText @bind-Value="_profileDto.LastName" class="input" placeholder="نام خانوادگی" />
-                    <ValidationMessage For="@(() => _profileDto.LastName)"></ValidationMessage>
+                    <legend class="fieldset-legend">@(ModelExtensions.ToDisplay<UserProfileDto>(i => i.FullName))</legend>
+                    <InputText @bind-Value="_profileDto.FullName" class="input" placeholder="نام" />
+                    <ValidationMessage For="@(() => _profileDto.FullName)"></ValidationMessage>
                 </fieldset>
 
                 <fieldset class="fieldset w-full">

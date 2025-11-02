@@ -30,7 +30,7 @@ namespace Shared.DTOs
     public class ReSendDto
     {
         [Required]
-        public int Id { get; set; }
+        public long Id { get; set; }
     }
 
 

@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities
 {
-    public class IpAccessType: BaseEntity, IHashedEntity
+    public class IpAccessType: BaseEntity 
     {
-        public int IpRuleId { get; set; }
+        public long IpRuleId { get; set; }
         public AccessType AccessType { get; set; }
         public string Hash { get; set; }
         public string SaltCode { get; set; }
