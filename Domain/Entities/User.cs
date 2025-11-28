@@ -8,20 +8,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities;
 
-public enum UserStatus
-{
-    [Display(Name = "غیرفعال")] Disable,
-    [Display(Name = "فعال")] Enable,
-    [Display(Name = "ناقص")] Imperfect
-}
 
 [Display(Name = "کاربران")]
 public class User : IdentityUser<long>, IBaseEntity<long> 
 {
-    public DateTimeOffset LastLoginDate { get; set; } = DateTimeOffset.Now;
     public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.Now;
     public DateTimeOffset? DeleteDate { get; set; } = null;
-    public UserStatus Status { get; set; }
+    public bool Enable { get; set; }
 
     [IgnoreDataMember] public List<Role> Roles { get; set; } = [];
     [IgnoreDataMember] public UserInfo? Info { get; set; }
@@ -29,15 +22,14 @@ public class User : IdentityUser<long>, IBaseEntity<long>
     [IgnoreDataMember] public List<ApiToken> ApiTokens { get; set; } = [];
     [IgnoreDataMember] public List<SmsLog> ReceivedSms { get; set; } = [];
     [IgnoreDataMember] public List<Notification> Notifications { get; set; } = [];
+}
 
-    #region CreatedModels
-
-    [IgnoreDataMember] public List<UploadedFile> CreatedUploadedFiles { get; set; } = [];
-    [IgnoreDataMember] public List<IpAccessType> CreatedIpAccessTypes { get; set; } = [];
-    [IgnoreDataMember] public List<IpRule> CreatedIpRules { get; set; } = [];
-    [IgnoreDataMember] public List<SmsLog> CreatedSmsLogs { get; set; } = [];
-    [IgnoreDataMember] public List<Notification> CreatedNotifications { get; set; } = [];
-    #endregion
+public enum GenderType
+{
+    [Display(Name = "زن")]
+    Female,
+    [Display(Name = "مرد")]
+    Male
 }
 
 public class UserInfo : IBaseEntity<long> 
@@ -46,7 +38,8 @@ public class UserInfo : IBaseEntity<long>
     public long UserId { get; set; }
     public string FullName { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
-
+    public string ConnectCode { get; set; }
+    public GenderType Gender { get; set; }
     public DateTime? BirthDate { get; set; }
     public DateTimeOffset CreateDate { get; set; }
     [IgnoreDataMember] public User User { get; set; } = null!;
@@ -72,25 +65,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(i => i.Notifications)
             .WithOne(i => i.User)
             .HasForeignKey(i => i.UserId);
-
-        #region CreatedModels
-
-        builder.HasMany(u => u.CreatedUploadedFiles)
-            .WithOne(f => f.CreatorUser)
-            .HasForeignKey(f => f.CreatorUserId);
-        builder.HasMany(u => u.CreatedIpAccessTypes)
-            .WithOne(i => i.CreatorUser)
-            .HasForeignKey(i => i.CreatorUserId);
-        builder.HasMany(u => u.CreatedIpRules)
-            .WithOne(i => i.CreatorUser)
-            .HasForeignKey(i => i.CreatorUserId);
-        builder.HasMany(u => u.CreatedSmsLogs)
-            .WithOne(i => i.CreatorUser)
-            .HasForeignKey(i => i.CreatorUserId);
-        builder.HasMany(u => u.CreatedNotifications)
-            .WithOne(i => i.CreatorUser)
-            .HasForeignKey(i => i.CreatorUserId);
-        #endregion
     }
 }
 

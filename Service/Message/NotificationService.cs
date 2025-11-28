@@ -26,7 +26,6 @@ namespace Service.Message
             var model = new Notification
             {
                 UserId = userId,
-                CreatorUserId = creatorUserId,
                 Title = title,
                 Status = NotificationStatus.Unseen
             };

@@ -67,7 +67,6 @@ public class UserController(
     [HttpPost("[action]")]
     public override async Task<ApiResult<UserResDto>> Create(UserDto dto, CancellationToken cancellationToken)
     {
-        var userEnable = dto.Status;
         if (string.IsNullOrEmpty(dto.Password))
             throw new BadRequestException("رمز را وارد کنید");
         var isExists =
@@ -88,8 +87,6 @@ public class UserController(
                 throw new BadRequestException("این  ایمیل قبلا استفاده شده");
         }
 
-        if (dto.Status == UserStatus.Disable)
-            userEnable = UserStatus.Disable;
         var model = dto.ToEntity(_mapper);
 
 
@@ -112,7 +109,6 @@ public class UserController(
             }
         }
 
-        model.Status = userEnable;
         model.Info = new UserInfo()
         {
             FullName= dto.FullName,
@@ -173,7 +169,7 @@ public class UserController(
 
         user.PhoneNumber = dto.PhoneNumber;
         user.Email = dto.Email;
-        user.Status = dto.Status;
+        user.Enable = dto.Enable;
         var info = user.Info;
         if (info is not null)
         {
@@ -201,7 +197,7 @@ public class UserController(
             throw new NotFoundException("کاربر پیدا نشد");
 
         var userId = User.Identity!.GetUserId<int>();
-        user.Status = dto.Status;
+        user.Enable = dto.Enable;
         return Ok();
     }
 
@@ -212,13 +208,6 @@ public class UserController(
             await repository.TableNoTracking.AnyAsync(i => i.Id == id && i.UserName == "admin", cancellationToken);
         if (isAdmin)
             throw new BadRequestException("کاربر مدیر نباید حذف شود");
-        var cantDelete = await repository.TableNoTracking
-            .Where(i => i.Id == id)
-            .AnyAsync(i =>
-                    i.CreatedNotifications.Any()
-                , cancellationToken);
-        if (cantDelete)
-            throw new BadRequestException("نمیتوان کاربر را به دلیل انجام عملیات در سیستم حذف کرد");
         var model = await Repository.GetByIdAsync(cancellationToken, id!);
         if (model is null) throw new NotFoundException();
         var userId = User.Identity!.GetUserId<int>();
@@ -338,7 +327,6 @@ public class UserController(
 
         if (!string.IsNullOrEmpty(user.Email))
         {
-            user.Status = UserStatus.Enable;
             await repository.UpdateAsync(user, ct);
         }
 
@@ -683,7 +671,7 @@ public class UserController(
     public override async Task<ApiResult<List<SelectDto>>> GetSelectList(CancellationToken cancellationToken)
     {
         var models = await repository.TableNoTracking.Where(i => i.UserName != "admin")
-            .Where(i => i.Status != UserStatus.Disable)
+            .Where(i => !i.Enable)
             .Include(i => i.Info)
             .ToListAsync(cancellationToken);
         return models.Select(i => new SelectDto

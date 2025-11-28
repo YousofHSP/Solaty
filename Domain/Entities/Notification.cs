@@ -24,9 +24,6 @@ namespace Domain.Entities
     {
         public void Configure(EntityTypeBuilder<Notification> builder)
         {
-            builder.HasOne(i => i.CreatorUser)
-                .WithMany(i => i.CreatedNotifications)
-                .HasForeignKey(i => i.CreatorUserId);
             builder.HasOne(i => i.User)
                 .WithMany(i => i.Notifications)
                 .HasForeignKey(i => i.UserId);

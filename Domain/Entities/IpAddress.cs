@@ -26,9 +26,6 @@ namespace Domain.Entities
             builder.HasMany(i => i.IpAccessTypes)
                 .WithOne(i => i.IpRule)
                 .HasForeignKey(i => i.IpRuleId);
-            builder.HasOne(i => i.CreatorUser)
-                .WithMany(u => u.CreatedIpRules)
-                .HasForeignKey(i => i.CreatorUserId);
         }
     }
 }

@@ -140,8 +140,6 @@ public class CrudController<TDto, TResDto, TEntity, TKey>(
     {
         await checkPermission(HttpContext);
         var model = dto.ToEntity(Mapper);
-        if (model is BaseEntity entity)
-            entity.CreatorUserId = User.Identity!.GetUserId<int>();
 
         model = await setProperty(model);
         await Repository.AddAsync(model, cancellationToken);

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Domain.Entities;
 using Shared.Validations;
 
 namespace Shared.DTOs
@@ -71,4 +72,23 @@ namespace Shared.DTOs
     {
         public string UserName { get; set; }
     }
+
+    public class RegisterDto
+    {
+        [Display(Name = "نام و نام خانوادگی")]
+        public string FullName { get; set; }
+        [Display(Name = "ایمیل")]
+        public string Email { get; set; }
+        [Display(Name = "شماره مویایل")]
+        public string PhoneNumber { get; set; }
+        [Display(Name = "رمز")]
+        public string Password { get; set; }
+        [Display(Name = "کد اتصال")]
+        public string ConnectCode { get; set; }
+        [Display(Name = "جنسیت")]
+        public GenderType Gender { get; set; }
+        [Display(Name = "کد یکبار مصرف")]
+        public string OtpCode{ get; set; }
+    }
+
 }

@@ -25,7 +25,7 @@ public class UserDto : BaseDto<UserDto, User>
 
     [Display(Name = "وضعیت")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    public UserStatus Status { get; set; }
+    public bool Enable{ get; set; }
 
     [Display(Name = "گروه کاری")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -50,7 +50,7 @@ public class UserResDto : BaseDto<UserResDto, User>
     public string Roles{ get; set; }
     public List<long> RoleIds{ get; set; }
     [Display(Name = "وضعیت")]
-    public UserStatus Status { get; set; }
+    public bool Enable{ get; set; }
 
     protected override void CustomMappings(IMappingExpression<User, UserResDto> mapping)
     {
@@ -127,7 +127,7 @@ public class CheckTokenDto
 public class ChangeUserStatusDto
 {
     public long UserId { get; set; }
-    public UserStatus Status { get; set; }
+    public bool Enable{ get; set; }
 }
 
 public class DisableTokensDto

@@ -16,11 +16,11 @@ public class UserDataInitializer(UserManager<User> userManager, IRepository<User
             {
                 UserName = "admin",
                 PhoneNumber = "09140758738",
-                Status = UserStatus.Enable
+                PhoneNumberConfirmed = true,
+                Enable= true
             };
             await userManager.CreateAsync(user, "1qaz@WSX3edc");
-            await userManager.AddToRoleAsync(user, "Administrator");
-            var info = new UserInfo { FullName = "سیستم", BirthDate = DateTime.Today, UserId = user.Id };
+            var info = new UserInfo { FullName = "سیستم", BirthDate = DateTime.Today, UserId = user.Id, ConnectCode = ""};
             await userInfoRepository.AddAsync(info, default);
         }
     }
