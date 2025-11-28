@@ -29,7 +29,7 @@ public class AuthService
     /// <summary>
     /// ورود کاربر و ذخیره توکن در localStorage
     /// </summary>
-    public async Task<bool> LoginAsync(string userName, string password, string captchaToken)
+    public async Task<bool> LoginAsync(string userName, string password)
     {
         var dto = new LoginDto
         {
