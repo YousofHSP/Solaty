@@ -27,6 +27,7 @@ namespace Api.Controllers.v1
         IJwtService jwtService,
         UserManager<User> userManager,
         IUserRepository repository,
+        IRepository<UserInfo> userInfoRepository,
         IUploadedFileService uploadedFileService,
         ISettingService settingService,
         IOtpService _otpService,
@@ -189,6 +190,18 @@ namespace Api.Controllers.v1
                 throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");
             }
 
+            string connectCode;
+            int retry = 0;
+
+            do
+            {
+                connectCode = Random.Shared.Next(100000, 1000000).ToString();
+                retry++;
+
+                if (retry > 10)
+                    throw new Exception("Cannot generate unique connect code");
+            } while (await userInfoRepository.TableNoTracking.AnyAsync(i => i.ConnectCode == connectCode, ct));
+
             var user = new User()
             {
                 PhoneNumber = dto.PhoneNumber,
@@ -198,6 +211,7 @@ namespace Api.Controllers.v1
                 Enable = true,
                 Info = new UserInfo()
                 {
+                    ConnectCode = connectCode,
                     Gender = dto.Gender,
                     FullName = dto.FullName,
                     Address = ""
