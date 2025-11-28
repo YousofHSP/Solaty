@@ -18,7 +18,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> SignIn([FromQuery] string jwtToken)
     {
         await _authService.SignInAsync(jwtToken);
-        return LocalRedirect("/");
+        return LocalRedirect("/dashboard");
     }
 
     [HttpGet("signout")]

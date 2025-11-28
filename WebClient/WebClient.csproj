@@ -130,7 +130,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Components\UserPages\" />
       <Folder Include="wwwroot\rcl-plugins\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\UserPages\Dashboard\DashboardUsers.razor" />
     </ItemGroup>
 
 </Project>
