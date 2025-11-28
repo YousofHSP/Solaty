@@ -138,7 +138,6 @@
 @code {
     private string _userName = "";
     private string _password = "";
-    private string _captchaToken = "";
     private bool _isBusy;
     private bool _isLoadingCaptcha;
     private bool _isHumanVerified;
@@ -160,16 +159,11 @@
     {
         try
         {
-            // اگر کپچا می‌خواهی → نذار حذف کنم
-            if (!_isHumanVerified || string.IsNullOrEmpty(_captchaToken))
-            {
-                ToastService.ShowError("لطفاً کپچا را تکمیل کنید.");
-                return;
-            }
+
 
             _isBusy = true;
 
-            var result = await AuthService.LoginAsync(_userName, _password, _captchaToken);
+            var result = await AuthService.LoginAsync(_userName, _password);
 
             if (result)
             {
@@ -198,7 +192,6 @@
 
         await Task.Delay(1500);
 
-        _captchaToken = Guid.NewGuid().ToString("N");
         _isHumanVerified = true;
         _isLoadingCaptcha = false;
 
