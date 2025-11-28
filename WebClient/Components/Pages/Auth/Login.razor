@@ -1,4 +1,4 @@
-@page "/Auth/Login"
+@page "/auth-login"
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
@@ -10,73 +10,129 @@
 @inject AuthService AuthService
 @inject ToastService ToastService
 @inject NavigationManager NavManager
-@layout AuthLayout
 @inject IJSRuntime Js
 @inject IBaseService BaseService
 @inject IHttpClientFactory ClientFactory
 @inject HttpClient SelfHttp
 @rendermode InteractiveServer
 
-<!-- لود کردن فایل استایل انیمیشن -->
-<link href="css/LoginAnimationStyle.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/auth-login.css" />
+<link rel="stylesheet" href="css/font.css" />
 
-<div class="hero bg-base-200 min-h-screen" id="loginPage">
-    <div class="hero-content flex-col lg:flex-row-reverse gap-20">
-        <!-- بخش متن سمت راست -->
-        <div class="flex-1 hidden lg:flex flex-col items-center">
-            <img src="images/loginImage.svg" alt="ورود به سامانه" class="max-w-md w-full animate-fade-in" />
+<div class="register-page">
+
+    <!-- ستون راست -->
+    <section class="form-col">
+        <div class="form-wrap">
+            <img class="decor decor-left" src="images/gift_front 2.svg" />
+            <img class="decor decor-top-right" src="images/Rectangle 2.svg" />
+            <img class="decor decor-bottom-left" src="images/Rectangle 3.svg" />
+
+            <div class="m-hero mobile-only">
+                <img class="m-hero__logo" src="images/Group 1.svg" />
+                <h1 class="m-hero__title">لاولایف</h1>
+                <p class="m-hero__subtitle">سامانه مدیریت روابط زوجین</p>
+            </div>
+
+            <article class="form-card" role="form">
+
+                <header class="form-head desktop-only">
+                    <h2 class="form-title">ورود به لاولایف</h2>
+                    <p class="form-subtitle">لطفاً اطلاعات خود را وارد کنید</p>
+                </header>
+
+                <!-- تلفن / نام کاربری -->
+                <label class="field">
+                    <span class="field__icon">
+                        <img src="images/Phone Rounded.svg" />
+                    </span>
+                    <input class="field__input"
+                           type="text"
+                           placeholder="نام کاربری / تلفن"
+                           @bind="_userName" />
+                </label>
+
+                <!-- رمز عبور -->
+                <label class="field">
+                    <span class="field__icon">
+                        <img src="images/Lock Password Unlocked.svg" />
+                    </span>
+                    <img class="rp-eye" src="images/Eye.svg" />
+                    <input class="field__input"
+                           type="password"
+                           placeholder="کلمه عبور"
+                           @bind="_password" />
+                </label>
+
+                <div class="links-row">
+                    <a class="link-otp">ورود با کد یکبار مصرف</a>
+                    <a class="link-muted" @onclick="GoToForgotPassword">کلمه عبور خود را فراموش کردم</a>
+                </div>
+
+                <!-- دکمه ورود -->
+                <button class="btn-primary" type="button" @onclick="LoginAsync" disabled="@_isBusy">
+                    @if (_isBusy)
+                    {
+                        <span>لطفاً صبر کنید...</span>
+                    }
+                    else
+                    {
+                        <span>ورود به حساب لاولایف</span>
+                    }
+                </button>
+
+                <!-- سوشال -->
+                <div class="or-social">
+                    <span class="or-line"></span>
+                    <span class="or-text">یا ورود از طریق</span>
+                    <span class="or-line"></span>
+                </div>
+
+                <div class="social-row">
+                    <button class="social-btn"><img src="images/Facebook.svg" /></button>
+                    <button class="social-btn"><img src="images/Apple.svg" /></button>
+                    <button class="social-btn">
+                        <img src="images/Google.svg" />
+                        <p class="text-Google mobile-only">حساب گوگل</p>
+                    </button>
+                </div>
+
+                <p class="bottom-cta">
+                    حساب کاربری نداری؟
+                    <a class="link-accent">ساخت حساب</a>
+                </p>
+
+                <p class="app-version mobile-only">V 1.0.0.2</p>
+
+            </article>
         </div>
+    </section>
 
-        <!-- کارت لاگین -->
-        <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-            <div class="card-body">
-                <h2 class="text-3xl font-bold mb-6 text-center lg:text-right">ورود به سامانه</h2>
-                <fieldset class="fieldset">
-                    <label class="label">نام کاربری</label>
-                    <input @bind="_userName" type="text" class="input input-bordered" placeholder="نام کاربری" />
+    <!-- ستون چپ -->
+    <section class="hero">
+        <div class="hero-text">
+            <span class="hero-divider"></span>
+            <h1 class="hero-title">دیت لند</h1>
+            <p class="hero-desc">
+                بهترین لوکیشن‌های خاص برای قرارهای عاشقانه شما
+            </p>
 
-                    <label class="label">رمز عبور</label>
-                    <input @bind="_password" type="password" class="input input-bordered" placeholder="رمز عبور" />
-
-                    <!-- کپچا -->
-                    <div class="recaptcha-google-style mt-3" @onclick="HandleCaptchaClick">
-                        <div class="recaptcha-checkbox">
-                            <span class="recaptcha-box">
-                                @if (_isLoadingCaptcha)
-                                {
-                                    <div class="recaptcha-spinner"></div>
-                                }
-                                else if (_isHumanVerified)
-                                {
-                                    <svg viewBox="0 0 24 24" width="18" height="18">
-                                        <path fill="none" stroke="#34a853" stroke-width="3" d="M4 12l6 6L20 6" />
-                                    </svg>
-                                }
-                            </span>
-                            <span class="recaptcha-label">من ربات نیستم</span>
-                        </div>
-
-                        <div class="recaptcha-logo">
-                            <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
-                                <path fill="#4285F4"
-                                      d="M9 0c-1.847 0-3.345 1.167-3.904 2.773L6.087 5.5H2.5v6h6v-3.585l2.727-1.99A3.497 3.497 0 0 1 15 9c0 1.657-1.343 3-3 3-1.116 0-2.086-.607-2.594-1.5H6.5c.508 1.22 1.67 2 3 2 1.657 0 3-1.343 3-3 0-1.436-1.08-2.613-2.5-2.902V6h3.5v1h-2.027a4.978 4.978 0 0 0-1.473-.13C12.04 6.87 13 7.797 13 9c0 1.657-1.343 3-3 3-1.63 0-2.949-1.313-2.999-2.935L6 9.034V8.5h3v1H9z" />
-                            </svg>
-                            <span class="recaptcha-text">reCAPTCHA</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-2">
-                        <a @onclick="GoToForgotPassword" class="link link-hover text-sm cursor-pointer">
-                            فراموشی رمز عبور؟
-                        </a>
-                    </div>
-
-                    <LoadingBtn ButtonText="ورود" IsLoading="_isBusy" OnClick="LoginAsync"
-                                CssClass="btn-primary mt-4 w-full"></LoadingBtn>
-                </fieldset>
+            <div class="hero-pager">
+                <button class="pager-arrow is-left">→</button>
+                <div class="dots">
+                    <span class="dot is-active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <button class="pager-arrow is-right">←</button>
             </div>
         </div>
-    </div>
+
+        <div class="hero-illustration">
+            <img src="images/7 1.svg" />
+        </div>
+    </section>
 </div>
 
 @code {
@@ -104,6 +160,7 @@
     {
         try
         {
+            // اگر کپچا می‌خواهی → نذار حذف کنم
             if (!_isHumanVerified || string.IsNullOrEmpty(_captchaToken))
             {
                 ToastService.ShowError("لطفاً کپچا را تکمیل کنید.");
@@ -111,6 +168,7 @@
             }
 
             _isBusy = true;
+
             var result = await AuthService.LoginAsync(_userName, _password, _captchaToken);
 
             if (result)
@@ -138,9 +196,9 @@
         _isLoadingCaptcha = true;
         StateHasChanged();
 
-        // شبیه‌سازی فراخوانی سرویس کپچا (در عمل باید به reCAPTCHA یا hCaptcha وصل شود)
         await Task.Delay(1500);
-        _captchaToken = Guid.NewGuid().ToString("N"); // توکن شبیه‌سازی‌شده
+
+        _captchaToken = Guid.NewGuid().ToString("N");
         _isHumanVerified = true;
         _isLoadingCaptcha = false;
 
@@ -149,11 +207,8 @@
 
     private async Task GoToForgotPassword()
     {
-        // اجرای انیمیشن
-        await Js.InvokeVoidAsync("eval", "document.getElementById('loginPage').classList.add('page-transition');");
-        // صبر برای پایان انیمیشن
+        await Js.InvokeVoidAsync("eval", "document.body.classList.add('page-transition');");
         await Task.Delay(600);
-        // ریدایرکت
         NavManager.NavigateTo("/Auth/ForgotPassword");
     }
 
