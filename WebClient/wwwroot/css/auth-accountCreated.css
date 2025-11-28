@@ -1,0 +1,78 @@
+*{
+    font-family: IranSans, sans-serif;
+}
+/* کل صفحه */
+.ac-page{
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    justify-items: center;
+    align-items: start;
+    padding: 40px 16px;
+    background: #ffffff;
+    font-family: 'Kalameh', sans-serif;
+    color: #263248;
+}
+
+/* بخش تیتر */
+.ac-hero{
+    text-align: center;
+    max-width: 920px;
+}
+
+/* تیتر اصلی */
+.ac-title{
+    margin: 0 0 15px 0;
+    font-size: 24px;
+    line-height: 1.6;
+    font-weight: 900;
+    color: #071437;
+
+}
+
+/* توضیح زیر تیتر */
+.ac-subtitle{
+    margin: 0 0 18px 0;
+    font-size: 16px;
+    color: #071437;
+}
+
+/* ردیف کد اتصال (بر اساس طرح: برچسب راست، مقدار چپ) */
+.ac-code-row{
+    margin: 6px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;  
+    align-items: center;
+    gap: 200px;
+    max-width: 520px;
+}
+.ac-code-label{
+    justify-self: end;     
+    font-size: 16px;
+    color: #071437;
+    font-weight: 500;
+    margin-left: 35px;
+}
+.ac-code-value{
+    justify-self: start;   
+    font-size: 16px;
+    font-weight: 500;
+    direction: ltr;        
+    color: #071437;
+}
+
+/* تصویر اصلی */
+.ac-figure{
+    margin: 24px 0 0 30px;
+    display: grid;
+    place-items: center;
+    width: 100%;
+}
+.ac-figure img{
+    width: 539px;  
+    height: 456px;
+    display: block;
+    user-select: none;
+}
+
+

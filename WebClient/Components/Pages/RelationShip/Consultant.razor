@@ -1,0 +1,426 @@
+@page "/relationShip"
+
+<link rel="stylesheet" href="css/consultant.css" />
+<link rel="stylesheet" href="css/font.css" />
+
+
+<div class="dscore-layout">
+<!-- هدرِ خالی (Placeholder) -->
+<header class="dscore-header">هدر</header>
+
+<!-- منوی سمت راستِ خالی (Placeholder) -->
+<aside class="dscore-sidebar">منوی سمت راست</aside>
+
+<!-- محتوای اصلی: فقط نوار زیر هدر -->
+<main class="dscore-main">
+    <section class="dscore-toolbar" aria-label="نوار راهبری بالای کارت‌ها">
+      <nav class="dscore-toolbar__trail" aria-label="مسیر">
+        <a class="dscore-trail__item is-muted" href="#">مشاوران</a>
+        <div class="dscore-trail__divider" aria-hidden="true">
+          <img src="images/Alt Arrow Left.svg" alt=""/>
+        </div>
+        <a class="dscore-trail__item is-active" href="#">لاولایف</a>
+      </nav>
+
+      <!-- چپ: متای کوچک (دلخواه) -->
+      <div class="dscore-toolbar__meta">
+        <!-- مثال: شمارنده/راهنما/توضیح کوتاه -->
+        <span class="dscore-meta__text">لیست مشاورهایی که اینجا هستن تا همراهت باشن</span>
+      </div>
+    </section>
+    
+    <section class="list-toolbar v2" dir="rtl" aria-label="نوار بالای لیست">
+      <!-- کپسولِ مرتب‌سازی -->
+      <button class="pill pill--wide" type="button">
+        <img class="pill__menu" src="images/sort.svg" alt="" aria-hidden="true">
+        <span class="pill__title">مرتب سازی</span>
+        <span class="pill__muted">محبوب ترین ها</span>
+        <img class="pill__chev" src="images/Alt Arrow Down.svg" alt="" aria-hidden="true">
+      </button>
+      <!-- فاصلهٔ افقی -->
+      <span class="pill-gap"></span>
+      <!-- کپسولِ نزدیک‌ترین نوبت -->
+      <button class="pill pill--wide" type="button">
+        <img class="pill__menu" src="images/sort.svg" alt="" aria-hidden="true">
+        <span class="pill__title">نزدیک‌ترین نوبت</span>
+        <span class="pill__muted">تا ۳ روز آینده</span>
+        <img class="pill__chev2" src="images/Alt Arrow Down.svg" alt="" aria-hidden="true">
+      </button>
+    </section>
+
+
+    <!-- ستون چپ: لیست مشاورها -->
+    <article class="coach-card" dir="rtl">    
+      <div class="pc-row pc-row--padded">
+        <span class="pc-badge">
+          <i class="pc-badge__like">
+            <img src="images/like2.svg" alt=""/>
+          </i>
+          ۹۷٪ پیشنهاد کاربران
+        </span>
+
+        <span class="pc-rating">
+          <img src="images/Star2.svg" alt="">
+          ۴.۵/۵ از (۳۲۰ نظر) 
+        </span>
+      </div>
+
+      <!-- هدر: آیکن دایره‌ای سمت راست + عنوان و زیرعنوان -->
+      <header class="pc-head v2">
+        <div class="pc-iconCircle">
+          <img src="images/image (10).svg" alt="">
+        </div>
+        <img class="pc-badgePink" src="images/Group 47861.svg" alt="" aria-hidden="true">
+        <div class="pc-titleBlock">
+          <h3 class="pc-title">نسرین معصومی</h3>
+          <div class="pc-subtitle">متخصص زوج درمانی و روان درمانگر شناختی</div>
+        </div>
+      </header>
+
+      <hr class="pc-sep"/>
+
+      <!-- توضیحات -->
+  
+      <!-- نوار وضعیت بازدید -->
+      <div class="pc-softNote">
+        <span class="dot-pink">
+          <img src="images/tick-circle2.svg" alt=""/>
+        </span>
+        ۱۲۳۲ نوبت موفق در نوبیتو
+      </div>
+
+      <div class="pc-infoRow">
+        <img  src="images/Ticket Sale.svg" alt="">
+        <span class="val">۴۵۰,۰۰۰ تومان / جلسه آنلاین ۴۵ دقیقه ای</span>
+      </div>
+
+      <!-- ساعت کاری -->
+      <div class="pc-infoRow">
+        <img  src="images/Clock Circle.svg" alt="">
+        <span class="val">اولین زمان آزاد: سه‌شنبه ۵ تیر، ساعت ۱۹:۰۰</span>
+      </div>
+      <hr class="pc-sep2"/>
+
+      <div class="pc-actions">
+        <button class="pc-pill">زوج‌درمانی</button>
+        <button class="pc-pill">درمان خیانت</button>
+        <button class="pc-pill">ارتباط باخانواده همسر</button>
+      </div>
+      <!-- آدرس -->
+      <div class="pc-infoRow2">
+        <img  src="images/Map Point.svg" alt="">
+        <span class="label">نشانی :</span>
+        <span class="val">تهران، بلوار کشاورز، خیابان فلسطین، کوچه ۲۴، ساختمان لاله</span>
+      </div>
+      <!-- فوتر: دکمه مسیر‌یابی (استایل مثل طرح) -->
+      <footer class="pc-foot v2">
+        <button class="btn-route">
+          <span class="btn-route__bubble">
+            <img src="images/arrow-left.svg" alt="">
+          </span>
+          <span class="btn-route__label">دریافت نوبت</span>
+        </button>
+      </footer>
+    </article>
+    
+    <article class="coach-card2" dir="rtl">    
+ <div class="pc-row pc-row--padded">
+    <span class="pc-badge">
+      <i class="pc-badge__like">
+        <img src="images/like2.svg" alt=""/>
+      </i>
+       ۹۷٪ پیشنهاد کاربران
+    </span>
+
+    <span class="pc-rating">
+      <img src="images/Star2.svg" alt="">
+       ۴.۵/۵ از (۳۲۰ نظر) 
+    </span>
+  </div>
+
+  <!-- هدر: آیکن دایره‌ای سمت راست + عنوان و زیرعنوان -->
+  <header class="pc-head v2">
+    <div class="pc-iconCircle">
+      <img src="images/image (10).svg" alt="">
+    </div>
+    <img class="pc-badgePink" src="images/Group 47861.svg" alt="" aria-hidden="true">
+    <div class="pc-titleBlock">
+      <h3 class="pc-title">نسرین معصومی</h3>
+      <div class="pc-subtitle">متخصص زوج درمانی و روان درمانگر شناختی</div>
+    </div>
+  </header>
+
+  <hr class="pc-sep"/>
+
+  <!-- توضیحات -->
+  
+<!-- نوار وضعیت بازدید -->
+<div class="pc-softNote">
+  <span class="dot-pink">
+    <img src="images/tick-circle.svg" alt=""/>
+  </span>
+  ۱۲۳۲ نوبت موفق در نوبیتو
+</div>
+
+<div class="pc-infoRow">
+  <img  src="images/Ticket Sale.svg" alt="">
+  <span class="val">۴۵۰,۰۰۰ تومان / جلسه آنلاین ۴۵ دقیقه ای</span>
+</div>
+
+  <!-- ساعت کاری -->
+  <div class="pc-infoRow">
+    <img  src="images/Clock Circle.svg" alt="">
+    <span class="val">اولین زمان آزاد: سه‌شنبه ۵ تیر، ساعت ۱۹:۰۰</span>
+  </div>
+  <hr class="pc-sep2"/>
+
+  <div class="pc-actions">
+    <button class="pc-pill">زوج‌درمانی</button>
+    <button class="pc-pill">درمان خیانت</button>
+    <button class="pc-pill">ارتباط باخانواده همسر</button>
+  </div>
+  <!-- آدرس -->
+  <div class="pc-infoRow2">
+    <img  src="images/Map Point.svg" alt="">
+    <span class="label">نشانی :</span>
+    <span class="val">تهران، بلوار کشاورز، خیابان فلسطین، کوچه ۲۴، ساختمان لاله</span>
+  </div>
+  <!-- فوتر: دکمه مسیر‌یابی (استایل مثل طرح) -->
+  <footer class="pc-foot v2">
+    <button class="btn-route">
+      <span class="btn-route__bubble">
+        <img src="images/arrow-left.svg" alt="">
+      </span>
+      <span class="btn-route__label">دریافت نوبت</span>
+    </button>
+  </footer>
+</article>
+    
+ <article class="coach-card3" dir="rtl">    
+ <div class="pc-row pc-row--padded">
+    <span class="pc-badge">
+      <i class="pc-badge__like">
+        <img src="images/like2.svg" alt=""/>
+      </i>
+       ۹۷٪ پیشنهاد کاربران
+    </span>
+
+    <span class="pc-rating">
+      <img src="images/Star2.svg" alt="">
+       ۴.۵/۵ از (۳۲۰ نظر) 
+    </span>
+  </div>
+
+  <!-- هدر: آیکن دایره‌ای سمت راست + عنوان و زیرعنوان -->
+  <header class="pc-head v2">
+    <div class="pc-iconCircle">
+      <img src="images/image (10).svg" alt="">
+    </div>
+    <img class="pc-badgePink" src="images/Group 47861.svg" alt="" aria-hidden="true">
+    <div class="pc-titleBlock">
+      <h3 class="pc-title">نسرین معصومی</h3>
+      <div class="pc-subtitle">متخصص زوج درمانی و روان درمانگر شناختی</div>
+    </div>
+  </header>
+
+  <hr class="pc-sep"/>
+  
+<!-- نوار وضعیت بازدید -->
+<div class="pc-softNote">
+  <span class="dot-pink">
+    <img src="images/tick-circle.svg" alt=""/>
+  </span>
+  ۱۲۳۲ نوبت موفق در نوبیتو
+</div>
+
+<div class="pc-infoRow">
+  <img  src="images/Ticket Sale.svg" alt="">
+  <span class="val">۴۵۰,۰۰۰ تومان / جلسه آنلاین ۴۵ دقیقه ای</span>
+</div>
+
+  <!-- ساعت کاری -->
+  <div class="pc-infoRow">
+    <img  src="images/Clock Circle.svg" alt="">
+    <span class="val">اولین زمان آزاد: سه‌شنبه ۵ تیر، ساعت ۱۹:۰۰</span>
+  </div>
+  <hr class="pc-sep2"/>
+
+  <div class="pc-actions">
+    <button class="pc-pill">زوج‌درمانی</button>
+    <button class="pc-pill">درمان خیانت</button>
+    <button class="pc-pill">ارتباط باخانواده همسر</button>
+  </div>
+  <!-- آدرس -->
+  <div class="pc-infoRow2">
+    <img  src="images/Map Point.svg" alt="">
+    <span class="label">نشانی :</span>
+    <span class="val">تهران، بلوار کشاورز، خیابان فلسطین، کوچه ۲۴، ساختمان لاله</span>
+  </div>
+  <!-- فوتر: دکمه مسیر‌یابی (استایل مثل طرح) -->
+  <footer class="pc-foot v2">
+    <button class="btn-route">
+      <span class="btn-route__bubble">
+        <img src="images/arrow-left.svg" alt="">
+      </span>
+      <span class="btn-route__label">دریافت نوبت</span>
+    </button>
+  </footer>
+</article>   
+    <!-- ستون راست فیلترها -->
+<aside class="filters-col" dir="rtl">
+  <!-- 1) فیلترهای انتخاب‌شده -->
+  <article class="fcard fcard--chips">
+    <header class="fcard__head">
+      <h3 class="fcard__title">
+        <img src="images/filter.svg" alt="" aria-hidden="true" />
+        فیلترهای انتخاب شده
+      </h3>
+      <span class="fc-badge">۳</span>
+      <button class="link-clear" type="button">حذف فیلترها</button>
+    </header>
+    <div class="chips">
+      <button class="chip"> <span aria-hidden="true">
+        <img src="images/close-circle.svg" alt=""/>
+      </span> ویزیت آنلاین </button>
+      <button class="chip"><span aria-hidden="true">
+        <img src="images/close-circle.svg" alt=""/>
+      </span>روانشناسی </button>
+      <button class="chip"><span aria-hidden="true">
+        <img src="images/close-circle.svg" alt=""/>
+      </span>مدرک تخصصی </button>
+    </div>
+  </article>
+
+  <!-- 2) تخصص -->
+  <article class="fcard">
+    <header class="fcard__head">
+      <h3 class="fcard__title">تخصص</h3>
+      <button class="fc-caret" type="button" aria-label="باز/بسته">
+        <img src="images/Alt Arrow Down.svg" alt=""/>
+      </button>
+    </header>
+
+    <label class="search">
+      <input type="search" placeholder="روان" />
+      <span class="search__icon" aria-hidden="true">
+        <img src="images/Minimalistic Magnifer.svg" alt=""/>
+      </span>
+    </label>
+
+    <ul class="checklist">
+      <li>
+        <label class="check">
+          <input type="checkbox" checked />
+          <i></i><span>روانکاوی</span>
+        </label>
+      </li>
+      <li>
+        <label class="check">
+          <input type="checkbox" />
+          <i></i><span>مشاوره ازدواج</span>
+        </label>
+      </li>
+      <li>
+        <label class="check">
+          <input type="checkbox" />
+          <i></i><span>مشاوره طلاق و جدایی آگاهانه</span>
+        </label>
+      </li>
+      <li>
+        <label class="check">
+          <input type="checkbox" />
+          <i></i><span>درمان خیانت</span>
+        </label>
+      </li>
+      <li>
+        <label class="check">
+          <input type="checkbox" />
+          <i></i><span>بازسازی رابطه بعد از خیانت</span>
+        </label>
+      </li>
+    </ul>
+  </article>
+
+  <!-- 3) میزان تجربه -->
+  <article class="fcard">
+    <header class="fcard__head">
+      <h3 class="fcard__title">میزان تجربه</h3>
+      <button class="fc-caret" type="button" aria-label="باز/بسته">
+        <img src="images/Alt Arrow Down.svg" alt=""/>
+      </button>
+    </header>
+
+    <ul class="checklist checklist--tight">
+      <li>
+        <label class="check">
+          <input type="checkbox" checked />
+          <i></i><span>همه</span>
+        </label>
+      </li>
+      <li>
+        <label class="check">
+          <input type="checkbox" />
+          <i></i><span>کمتر از ۵ سال</span>
+        </label>
+      </li>
+      <li>
+        <label class="check">
+          <input type="checkbox" />
+          <i></i><span>بین ۵ تا ۱۰ سال</span>
+        </label>
+      </li>
+      <li>
+        <label class="check">
+          <input type="checkbox" />
+          <i></i><span>بالای ۱۰ سال</span>
+        </label>
+      </li>
+    </ul>
+  </article>
+
+  <!-- 4) هزینه جلسه (+ جنسیت) -->
+  <article class="fcard">
+    <header class="fcard__head">
+      <h3 class="fcard__title">هزینه جلسه</h3>
+      <button class="fc-caret" type="button" aria-label="باز/بسته">
+        <img src="images/Alt Arrow Down.svg" alt=""/>
+      </button>
+    </header>
+
+    <div class="price">
+      <div class="price__badge">۵۰۰,۰۰۰ تا ۱,۰۰۰۰ </div>
+      <div class="price__track">
+        <div class="price__fill" style="--from:25%; --to:70%"></div>
+        <div class="price__knob" style="--pos:25%"></div>
+        <div class="price__knob" style="--pos:70%"></div>
+      </div>
+      <div class="price__hint">بین 10 هزارتومان تا 500 هزارتومان</div>
+    </div>
+  </article>
+  
+  <article class="fcard">
+    <header class="fcard__head">
+      <h3 class="fcard__title">جنسیت</h3>
+      <button class="fc-caret" type="button" aria-label="باز/بسته">
+        <img src="images/Alt Arrow Down.svg" alt=""/>
+      </button>
+    </header>
+    <div class="radios-inline" role="radiogroup" aria-label="جنسیت">
+      <label class="radio2 radio3">
+        <input type="radio" name="gender" checked />
+        <i></i><span>تفاوتی ندارد</span>
+      </label>
+      <label class="radio2">
+        <input type="radio" name="gender" />
+        <i></i><span>آقا</span>
+      </label>
+      <label class="radio2">
+        <input type="radio" name="gender" />
+        <i></i><span>خانم</span>
+      </label>
+    </div>
+  </article>
+</aside>
+
+</main>
+</div>

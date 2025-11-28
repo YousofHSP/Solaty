@@ -386,9 +386,6 @@
       <_ContentIncludedByDefault Remove="wwwroot\rcl-plugins\CreateUser\wwwroot\exampleJsInterop.js.gz" />
       <_ContentIncludedByDefault Remove="Components\Pages\FollowShape\FollowShapeIndex.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\FollowShape\FollowShapeModal.razor" />
-      <_ContentIncludedByDefault Remove="Components\Pages\Dashboard\FormModal.razor" />
-      <_ContentIncludedByDefault Remove="Components\Pages\Dashboard\Home.razor" />
-      <_ContentIncludedByDefault Remove="Components\Pages\Dashboard\StartRequestModal.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\FollowShapeKind\FollowShapeKindIndex.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\FollowShapeKind\FollowShapeKindModal.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\Form\FormIndex.razor" />
