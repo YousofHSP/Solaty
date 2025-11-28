@@ -1,0 +1,174 @@
+@page "/daily-score"
+
+<link rel="stylesheet" href="css/dailyScore.css" />
+<link rel="stylesheet" href="css/font.css" />
+
+
+<div class="dscore-layout">
+    <!-- هدرِ خالی (Placeholder) -->
+    <header class="dscore-header">هدر</header>
+
+    <!-- منوی سمت راستِ خالی (Placeholder) -->
+    <aside class="dscore-sidebar">منوی سمت راست</aside>
+
+    <!-- محتوای اصلی: فقط نوار زیر هدر -->
+    <main class="dscore-main">
+        <section class="cards-row">
+            <article class="kcard kcard--start" aria-label="شروع پریودی پارتنرت">
+                <div class="kcard__top">
+                    <div class="kcard__text">
+                        <div class="kcard__title">مود عمومی هفته آخر</div>
+                        <div class="kcard__metric">هفته‌ای پر از مکالمه و صمیمیت</div>
+                    </div>
+                </div>
+                <div class="kcard__gap" aria-hidden="true"></div>
+                <div class="kcard__strip">
+                    <div class="kcard__delta">
+                        <span class="kcard__deltaIcon" aria-hidden="true"></span>
+                        <span class="kcard__deltaText">+۴.۶%</span>
+                    </div>
+                    <div class="kcard__helper">نسبت به گذشته</div>
+                </div>
+            </article>
+            
+            <article class="kcard kcard--engage" aria-label="درصد تعامل این هفته">
+                <div class="kcard__top">
+                    <div class="kcard__text">
+                        <div class="kcard__title">درصد بالاترین نقطه قوت رابطه‌تون این هفته</div>
+                        <div class="kcard__metric">شوخ‌طبعی و انرژی خوب</div>
+                    </div>
+                </div>
+                <div class="kcard__gap" aria-hidden="true"></div>
+                <div class="kcard__strip">
+                    <div class="kcard__delta">
+                        <span class="kcard__deltaIcon" aria-hidden="true"></span>
+                        <span class="kcard__deltaText">+۴.۶%</span>
+                    </div>
+                    <div class="kcard__helper">نسبت به گذشته</div>
+                </div>
+            </article>
+            
+            <article class="kcard kcard--birthday" aria-label="تولد یارت نزدیکه">
+                <div class="kcard__top">
+                    <div class="kcard__text">
+                        <div class="kcard__title">چیزی که باید براش تلاش کنید</div>
+                        <div class="kcard__metric">برنامه‌ریزی برای وقت دونفره</div>
+                    </div>
+                </div>
+                <div class="kcard__gap" aria-hidden="true"></div>
+                <div class="kcard__strip">
+                    <div class="kcard__delta">
+                        <span class="kcard__deltaIcon" aria-hidden="true"></span>
+                        <span class="kcard__deltaText">+۴.۶%</span>
+                    </div>
+                    <div class="kcard__helper">نسبت به گذشته</div>
+                </div>
+            </article>
+            
+            <article class="kcard kcard--score" aria-label="امتیاز تو تا اینجا توی این رابطه">
+                <!-- ناحیهٔ گرادیان بالا -->
+                <div class="kcard__top">
+                    <div class="kcard__text">
+                        <div class="kcard__title"> نوع رابطه در حال حاضر</div>
+                        <div class="kcard__metric">احساسی ، حمایت عاطفی</div>
+                    </div>
+                </div>
+
+                <div class="kcard__gap" aria-hidden="true"></div>
+
+                <!-- نوار سفید پایین -->
+                <div class="kcard__strip">
+                    <div class="kcard__delta">
+                        <span class="kcard__deltaIcon" aria-hidden="true"></span>
+                        <span class="kcard__deltaText">+۴.۶%</span>
+                    </div>
+                    <!-- سمت راست: متن کمکی -->
+                    <div class="kcard__helper">نسبت به گذشته</div>
+                </div>
+            </article>
+        </section>
+        
+        <section class="dscore-bottomGrid">
+
+            <article class="pCard" aria-label="پروفایل">
+                <div class="pCard__media">
+                    <img src="images/image.svg" alt="" />
+                </div>
+                <div class="pCard__body">
+                    <div class="pCard__score pCard__score--left">۴.۵</div>
+                    <h4 class="pCard__name">فائزه حسینی</h4>
+                </div>
+            </article>
+
+            <article class="pCard2 pCard--outlined" aria-label="پروفایل">
+                <div class="pCard__media2">
+                    <img src="images/image (1).svg" alt="" />
+                </div>
+                <div class="pCard__body">
+                    <div class="pCard__row">
+                        <span class="pCard__miniIcon" aria-hidden="true">
+                            <img src="images/Button.svg" alt="" />
+                        </span>
+                        <h4 class="pCard__name">میلاد اعرابیها</h4>
+                    </div>
+
+                    <div class="pCard__rule" aria-hidden="true"></div>
+                    <!-- ستاره‌ها -->
+                    <div class="pCard__stars" aria-label="امتیاز">
+                        <span class="star is-active">★</span>
+                        <span class="star is-active">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <div class="pCard__score pCard__score--right">۴.۵</div>
+                </div>
+            </article>
+            
+             <article class="rcard dscore-bottom" aria-label="پرسش روز">
+                <header class="rcard__header" dir="rtl">
+                    <nav class="rcard__pills" aria-label="دسته‌بندی‌ها">
+                        <button class="pill pill--active pill--emotype">تایپ احساسی</button>
+                        <button class="pill pill--trust">اعتماد</button>
+                        <button class="pill pill--mutual">علاقه دوطرفه</button>
+                        <button class="pill pill pill--support">تکیه گاه</button>
+                    </nav>
+                </header>
+
+                <!-- خط نازک زیر پیل‌ها -->
+                <div class="rcard__rule" aria-hidden="true"></div>
+
+                <div class="rcard__nav" dir="rtl">
+                    <button class="rcard__navBtn" type="button" aria-label="بعدی">
+                        <span class="rcard__navArrow" aria-hidden="true">→</span>
+                    </button>
+                    <span class="rcard__step" aria-label="مرحله">۳</span>
+                </div>
+                <div class="rcard__grid">
+                    <aside class="rcard__note">
+                        <div class="noteBox">
+                            اگر چیزی هست که دوست داری اضافه کنی، اینجا بنویس…
+                        </div>
+                    </aside>
+
+                    <!-- سوال و گزینه‌ها -->
+                    <div class="rcard__qa">
+                        <h3 class="rcard__qTitle">
+                            ندا به نظرت میلاد توی رابطه چقدر احساسی برخورد می‌کنه؟
+                        </h3>
+                        <p class="rcard__qDesc">
+                            وقتایی که حواسش به تو نیست چقدر احساسی برخورد می‌کنه باهات؟
+                        </p>
+                        <div class="rcard__choices" role="group" aria-label="میزان">
+                            <button class="choice choice--primary">زیاد</button>
+                            <button class="choice">متوسط</button>
+                            <button class="choice">کم</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+
+@code { }

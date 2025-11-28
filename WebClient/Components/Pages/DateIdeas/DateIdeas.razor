@@ -1,0 +1,302 @@
+@page "/date-ideas"
+
+
+<link rel="stylesheet" href="css/dateIdeas.css" />
+<link rel="stylesheet" href="css/font.css" />
+
+<div class="dscore-layout">
+  
+  <!-- هدرِ خالی (Placeholder) -->
+  <header class="dscore-header">هدر</header>
+
+  <!-- منوی سمت راستِ خالی (Placeholder) -->
+  <aside class="dscore-sidebar">منوی سمت راست</aside>
+
+  <!-- محتوای اصلی: فقط نوار زیر هدر -->
+  <main class="dscore-main">
+    <section class="dscore-toolbar" aria-label="نوار راهبری بالای کارت‌ها">
+      <nav class="dscore-toolbar__trail" aria-label="مسیر">
+        <a class="dscore-trail__item is-muted" href="#">پیشنهاد دیت</a>
+        <div class="dscore-trail__divider" aria-hidden="true">
+          <img src="images/Alt Arrow Left.svg" alt=""/>
+        </div>
+        <a class="dscore-trail__item is-active" href="#">تقویم رابطه و مناسبت</a>
+      </nav>
+      
+      <div class="dscore-toolbar__meta">
+        <span class="dscore-meta__text">چالش های روزانه</span>
+      </div>
+    </section>
+
+    <!-- نوار تب‌های بالای کارت چپ -->
+    <section class="di-catbar" aria-label="نوار دسته‌بندی">
+      <div class="di-catbar__right">
+        <button class="di-catbar__menu" type="button">
+          <span class="di-catbar__chev" aria-hidden="true">
+            <img src="images/sort.svg" alt=""/>
+          </span>
+          <span class="di-catbar__title">دسته‌بندی :</span>
+        </button>
+      </div>
+
+      <nav class="di-catbar__tabs" role="tablist">
+        <button class="di-tab is-active" role="tab" aria-selected="true">محبوب‌ترین‌ها</button>
+        <button class="di-tab" role="tab">نزدیک‌ترین</button>
+        <button class="di-tab" role="tab">لوکس</button>
+        <button class="di-tab" role="tab">بیش‌ترین امتیاز</button>
+      </nav>
+    </section>
+
+    <!-- ستون چپ: فید پیشنهادها -->
+    <section class="feed">
+
+      <!-- کارت بزرگ (آیتم شاخص) -->
+      <article class="place-card" dir="rtl">
+        <!-- گالری -->
+        <div class="pc-gallery">
+          <img class="pc-cover" src="images/image (2).svg" alt="کافه کاپو"/>
+          <div class="pc-thumbs">
+            <img src="images/image (3).svg" alt="">
+            <img src="images/image (4).svg" alt="">
+            <img src="images/image (5).svg" alt="">
+            <img src="images/image (6).svg" alt="">
+          </div>
+        </div>
+
+        <!-- ردیف برچسب پیشنهاد + امتیاز -->
+        <div class="pc-row pc-row--padded">
+          <span class="pc-badge">
+            <i class="pc-badge__like">
+              <img src="images/like.svg" alt=""/>
+            </i>
+            ۹۷٪ پیشنهاد کاربران
+          </span>
+
+          <span class="pc-rating">
+            <img src="images/Star2.svg" alt="">
+            ۴.۵/۵ از (۳۲۰ نظر)
+          </span>
+        </div>
+
+        <!-- هدر: آیکن دایره‌ای سمت راست + عنوان و زیرعنوان -->
+        <header class="pc-head v2">
+          <div class="pc-iconCircle">
+            <img src="images/Frame 78.svg" alt="">
+          </div>
+          <div class="pc-titleBlock">
+            <h3 class="pc-title">کافه کاپو</h3>
+            <div class="pc-subtitle">مناسب دیتِ دونفره، نوشیدنی‌های گرم</div>
+          </div>
+        </header>
+
+        <hr class="pc-sep"/>
+
+        <!-- توضیحات -->
+        <p class="pc-desc v2">
+          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد
+        </p>
+
+        <!-- نوار وضعیت بازدید -->
+        <div class="pc-softNote">
+          <span class="dot-pink">
+            <img src="images/tick-circle.svg" alt=""/>
+          </span>
+          ۱۵۰۰ بازدید موفق
+        </div>
+        <hr class="pc-sep"/>
+        <!-- ساعت کاری -->
+        <div class="pc-infoRow">
+          <img src="images/Clock Circle.svg" alt="">
+          <span class="label">ساعت کاری :</span>
+          <span class="val">شنبه تا چهارشنبه، صبح تا ۶ عصر</span>
+        </div>
+
+        <!-- آدرس -->
+        <div class="pc-infoRow">
+          <img src="images/Map Point.svg" alt="">
+          <span class="label">نشانی :</span>
+          <span class="val">تهران، بلوار کشاورز، خیابان فلسطین، کوچه ۲۴، ساختمان لاله</span>
+        </div>
+        <!-- فوتر: دکمه مسیر‌یابی (استایل مثل طرح) -->
+        <footer class="pc-foot v2">
+          <button class="btn-route">
+            <span class="btn-route__label">مسیر‌یابی</span>
+            <span class="btn-route__bubble">
+              <img src="images/Map Point.svg" alt="">
+            </span>
+          </button>
+        </footer>
+      </article>
+
+
+      <!-- شبکه کارت‌های کوچک -->
+      <section class="grid-cards">
+        <!-- 6 آیتم نمونه؛ تصویر/لوگوی واقعی‌ات را بگذار -->
+        <article class="mini-card">
+          <div class="mini-thumb">
+            <img src="images/Group 23 (1).svg" alt="">
+          </div>
+        </article>
+        <article class="mini-card">
+          <div class="mini-thumb">
+            <img src="images/Group 23 (1).svg" alt="">
+          </div>
+        </article>
+        <article class="mini-card">
+          <div class="mini-thumb">
+            <img src="images/Group 23 (1).svg" alt="">
+          </div>
+        </article>
+        <article class="mini-card">
+          <div class="mini-thumb">
+            <img src="images/Group 23 (1).svg" alt="">
+          </div>
+        </article>
+        <article class="mini-card">
+          <div class="mini-thumb">
+            <img src="images/Group 23 (1).svg" alt="">
+          </div>
+        </article>
+        <article class="mini-card">
+          <div class="mini-thumb">
+            <img src="images/Group 23 (1).svg" alt="">
+          </div>
+        </article>
+      </section>
+
+    </section>
+
+
+    <div class="rcol" dir="rtl">
+      <article class="filterCard" aria-label="فیلتر کردن پیشنهادها">
+
+        <!-- ================= هدر کارت ================= -->
+        <header class="fc-head">
+          <div class="fc-title">
+            <i class="fc-title__icon" aria-hidden="true">
+              <img src="images/filter.svg" alt=""/>
+            </i>
+            <span>فیلتر کردن</span>
+          </div>
+
+          <button class="fc-clear" type="button" title="حذف فیلترها">
+            <span class="fc-badge" aria-hidden="true">۶</span>
+            حذف فیلترها
+          </button>
+        </header>
+
+        <!-- ============== نوع مکان ================== -->
+        <section class="fg">
+          <h6 class="fg-label">نوع مکان برای دیت را انتخاب نمایید</h6>
+          <div class="pills" role="tablist" aria-label="نوع مکان">
+            <button class="pill pill--active">دریاچه و کوه</button>
+            <button class="pill">حال و هوا</button>
+            <button class="pill ">مسافرت</button>
+          </div>
+        </section>
+
+
+        <!-- ============== زمان مناسب ================== -->
+        <section class="fg fg--line">
+          <div class="fg-row">
+            <h6 class="fg-label">زمان مناسب</h6>
+          </div>
+          <div class="seg">
+            <button class="seg__btn">هر زمان</button>
+            <button class="seg__btn">صبح</button>
+            <button class="seg__btn seg__btn--active">ظهر</button>
+            <button class="seg__btn">عصر</button>
+            <button class="seg__btn">شب</button>
+          </div>
+        </section>
+
+
+        <!-- ============== هزینه مورد نیاز ================= -->
+        <section class="fg fg--line">
+          <div class="fg-row">
+            <h6 class="fg-label">هزینه مورد نیاز</h6>
+            <button class="fg-caret" type="button" aria-label="باز/بسته">⌄</button>
+          </div>
+
+          <!-- ترک و نودها (UI) -->
+          <div class="price">
+            <div class="price__badge">۱,۰۰۰ تا ۵۰۰,۰۰۰</div>
+            <div class="price__track">
+              <div class="price__knob" style="--pos:30%"></div>
+              <div class="price__fill" style="--from:35%; --to:68%"></div>
+              <div class="price__knob" style="--pos:65%"></div>
+            </div>
+            <div class="price__hint">بین ۱۰ هزار‌تومان تا ۵۰۰ هزار‌تومان</div>
+          </div>
+        </section>
+
+
+        <!-- ============== نوع دیت ================= -->
+        <section class="fg fg--line">
+          <div class="isel isel--lg">
+            <span class="isel__iconRight" aria-hidden="true">
+              <img src="images/Code Scan.svg" alt=""/>
+            </span>
+
+            <!-- برچسب سمت راست -->
+            <div class="isel--stack">
+              <span class="isel__label">نوع دیت</span>
+              <br>
+              <!-- مقدار بولد -->
+              <span class="isel__value">طبیعت‌گردی/ پیک‌نیک</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============== استان / محله =============== -->
+        <section class="fg fg--line">
+          <div class="grid-2">
+            <button class="select isel--stack" dir="ltr">
+              <span>استان</span>
+              <span class="select__value">تهران</span>
+              <span class="select__chev">⌄</span>
+            </button>
+            <button class="select isel--stack" dir="ltr">
+              <span>محله</span>
+              <span class="select__value">تجریش</span>
+              <span class="select__chev">⌄</span>
+            </button>
+          </div>
+        </section>
+
+
+        <!-- ============== مناسب برای ================= -->
+        <section class="fg fg--line">
+          <div class="fitRow fitRow--oneLine">
+            <h6 class="fg-label fg-label--inline">مناسب برای :</h6>
+
+            <div class="radios-inline" role="radiogroup" aria-label="جنسیت">
+              <label class="radio2 radio3">
+                <input type="radio" name="gender" checked />
+                <i></i><span>هردو</span>
+              </label>
+              <label class="radio2">
+                <input type="radio" name="gender" />
+                <i></i><span>آقا</span>
+              </label>
+              <label class="radio2">
+                <input type="radio" name="gender" />
+                <i></i><span>خانم</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ============== دکمه اصلی ================== -->
+        <footer class="fc-foot">
+          <button class="btnPrimary" type="button">
+            <span class="btnPrimary__arrow" aria-hidden="true">→</span>
+            اعمال فیلتر
+          </button>
+        </footer>
+
+      </article>
+    </div>
+  </main>
+</div>

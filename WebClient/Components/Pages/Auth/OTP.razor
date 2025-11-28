@@ -1,0 +1,135 @@
+@page "/OTP"
+
+<link rel="stylesheet" href="css/auth-OTP.css" />
+<link rel="stylesheet" href="css/font.css" />
+
+<div class="fp-page">
+    <div class="bg-scene">
+        <div class="register-page" >
+            <!-- ✅ ستون راست: کارت فرم ثبت‌نام -->
+            <section class="form-col">
+                <div class="form-wrap">
+                    <img class="decor decor-left"        src="images/gift_front 2.svg"        alt="" aria-hidden="true" />
+                    <img class="decor decor-top-right"   src="images/Rectangle 2.svg"   alt="" aria-hidden="true" />
+                    <img class="decor decor-bottom-left" src="images/Rectangle 3.svg" alt="" aria-hidden="true" />
+                    <article class="form-card" role="form" aria-labelledby="regTitle">
+                        <header class="form-head">
+                            <h2 id="regTitle" class="form-title">ثبت نام در لاو لایف</h2>
+                            <p class="form-subtitle">لطفاً اطلاعات خود را وارد کنید تا با ما بپیوندید!</p>
+                        </header>
+                        <!-- فیلد: تلفن -->
+                        <label class="field">
+                            <span class="field__icon" aria-hidden="true">
+                                <img src="images/Phone Rounded.svg" alt=""/>
+                            </span>
+                            <input class="field__input" type="tel" placeholder="تلفن همراه"/>
+                        </label>
+
+                        <!-- فیلد: کلمه عبور -->
+                        <label class="field">
+                            <span class="field__icon" aria-hidden="true">
+                                <img src="images/Lock Password Unlocked.svg" alt=""/>
+                            </span>
+                            <input class="field__input" type="password" placeholder="کلمه عبور"/>
+                        </label>
+
+                        <div class="links-row">
+                            <a href="#" class="link-otp">ورود با کد یک بار مصرف</a>
+                            <a href="#" class="link-muted">کلمه عبور خود را فراموش کردم</a>
+                        </div>
+                        <!-- دکمه اصلی -->
+                        <button class="btn-primary" type="button">ورود به حساب در لاو لایف</button>
+
+                        <!-- یا ثبت‌نام با… -->
+                        <div class="or-social">
+                            <span class="or-line"></span>
+                            <span class="or-text">یا ورود از طریق</span>
+                            <span class="or-line"></span>
+                        </div>
+
+                        <div class="social-row">
+                            <button class="social-btn" aria-label="Facebook">
+                                <img src="images/Facebook.svg" alt=""/>
+                            </button>
+                            <button class="social-btn" aria-label="Apple">
+                                <img src="images/Apple.svg" alt=""/>
+                            </button>
+                            <button class="social-btn" aria-label="Google">
+                                <img src="images/Google.svg" alt=""/>
+                            </button>
+                        </div>
+                        <p class="bottom-cta">
+                            حساب کاربری نداری؟
+                            <a href="#" class="link-accent">ساخت حساب</a>
+                        </p>
+                    </article>
+                </div>
+            </section>
+            <section class="hero">
+                <!-- عنوان و توضیح کوتاه -->
+                <div class="hero-text">
+                    <span class="hero-divider" aria-hidden="true"></span>
+                    <h1 class="hero-title">دیت لند</h1>
+                    <p class="hero-desc">
+                        بهترین لوکیشن‌های خاص و نئچ برای قرارهای عاشقانه‌تون رو پیدا کنید.
+                        از هوای تازه‌ی کوه تا آرامش پارک! دست‌به‌دست هم بدید و لحظه‌هاتون رو تو لوکیشن‌هایی بسازید که خودشون عاشقانه‌ن.
+                    </p>
+                    <!-- ناوبری اسلاید (دایره‌ها + فلش‌ها؛ فقط ویژوال) -->
+                    <div class="hero-pager" aria-hidden="true">
+                        <button class="pager-arrow is-left" title="قبلی">→</button>
+                        <div class="dots">
+                            <span class="dot is-active"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <button class="pager-arrow is-right" title="بعدی">←</button>
+                    </div>
+                </div>
+                <div class="hero-illustration" aria-hidden="true">
+                    <img src="images/7 1.svg" alt="" />
+                </div>
+            </section>
+    
+        </div>
+    </div>
+    <div class="blur-overlay"></div>
+    
+    <!-- 🧊 کارت وسط صفحه -->
+   <section class="otp-card" role="dialog" aria-labelledby="otpTitle">
+
+    <!-- هدر کارت: برگشت | عنوان | بستن -->
+    <header class="otp-card__head">
+        <button class="icon-btn" aria-label="برگشت">
+            <img src="images/Arrow Left.svg" alt=""/>
+        </button>
+        <div class="otp-card__titles">
+            <h3 id="otpTitle">کد یکبار مصرف ارسال شد</h3>
+            <p class="muted">کد یکبار مصرف ارسال شده به شماره خود را وارد نمایید</p>
+        </div>
+        <button class="icon-btn" aria-label="بستن">
+            <img src="images/Close Circle.svg" alt=""/>
+        </button>
+
+    </header>
+    <!-- شماره‌ی کاربر + دکمه ویرایش -->
+    <div class="otp-card__phone">
+        <span class="phone">۰۹۱۳•••۰۱۰</span>
+        <button class="edit-btn" aria-label="ویرایش شماره">
+            <img src="images/Pen.svg" alt=""/>
+        </button>
+    </div>
+    <!-- ورودی‌های دایره‌ای OTP (بدون منطق؛ فقط UI) -->
+    <div class="otp-inputs">
+        <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" dir="ltr" value="۳" />
+        <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" dir="ltr" value="۸" />
+        <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" dir="ltr" />
+        <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" dir="ltr" />
+        <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" dir="ltr" />
+        <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" dir="ltr" />
+    </div>
+    <!-- تایمر نمایشی -->
+    <div class="otp-timer">۰۰:۵۹</div>
+
+</section>
+</div>

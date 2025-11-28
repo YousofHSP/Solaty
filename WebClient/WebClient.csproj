@@ -129,7 +129,6 @@
       <None Remove="bin\**" />
     </ItemGroup>
 
-
     <ItemGroup>
       <Folder Include="wwwroot\rcl-plugins\" />
     </ItemGroup>

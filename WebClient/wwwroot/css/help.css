@@ -1,0 +1,653 @@
+*{
+    font-family: IranSans, sans-serif;
+}
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html, body { overflow-x: hidden; }
+body {
+    margin: 0;
+    background: #F6F7FB;
+    color: #313C62;
+}
+img, video, svg { max-width: 100%; height: auto; display: block; }
+
+
+/* =============================
+   01) توکن‌ها (CSS Variables)
+   ============================= */
+
+/* بدنهٔ صفحه */
+.fp-page{
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #f6f7fb;           
+}
+
+.bg-scene{
+    position: relative;
+    inset: 0;
+    z-index: 0;
+    background: rgba(255,255,255,.18);
+    backdrop-filter: blur(8px) saturate(112%);
+    -webkit-backdrop-filter: blur(8px) saturate(112%);
+    filter: blur(4px);
+}
+
+
+:root{
+    --page-gap: 24px;
+
+    /* Toolbar */
+    --toolbar-width: 1156px;
+    --toolbar-min-h: 27px;
+    --toolbar-margin-top: -230px;
+    --toolbar-margin-bottom: 230px;
+    --toolbar-color: #ED145B;
+    --toolbar-muted: #313C62;
+    --toolbar-active: #BE1049;
+    --trail-divider: #E6E9F2;
+
+    /* Placeholder کارت‌ها */
+    --card-placeholder-bg: #FFFFFF;
+    --card-placeholder-bd: #E8E8E9;
+}
+
+/* =============================
+   02) چیدمان صفحه (Placeholder ها)
+   ============================= */
+.dscore-layout{
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    grid-template-rows: 64px auto;
+    gap: var(--page-gap);
+    padding: 20px;
+}
+.dscore-header{
+    position: fixed;
+    top: 0; left: 0;
+    grid-column: 1 / -1;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+    display: grid; place-items: center;
+    color: #A3ABB9;
+    width: 1203px;
+    height: 83px;
+}
+.dscore-sidebar{
+    position: fixed;
+    top: 0; right: 0;
+    grid-column: 2; grid-row: 2;
+    background: #fff;
+    -moz-border-radius-topright: 30px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+    width: 263px;
+    height: 953px;
+    color: #A3ABB9;
+}
+.dscore-main{ grid-column: 1; grid-row: 2; }
+
+/* =============================
+   03) نوار زیر هدر (Toolbar)
+   ============================= */
+.dscore-toolbar{
+    width: var(--toolbar-width);
+    min-height: var(--toolbar-min-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--toolbar-color);
+    margin-top: -5px;
+    margin-bottom: -20px;
+    margin-right: 20px;
+    margin-left: -30px;
+}
+
+.dscore-toolbar__trail{
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+}
+.dscore-trail__item{
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--toolbar-color);
+    transition: opacity .15s ease;
+}
+.dscore-trail__item.is-muted{ color: var(--toolbar-muted); }
+.dscore-trail__item.is-active{ color: var(--toolbar-color); font-weight: 500; }
+.dscore-trail__item:hover{ opacity: .85; }
+
+/* جداکنندهٔ کم‌رنگ بین آیتم‌ها */
+.dscore-trail__divider{
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    border-radius: 1px;
+}
+
+/* چپ: متای کوچک (دلخواه) */
+.dscore-toolbar__meta{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--toolbar-muted);
+}
+.dscore-meta__text{ font-size: 16px; font-weight: bold;  }
+
+.dscore-main { display:grid;
+    grid-template-columns: minmax(0,1fr) 405px;  
+    gap:24px;
+    align-items:start;
+}
+
+.list-toolbar.v2{
+    width: 727px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+    margin-left: -700px;  
+    margin-top: 45px;     
+}
+
+/* کپسول‌ها */
+.pill{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    padding: 0 14px 0 42px;            
+    background: #fff;
+    border: 1px solid #E6E9F2;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(34,54,85,.06);
+    cursor: pointer;
+    white-space: nowrap;
+}
+.pill--wide{ min-width: 330px; }       
+.pill__title{
+    font-size: 18px;
+    font-weight: 800;
+    color: #222222;
+    margin-right: 22px;
+}
+.pill__muted{
+    font-size: 14px;
+    font-weight: 700;
+    color: #313C62;
+    margin-inline-start: 6px;
+}
+
+/* آیکن فلش کوچک سمت راست متن (در RTL می‌شود چپ کپسول) */
+.pill__chev{
+    margin-right:55px;
+}
+.pill__chev2{margin-right: 35px;}
+/* آیکن سه‌خط کوچک سمت چپ کپسول */
+.pill__menu{
+    position: absolute;
+    left: 300px;              
+    width: 16px; height: 16px; opacity: .6;
+}
+
+/* فاصله‌ی بین دو کپسول */
+.pill-gap{ width: 24px; flex: 0 0 14px; }
+
+/* هاور ریز */
+.pill:hover{ box-shadow: 0 8px 22px rgba(34,54,85,.10); border-color:#E2E6EF; }
+
+.coach-card{
+
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 16px 40px rgba(34,54,85,.10);
+    overflow:hidden;
+    width: 727px;
+    height:340px;
+    margin-left: -35px;
+    margin-top: -3px;
+
+}
+
+.coach-card2{
+
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 16px 40px rgba(34,54,85,.10);
+    overflow:hidden;
+    width: 727px;
+    height:340px;
+    margin-left: -700px;
+    margin-top: 360px;
+
+}
+
+.coach-card3{
+
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 16px 40px rgba(34,54,85,.10);
+    overflow:hidden;
+    width: 727px;
+    height:340px;
+    margin-left: -34px;
+    margin-top: 3px;
+
+}
+
+
+.pc-row{ display:flex; align-items:center; flex-direction: column; }
+.pc-row--padded{ padding:12px 20px 6px; }
+.pc-badge{
+    display:inline-flex; align-items:center; gap:10px;
+    background:#F0F0F0; color:#B20F44;
+    padding:8px 8px; font-weight:800; font-size:12px; margin-right : 520px;
+    margin-bottom:9px; margin-top:18px;
+}
+
+.pc-badge__like{ margin-inline-start:6px; }
+.pc-rating{
+    color:#4E4E4E; font-size:12px; display:inline-flex; align-items:center; gap:6px;
+    margin-right : 560px; margin-bottom:6px; margin-top:6px;
+}
+.pc-rating img{ width:16px; height:16px; transform:translateY(2px); margin-top:-6px; }
+
+/* هدر عنوان + آیکن گرد سمت راست */
+.pc-head.v2{
+    display:flex; align-items:center; gap:14px; padding:10px 20px 0;
+    margin-left:380px; margin-top:-95px;
+}
+.pc-iconCircle{
+    margin-inline-start: auto;             
+    width:64px; height:64px; border-radius:50%;
+    display:grid; place-items:center;
+}
+.pc-iconCircle img{ width:74px; height:74px; }
+.pc-badgePink{
+    position: absolute;
+    left: 655px;     
+    top: 308px;
+    width: 18px;     
+    height: 18px;
+    pointer-events: none;   
+}
+.pc-titleBlock{ text-align:right; }
+.pc-title{ margin-top:20px ; font-size:16px; font-weight:900; color:#414141; margin-bottom:5px; }
+.pc-subtitle{ margin-top:5px; color:#6F7A92; font-size:14px; white-space:nowrap; }
+
+.pc-sep{ height:4px; background:#EBEBEB; border:none; margin:20px 30px; }
+.pc-sep2{ height:4px; background:#EBEBEB; border:none; margin:-10px 30px 70px; }
+
+
+/* متن توضیح */
+.pc-desc.v2{ padding:0 20px; color:#313C62; line-height:2.1; font-size:14px; }
+
+/* نوار بازدید موفق با نقطه صورتی */
+.pc-softNote{
+    display:flex; align-items:center; gap:12px;
+    padding:10px 20px; color:#B20F44; font-weight:800; font-size:12px;
+    margin-top:-20px; margin-right : 520px;
+}
+.dot-pink{ width:18px; height:18px; margin-top:1px; }
+
+.pc-actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:-115px;
+    margin-right: 20px;
+
+}
+.pc-pill{
+    background:#F5F5F5; border:1px solid #E6E9F2; color:#414141;
+    padding:8px 12px; border-radius:999px; font-size:12px; cursor:pointer;
+;
+}
+/* ردیف‌های اطلاعات (ساعت/آدرس) */
+.pc-infoRow{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 20px;
+    font-size:12px;
+}
+.pc-infoRow2{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 20px;
+    font-size:12px;
+}
+.pc-infoRow2 img{ width:24px; height:24px; margin-top: 28px; }
+.pc-infoRow2 .label{ color:#222222; margin-top:28px; font-size: 12px; margin-right: -3px;}
+.pc-infoRow2 .val{ font-size: 12px; color:#222222;margin-top:28px; }
+.pc-infoRow:not(:first-child){ margin-top:-25px; margin-bottom:50px;}
+.pc-infoRow img{ width:24px; height:24px; margin-top: -10px; }
+.pc-infoRow .label{ color:#222222; margin-top:-10px; font-size: 12px;}
+.pc-infoRow .val{ font-size: 12px; color:#222222;margin-top:-10px; }
+.pc-endcap{
+    margin-inline-start:auto;
+    width:36px; height:36px; border-radius:50%;
+    border:1px solid #E6E9F2; background:#fff; display:grid; place-items:center; cursor:pointer;
+}
+
+/* فوتر دکمه مسیر‌یابی */
+.pc-foot.v2{ padding:14px 20px 22px; display:flex; justify-content:flex-start; gap: -5px;}
+.btn-route{
+    position:relative; border:none; cursor:pointer; background:#F1416C; color:#fff;
+    height:48px; border-radius:999px; padding:0 74px 0 24px; 
+    font-weight:800; font-size:14px;
+    margin-right: 510px; margin-top:-60px;
+    white-space: nowrap;
+    margin-inline-start:auto;
+}
+.btn-route__bubble{
+    position:absolute; inset:auto 10px auto auto; top:50%; transform:translateY(-50%);
+    width:48px; height:48px; border-radius:999px; background:#F1416C;
+    display:grid; place-items:center;
+}
+.btn-route__bubble img{ width:22px; height:22px; filter:none; }
+
+:root{
+    --panel:#fff;
+    --ink:#1B2540;
+    --muted:#8E97A8;
+    --line:#ECEFF4;
+    --pink:#ED145B;
+    --soft:#F7F8FB;
+    --shadow:0 14px 36px rgba(34,54,85,.12);
+}
+.filters-col{
+    width:405px;             
+    display:grid;
+    gap:16px;
+    margin-top: -795px;
+    grid-column:2;
+    margin-left: 60px;
+
+}
+
+/* کارت عمومی */
+.fcard{
+    background:var(--panel);
+    border:1px solid #EFF2F7;
+    border-radius:16px;
+    box-shadow: var(--shadow);
+    padding:16px 16px 18px;
+
+}
+.fcard__head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:18px; margin-top: 15px; margin-right: 5px;
+    margin-left: 8px;
+}
+.fcard__title{
+    display:flex; align-items:center; gap:8px;
+    margin:0; font-size:18px; font-weight:800; color:#414141;
+}
+.fcard__title img{ width:20px; height:20px; }
+
+/* لینک حذف فیلتر */
+.link-clear{
+    border:none; background:transparent; color:#919191; cursor:pointer;
+    font-size:14px; padding:0; display:inline-flex; align-items:center; gap:8px;
+    margin-left: 10px;
+}
+
+.fc-badge{
+    min-width:20px; height:20px; border-radius:999px;
+    background:#E1E3E9; color:#222222; display:inline-grid; place-items:center;
+    font-size:12px; font-weight:800; line-height:1; padding:0 6px;
+    margin-right:50px;
+
+}
+.fc-caret{ border:none; background:transparent; color:#A8B0C2; cursor:pointer; width:32px; height:32px;
+    margin-top:-5px;}
+
+
+/* چیپ‌ها */
+.fcard--chips{ padding-top:12px; width: 404px; height: 129px;}
+.chips{ display:flex; flex-wrap:wrap; gap:1px; }
+.chip{
+    display: inline-flex; align-items: center; gap:5px;
+    border-radius:48px; border:1px solid #E6E9F2; background:#F5F5F5;
+    width: 117px; height: 34px;
+    padding:6px 10px; font-size:12px; color:#414141; cursor:pointer;
+    margin-right: 5px;
+    white-space: nowrap;
+}
+.chip span{ margin-inline-start:8px; color:#C1C7D0; }
+.chip img{
+    margin-top: 5px;
+    margin-right: -5px;
+    width:20px;
+    height:20px;
+}
+
+
+
+/* جستجو */
+.search{
+    position:relative; display:block; margin-bottom:10px; border-radius: 28px;
+}
+.search input{
+    width:100%; height:40px; border:1px solid #E6E9F2; border-radius:28px;
+    padding:0 36px 0 10px; background:#fff; color:#2C2C2E; outline:none;
+    font-size: 14px;
+}
+.search__icon{ position:absolute; right:10px; top:50%; transform:translateY(-50%); opacity:.6;
+    width: 24px; height:24px;}
+
+/* چک‌لیست */
+.checklist{ list-style:none; padding:0; margin:0; display:grid; gap:8px; }
+.checklist--tight{ gap:6px; }
+
+/* جعبهٔ چک‌باکس پایه */
+.check{ display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; color:#414141; }
+.check input{ appearance:none; width:0; height:0; position:absolute; }
+
+/* مربع خام */
+.check i{
+    width:18px; height:18px;
+    border-radius:4px;                   
+    border:1.6px solid #C9D1E0;
+    background:#fff; display:inline-block; position:relative;
+}
+
+.check input:checked + i{
+    background:#ED145B;                   
+    border-color:#ED145B;
+}
+.check input:checked + i::after{
+    content:""; position:absolute;
+    width:5px; height:9px;               
+    border-right:2px solid #fff;         
+    border-bottom:2px solid #fff;
+    transform: rotate(45deg);
+    top:2px; left:6px;                   
+}
+
+.check span{ user-select:none; }
+
+/* رادیوها */
+.radios-inline{ display:flex; align-items:center; gap:70px; }
+.radio2{ display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:14px; color:#414141; }
+.radio3{ color:#D51252;}
+.radio2 input{ appearance:none; width:0; height:0; position:absolute; }
+.radio2 i{
+    width:18px; height:18px; border-radius:50%; border:2px solid #C9D1E0; display:inline-block; position:relative; background:#fff;
+}
+.radio2 input:checked + i{ border-color:#D51252; }
+.radio2 input:checked + i::after{
+    content:""; position:absolute; inset:3px; border-radius:50%; background:linear-gradient(90deg,#FDE8EF,#ED145B);
+}
+
+
+/* جداکننده داخل کارت */
+.f-sep{ border:none; height:1px; background:var(--line); margin:12px 0; }
+
+.price{ display:grid; gap:8px; }
+.price__badge{
+    justify-self:center; background:var(--pink); color:#fff;
+    padding:6px 12px; border-radius:999px; font-size:12px; font-weight:700;
+}
+.price__track{
+    position:relative; height:6px; border-radius:999px; background:#EDF1F7;
+}
+.price__fill{
+    position:absolute; top:0; bottom:0;
+    left:var(--from); width:calc(var(--to) - var(--from));
+    background:linear-gradient(90deg,#FDE8EF,#ED145B); border-radius:999px;
+}
+.price__knob{
+    position:absolute; top:50%; transform:translateY(-50%);
+    left:var(--pos); width:18px; height:18px; border-radius:50%;
+    background:#fff; border:4px solid var(--pink);
+}
+.price__hint{ color:#919191; font-size:12px; text-align:right;
+    margin-top: 10px;}
+
+.subttl{ margin:6px 0 20px; font-size:18px; color:#414141; font-weight:700; }
+
+/* مودال وسط صفحه */
+.support-modal{
+    position: fixed;
+    inset: 52% auto auto 50%;
+    transform: translate(-50%,-50%);
+    width: 566px;
+    height: 820px;
+    background:#fff;
+    border-radius: 20px;
+    box-shadow: 0 40px 120px rgba(16,24,40,.25);
+    padding: 18px 20px 22px;
+    z-index: 1000;
+    margin-top: -15px;
+}
+
+/* دکمه بستن گوشه چپ بالا */
+.sm-close{
+    position:absolute; left: 26px; top: 50px;
+    width: 36px; height: 36px; border:0; background:transparent; cursor:pointer;
+    opacity:.9;
+}
+.sm-close img{ width:100%; height:100%; }
+
+/* هدر: عنوان وسط + مدال لوگو سمت راست */
+.sm-head{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding-inline: 8px;
+    margin-top: 18px;
+    margin-bottom: 39px;
+}
+.sm-title{
+    margin-right: -420px;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #313C62;
+}
+.sm-badge{
+    justify-self: right;
+    width: 72px; height: 72px;
+    background:#F7F7FA;
+    border-radius: 999px;
+    display: grid;
+    margin-left: 400px;
+}
+.sm-badge img{ width: 72px; height: 72px; }
+
+.pc-sep{ height:4px; background:#EBEBEB; border:none; margin:-25px 10px 20px; }
+.pc-sep2{ height:4px; background:#EBEBEB; border:none; margin:5px 10px 20px; }
+
+
+/* ویدئو */
+.sm-video{
+    position: relative;
+    margin: 0 0 16px;
+    border-radius: 12px;
+    overflow: hidden;
+    background:#111;
+}
+.sm-video__poster{
+    width: 100%;
+    height: 190px;           
+    object-fit: cover;
+    display: block;
+    filter: saturate(.9);
+}
+.sm-video__caption{
+    position: absolute;
+    top: 20px; left: 0; right: 0; bottom: 20px;
+    text-align: center;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 16px;
+    text-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+.sm-video__play{
+    position:absolute; inset:0; margin:auto;
+    width: 78px; height: 78px; border-radius: 999px;
+    border: 5px solid #5e5a5a;
+    background: #fff;
+    display: grid; place-items:center;
+    cursor: pointer;
+}
+.sm-video__play img{ width:28px; height:28px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
+.sm-video__duration{
+    position: absolute; bottom: 15px; text-align: center;
+    right: 233px;
+    background: rgba(17,17,17,.75);
+    color:#fff; font-size: 12px; font-weight:700;
+    padding: 4px 10px; border-radius: 999px;
+}
+
+/* تیتر بخش تماس */
+.sm-sec-title{
+    margin: 6px 0 20px;
+    text-align: right;
+    font-size: 16px;
+    font-weight: 800;
+    color:#313C62;
+}
+
+/* لیست ردیف‌ها */
+.sm-list{
+    --label-w: 220px;          
+    --col-gap: 90px;
+    list-style:none; margin:0 0 14px; padding:0 8px;
+    display: grid; gap: 10px;
+}
+.sm-row{
+    display:grid;
+    grid-template-columns: auto 1fr auto; 
+    align-items: center;
+    column-gap: var(--col-gap);
+}
+.sm-key{ color:#404040; font-size:14px; margin-right: 20px;}
+.sm-val{ color:#404040; font-size:14px; font-weight:700; margin-right:120px;}
+.sm-val1{ color:#404040; font-size:14px; font-weight:700; margin-right:145px;}
+.sm-val2{ color:#404040; font-size:14px; font-weight:700; margin-right:153px; width: 190px;}
+.sm-row--addr{ align-items: start; }
+.sm-row--addr .sm-val{ line-height: 1.9; }
+.sm-copy{
+    width:28px; height:28px; border-radius:8px;
+    border:1px  #E6E9F2; background:#fff; display:grid; place-items:center;
+    cursor:pointer;
+    gap: 10px;
+    margin-right: -70px;
+}
+.sm-copy img{ width:20px; height:20px; opacity:.8; margin-right:-1045px; }
+
+/* نقشه */
+.sm-map{
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #EFF2F7;
+}
+.sm-map img{ width:528px; height:180px; object-fit: cover; filter: grayscale(20%); }
+.sm-map__fab{
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 12px;
+    background: #fff; border: 1px solid #E6E9F2;
+    display: grid; place-items: center; cursor: pointer;
+    box-shadow: 0 10px 24px rgba(34,54,85,.12);
+}
+.sm-map__fab img{ width:22px; height:22px; }

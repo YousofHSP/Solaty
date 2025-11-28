@@ -1,0 +1,87 @@
+@page "/game"
+
+
+<link rel="stylesheet" href="css/game.css" />
+<link rel="stylesheet" href="css/font.css" />
+
+
+<div class="dscore-layout">
+    <!-- هدرِ خالی (Placeholder) -->
+    <header class="dscore-header">هدر</header>
+
+    <!-- منوی سمت راستِ خالی (Placeholder) -->
+    <aside class="dscore-sidebar">منوی سمت راست</aside>
+
+    <!-- محتوای اصلی: فقط نوار زیر هدر -->
+    <main class="dscore-main">
+        <section class="dscore-toolbar" aria-label="نوار راهبری بالای کارت‌ها">
+            <nav class="dscore-toolbar__trail" aria-label="مسیر">
+                <a class="dscore-trail__item is-muted" href="#">سوپرایز هفتگی</a>
+                <div class="dscore-trail__divider" aria-hidden="true">
+                    <img src="images/Alt Arrow Left.svg" alt=""/>
+                </div>
+                <a class="dscore-trail__item is-active" href="#">لاولایف</a>
+            </nav>
+
+            <!-- چپ: متای کوچک (دلخواه) -->
+            <div class="dscore-toolbar__meta">
+                <!-- مثال: شمارنده/راهنما/توضیح کوتاه -->
+                <span class="dscore-meta__text">😊یه کوچولو خلاقیت، یه کوچولو عشق. ببین این هفته چی برات داریم </span>
+            </div>
+        </section>
+        
+        <!-- ====== بخش دو کارت وسط ====== -->
+        <section class="gw-cards" dir="rtl">
+            <!-- کارت 1 -->
+            <article class="gw-card">
+                <div class="gw-illus2">
+                    <img src="images/kjgfg.png" alt="" />
+                </div>
+
+                <div class="gw-badge">
+                    <span class="gw-badge__icon" aria-hidden="true">
+                        <img src="images/User Heart Rounded.svg" alt=""/>
+                    </span>
+                    ۶۳۴ زوج این بازی رو انجام داد
+                </div>
+
+                <h3 class="gw-title">جرعت حقیقت</h3>
+
+                <p class="gw-desc">
+                    وقتشه کمی از لاک خودتون دربیاید! سوالای خجالت‌آور، کارای هیجان‌انگیز و لحظه‌هایی ک خاطره می‌شن آماده‌ای رازاتو رو کنی یا یه کار دیوونه‌بازی انجام بدی؟ 😅
+                </p>
+
+                <div class="gw-actions">
+                    <button class="gw-btn gw-btn--primary">شروع بازی</button>
+                    <button class="gw-btn gw-btn--ghost">قوانین بازی</button>
+                </div>
+            </article>
+
+            <!-- کارت 2 -->
+            <article class="gw-card">
+                <div class="gw-illus">
+                    <img src="images/education _ study, learn, write, notes, document, page 1.svg" alt="" />
+                </div>
+
+                <div class="gw-badge">
+                    <span class="gw-badge__icon" aria-hidden="true">
+                        <img src="images/User Heart Rounded.svg" alt=""/>
+                    </span>
+                    ۶۳۴ زوج این بازی رو انجام دادن
+                </div>
+
+                <h3 class="gw-title">اسم‌فامیل دونفره</h3>
+
+                <p class="gw-desc">
+                    یه نسخه خاص از اسم‌فامیل فقط برای تو و عشق‌جونت! موضوع‌ها هم کمی عاشقانه‌تر شدن 😉 ببین کی سریع‌تر فکر می‌کنه، و کی خلاق‌تر جواب می‌ده!
+                </p>
+
+                <div class="gw-actions">
+                    <button class="gw-btn gw-btn--primary">شروع بازی</button>
+                    <button class="gw-btn gw-btn--ghost">قوانین بازی</button>
+                </div>
+            </article>
+        </section>
+
+    </main>
+</div>

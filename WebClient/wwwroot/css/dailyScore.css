@@ -1,0 +1,661 @@
+*{
+    font-family: IranSans, sans-serif;
+}
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    margin: 0;
+    background: #F6F7FB;       
+    font-family: 'Kalameh', system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    color: #313C62;
+}
+
+/* =============================
+   01) توکن‌ها (CSS Variables)
+   ============================= */
+:root{
+    --page-gap: 24px;
+
+    /* Toolbar */
+    --toolbar-width: 1156px;     
+    --toolbar-min-h: 27px;       
+    --toolbar-margin-top: -85px;
+    --toolbar-margin-bottom: 20px;
+    --toolbar-color: #ED145B;    
+    --toolbar-muted: #313C62;   
+    --toolbar-active: #BE1049;  
+    --trail-divider: #E6E9F2;    
+
+    /* Placeholder کارت‌ها */
+    --card-placeholder-bg: #FFFFFF;
+    --card-placeholder-bd: #E8E8E9;
+}
+
+/* =============================
+   02) چیدمان صفحه (Placeholder ها)
+   ============================= */
+.dscore-layout{
+    display: grid;
+    grid-template-columns: 1fr 280px; 
+    grid-template-rows: 64px auto;
+    gap: var(--page-gap);
+    padding: 20px;
+}
+.dscore-header{
+    position: fixed;
+    top: 0; left: 0;
+    grid-column: 1 / -1;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+    display: grid; place-items: center;
+    color: #A3ABB9;
+    width: 1203px;
+    height: 83px;
+}
+.dscore-sidebar{
+    position: fixed;
+    top: 0; right: 0;
+    grid-column: 2; grid-row: 2;
+    background: #fff;
+    -moz-border-radius-topright: 30px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+    width: 263px;
+    height: 953px;
+    color: #A3ABB9;
+}
+.dscore-main{ grid-column: 1; grid-row: 2; }
+
+/* =============================
+   03) نوار زیر هدر (Toolbar)
+   ============================= */
+.dscore-toolbar{
+    width: var(--toolbar-width);
+    min-height: var(--toolbar-min-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;   
+    color: var(--toolbar-color);
+    margin-top: var(--toolbar-margin-top);
+    margin-bottom: var(--toolbar-margin-bottom);
+    margin-left: -10px;
+}
+
+.dscore-toolbar__trail{
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;                     
+}
+.dscore-trail__item{
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--toolbar-color);
+    transition: opacity .15s ease;
+}
+.dscore-trail__item.is-muted{ color: var(--toolbar-muted); }
+.dscore-trail__item.is-active{ color: var(--toolbar-color); font-weight: 500; }
+.dscore-trail__item:hover{ opacity: .85; }
+
+/* جداکنندهٔ کم‌رنگ بین آیتم‌ها */
+.dscore-trail__divider{
+    width: 24px;
+    height: 24px;
+    /*color: var(--trail-divider);*/
+    display: inline-block;
+    border-radius: 1px;
+}
+
+/* چپ: متای کوچک (دلخواه) */
+.dscore-toolbar__meta{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--toolbar-muted);
+}
+.dscore-meta__text{ font-size: 16px; font-weight: bold;  }
+
+/* =============================
+   05) Utilities
+   ============================= */
+.dscore-main { display: grid; grid-template-columns: 1fr; }
+:root {
+    /* صفحه */
+
+    --page-bg: #F3F4F4;         
+    --text-muted: #7F8794;     
+
+    /* کارت و خطوط */
+    --card-radius: 12px;       
+    --card-border: #E8E8E9;     
+    --card-gap: 2px;            
+    --shadow-soft: 0 4px 14px rgba(34, 54, 85, 0.08);
+
+    /* رنگ‌های دلتا */
+    --delta-up: #006F1F;        
+    --delta-gap: 10px;
+    --delta-offset-y: -2px;   
+    --delta-size: 22px;       
+    --delta-stroke: 2px;     
+    --arrow-stroke: 3px;     
+    --arrow-height: 9px;      
+    --arrow-head: 8px;      
+
+    /* گرادیانت کارت امتیاز – جایگزین با Figma */
+    --score-grad-start: #F6B06A; 
+    --score-grad-end:   #F99153; 
+    --birthday-grad-start: #FB5A61;
+    --birthday-grad-end:  #F48785;
+    --engage-grad-start: #3364CD;
+    --engage-grad-end:  #3E93F7;
+    --start-grad-start: #9677DF;
+    --start-grad-end:  #B0A3D5;
+}
+
+/* =========================================
+   02) پایه و ریست‌ها
+   ========================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    margin: 0;
+    background: var(--page-bg);
+    font-family: 'Kalameh', system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+/* =========================================
+   03) چیدمان صفحه (Placeholder ها)
+   ========================================= */
+
+
+.cards-row{ display:grid; grid-auto-flow:column; grid-auto-columns:272px; gap:22px; }
+.below-placeholder{ height:480px }
+
+/* =========================================
+   04) کامپوننت KCard (ساختار BEM)
+   ========================================= */
+.kcard{
+    width:272px;                
+    height:112px;                
+    background:#fff;             
+    border:1px solid var(--card-border); 
+    border-radius:var(--card-radius);     
+    padding:2px;                 
+    display:flex;                
+    flex-direction:column;
+    gap:var(--card-gap);        
+    box-shadow:var(--shadow-soft);
+    position:relative;
+    margin-top: -20px;
+}
+
+/* -- Top (گرادیان بالا) ----------------------------------------------- */
+.kcard__top{
+    flex:0 0 76px;              
+    border-radius:calc(var(--card-radius) - 2px); 
+    position:relative;
+    padding:10px 14px 0 14px;   
+    display:flex; justify-content:flex-end; align-items:flex-start;
+}
+
+
+/* -- Text group (عنوان + متریک) --------------------------------------- */
+.kcard__text{ color:#fff; text-align:right; display:flex; flex-direction:column; gap:15px}
+.kcard__title{font-style: normal; font-size:14px; font-weight:400; letter-spacing:.2px;}
+.kcard__metric{ font-size:16px; font-weight:700; line-height:1; text-shadow:0 1px 0 rgba(0,0,0,.08)}
+
+/* -- Gap (خط فاصله 2px بین بالا و پایین) ------------------------------ */
+.kcard__gap{ height:var(--card-gap); background:transparent }
+
+/* -- Strip پایین (سفید) ------------------------------------------------ */
+.kcard__strip{ flex:0 0 32px; 
+    background:#fff; border-radius:calc(var(--card-radius) - 2px); display:flex; align-items:center; justify-content:space-between; padding:0 12px; }
+
+/* چپ: فلش سبز + درصد */
+.kcard__delta{
+    display: flex;
+    align-items: center;
+    gap: var(--delta-gap, 8px);
+    transform: translateY(var(--delta-offset-y));
+}
+
+.kcard__deltaIcon{
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 1px solid var(--delta-up);
+    position: relative; display: inline-block;
+
+}
+/* میله عمودی فلش */
+.kcard__deltaIcon::before{
+    content: "";
+    position: absolute; left: 50%; transform: translateX(-50%);
+    top: 7px; width: 2px; height: 9px; bottom: 4px; background: var(--delta-up);
+    border-radius: 1px;
+}
+/* سر فلش (مثلث رو به بالا) */
+.kcard__deltaIcon::after{
+    content: "";
+    position: absolute; left: 50%; transform: translateX(-50%);
+    top: 1px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 6px solid var(--delta-up);
+}
+.kcard__deltaText{ color: var(--delta-up); font-weight: 400; }
+
+
+/* راست: متن کمکی خاکستری */
+.kcard__helper{ color:var(--text-muted);  transform: translateY(var(--delta-offset-y));
+}
+
+/* -- Modifier: Score ---------------------------------------------------- */
+.kcard--score .kcard__top{ background:linear-gradient(90deg, var(--score-grad-start), var(--score-grad-end)) }
+.kcard--birthday .kcard__top{ background:linear-gradient(90deg, var(--birthday-grad-start), var(--birthday-grad-end)) }
+.kcard--engage .kcard__top{ background:linear-gradient(90deg, var(--engage-grad-start), var(--engage-grad-end))  }
+.kcard--start .kcard__top{ background:linear-gradient(90deg, var(--start-grad-start), var(--start-grad-end))  }
+
+.cards-row{
+    margin-bottom: 260px;  
+    margin-top: 5px;
+}
+
+.bottom-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 24px;
+    align-items: start;
+}
+
+/* ===================================================================
+   Right Card (rcard) – کارت سمت راست Daily Score
+   =================================================================== */
+:root{
+    --rcard-w: 684px;
+    --rcard-h: 336px;
+    --rcard-pad: 24px;
+    --rcard-radius: 12px;
+    --rcard-bg: #fff;
+    --rcard-bd: #E8E8E9;
+    --rcard-shadow: 0 10px 28px rgba(34,54,85,.06);
+
+    /* متن‌ها */
+    --rcard-title: #11111D;
+    --rcard-muted: #A5ADBD;
+
+    /* Pills */
+    --pill-bg: #FDE8EF;               
+    --pill-color: #ED145B;
+    --pill-inactive-bg: #FDE8EF;      
+    --pill-inactive-color: #ED145B80;
+    --pill-bd: #F3A5C0;
+    --pill-w: 96px;
+
+    /* خط زیر هدر */
+    --rcard-rule: #EBEBEB;
+    --rcard-offset-x: 320px;
+    --rule-width: 380px;        
+    --rule-gap-top: 10px;       
+    --rule-gap-bottom: 6px;    
+
+    /* دکمه‌های گزینه‌ها */
+    --choice-outline-grad: linear-gradient(90deg, #743FB1, #CF34A1);
+    --choice-outline-text: #7040B2;
+    --choice-primary-grad: linear-gradient(90deg, #6641B4, #D233A0);
+    --choice-primary-shadow: 0 12px 28px rgba(161,64,203,.28);
+
+    /* ناوبری */
+    --nav-btn-bd: #E7E3F9;
+    --nav-btn-bg: #E7E3F9;
+    --nav-arrow: #8B95A9;
+    --nav-step-bg: #E7E3F9;
+    --nav-step-color: #313C62;
+
+    --note-offset-y: -160px;
+
+
+    /* آرک گوشه راست */
+    --arc-size: 350px;
+    --arc-offset: -10px; 
+    --arc-stroke: 2px;
+    --arc-fill-0: rgba(233,46,109,.10);          
+    --arc-fill-1: rgba(233,46,109,.02);
+    --arc-dx: 0px;              
+    --arc-dy: 0px;               
+    --arc-rotate: 0deg;
+}
+
+/* جای کارت در ردیف پایین */
+.dscore-bottom{
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: end; 
+
+
+}
+
+/* ظرف کارت */
+.rcard{
+    width: 100%;
+    max-width: 684px;         
+    margin-top: -224px;
+    height: var(--rcard-h);
+    background: var(--rcard-bg);
+    border: 1px solid var(--rcard-bd);
+    border-radius: var(--rcard-radius);
+    padding: var(--rcard-pad);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--rcard-shadow);
+}
+
+/* هدر: pills راست + ناوبری چپ */
+.rcard__header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between; 
+    position: relative; z-index: 2;
+
+}
+
+/* Pills – RTL: آیتم فعال سمت راست */
+.rcard__pills{
+    display:flex; gap:12px; direction: rtl; height: 34px;
+}
+.pill{
+    border:none;
+    border-radius:48px;
+    padding:10px 10px;
+    font-weight:500;
+    font-size: 12px;
+    cursor:pointer;
+    background: var(--pill-inactive-bg);
+    color: var(--pill-inactive-color);
+    align-items: center;
+    margin-top: -5px;
+}
+.pill--active{
+    background:#FDE8EF;
+    color: var(--pill-color);
+    border:1px solid var(--pill-color);
+    font-weight:500;
+    font-size: 12px;
+}
+
+.pill--support   { min-width: 72px; }
+.pill--mutual    { min-width: 96px; }
+.pill--trust     { min-width: 62px; }
+.pill--emotype   { min-width: 99px; }
+
+
+/* ناوبری */
+.rcard__nav{ display:flex; align-items:center; gap:10px; padding: 15px 7px 16px; margin-top: -3px;
+    margin-bottom: -10px; z-index: 2}
+.rcard__navBtn{
+    width:30px; height:30px; border-radius:24px;
+    border:1px solid var(--nav-btn-bd);
+    background: var(--nav-btn-bg);
+    display:grid; place-items:center; cursor:pointer;
+}
+.rcard__navArrow{ color: var(--nav-step-color); font-weight:700; }
+.rcard__step{
+    width:30px; height:30px; border-radius:24px;
+    display:grid; place-items:center;
+    background: var(--nav-step-bg);
+    color: var(--nav-step-color); font-weight:700; font-size: 16px;
+}
+
+/* خط نازک زیر پیل‌ها */
+.rcard__rule{
+    direction: rtl;
+    display: block;
+    width: var(--rule-width);   
+    border: 0.5px solid var(--rcard-rule);
+    background: var(--rcard-rule);
+    padding-left: -20px;
+    margin-inline-start: 0;
+    margin-inline-end: auto;
+    border-radius: 1px;
+    margin-top: 10px;
+    z-index: 2;
+}
+
+/* دو ستون: چپ یادداشت | راست سؤال */
+.rcard__grid{
+    display:grid; grid-template-columns: 1.1fr 1.9fr; gap: 24px;
+    margin-left: -50px;
+    position: relative; z-index: 2;
+    margin-top: 20px;
+}
+
+/* باکس یادداشت چپ */
+.noteBox{
+    width: 188px;
+    height: 285px;
+    border:1px solid #E3E6EF;
+    border-radius: 8px;
+    padding: 15px;
+    color:#B9BFCC;
+    background: #fff;
+    transform: translateY(var(--note-offset-y));
+
+}
+.rcard__note{
+    direction: rtl;
+}
+/* متن سؤال و توضیح */
+.rcard__qTitle{
+    margin:0;
+    font-size:16px; font-weight:700; color: var(--rcard-title);
+    text-align:right;
+}
+.rcard__qDesc{
+    margin:8px 0 20px 0;
+    font-size:14px; line-height:1.9; color: var(--rcard-muted); font-weight:500;
+    text-align:right;
+}
+
+/* گزینه‌ها: راست‌چین، سه دکمه */
+.rcard__choices{
+    display:flex; gap:4px; direction: rtl;
+    width: 102px; height: 36px; align-items: center;
+    transform: translatex(var(--rcard-offset-x));
+
+}
+.choice{
+    position:relative;
+    border-radius: 50px;
+    padding: 6px 40px;
+    font-weight:400;
+    background:
+            linear-gradient(#fff, #fff) padding-box,
+            var(--choice-outline-grad) border-box;
+    border:1px solid transparent;
+    color: var(--choice-outline-text);
+}
+.choice--primary{
+    background: var(--choice-primary-grad);
+    color:#fff;
+    border:none;
+    box-shadow: var(--choice-primary-shadow);
+}
+
+/* ===================================================================
+   07) ردیف پایین سه‌ستونه: دو کارت پروفایل + کارت پرسش
+   =================================================================== */
+.dscore-bottomGrid{
+    display: flex;
+    gap: 24px;
+    align-items: start;
+}
+
+/* ===================================================================
+   08) کارت پروفایل (pCard)
+   =================================================================== */
+:root{
+    --p-w: 320px;
+    --p-radius: 16px;
+    --p-pad: 16px;
+
+    --p-bg: #FFFFFF;
+    --p-bd: #E8E8E9;
+    --p-shadow: 0 10px 28px rgba(34,54,85,.06);
+
+    --p-name: #313C62;
+    --p-muted: #222222;
+
+    --p-outline: #ED145B; 
+    --p-outline-soft: rgba(240,110,154,.25);
+
+    --star-active: #E42661; 
+    --star-idle:   #D7DEEA; 
+}
+
+/* --- اسکلت اصلی --- */
+.pCard{
+    width: 212px;
+    height: 178px;
+    margin-top: -70px;
+    background: var(--p-bg);
+    border-radius: var(--p-radius);
+    box-shadow: var(--p-shadow);
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.pCard2{
+    width: 212px;
+    height: 229px;
+    margin-top: -117px;
+    border: 1px solid var(--p-outline);
+    background: var(--p-bg);
+    border-radius: var(--p-radius);
+    box-shadow: var(--p-shadow);
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* نسخه‌ی حاشیه‌دار (کارت سمت راست تصویر) */
+.pCard--outlined{
+    box-shadow: 0 8px 20px var(--p-outline-soft);
+
+}
+
+.pCard--outlined .pCard__body{
+    border-bottom-left-radius: 16px;  
+    border-bottom-right-radius: 16px;
+}
+
+/* --- تصویر --- */
+.pCard__media{
+    width: 179px;
+    height: 232px;
+    margin-top:-117px;
+    margin-left:17px;
+}
+
+.pCard__media2{
+    width: 179px;
+    height: 226px;
+    margin-top:-104px;
+    margin-left:17px;
+}
+.pCard--outlined .pCard__media2{
+    overflow: hidden;
+}
+.pCard__media img{
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+}
+
+/* --- بدنه --- */
+.pCard__body{
+    padding: var(--p-pad);
+    background: #fff;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* ردیف آیکن کوچک + نام (کارت راست) */
+.pCard__row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+.pCard__miniIcon{
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+}
+
+/* نام */
+.pCard__name{
+    margin-top: 8px;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--p-name);
+    text-align: right;
+}
+
+/* خط نازک داخل کارت راست */
+.pCard__rule{
+    height: 1px;
+    background: #ECEFF5;
+    margin: 12px 0;
+    border-radius: 1px;
+}
+
+/* ستاره‌ها */
+.pCard__stars{ display: flex; gap: 4px; }
+.star{
+    font-size: 16px;
+    color: var(--star-idle);
+}
+.star.is-active{ color: var(--star-active); }
+
+/* امتیاز گوشه‌های پایین (چپ/راست) */
+.pCard__score{
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--p-muted);
+}
+.pCard__score--left{ float: left; margin-top: 8px; }
+.pCard__score--right{ float: right; margin-top: -20px;  }
+
+/* نسخه‌ی پایه (کارت اول) — پایه‌ی سفید با گوشه‌های خیلی گرد پایین */
+.pCard:not(.pCard--outlined) .pCard__body{
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+/* رفع float برای امتیاز */
+.pCard__body::after{ content:""; display:block; clear:both; }
+
+
+.rcard::before{
+    content:"";
+    position:absolute; top:0; right:0;
+    width:400px; height:400px; border-radius:50%;
+    transform: translate(50%,-50%);
+    background: linear-gradient(#F2F2FC00,#FDE8EF);
+    z-index:0; pointer-events:none;
+}
+/* خط قوس */
+.rcard::after{
+    content:"";
+    position:absolute; top:0; right:0;
+    width:400px; height:400px; border-radius:50%;
+    transform: translate(50%,-50%);
+    background: radial-gradient(closest-side,
+    transparent calc(10% - var(--arc-stroke)),
+    #DA3A66 1);
+    z-index:2; pointer-events:none;
+    border:0.1px;
+}

@@ -1,0 +1,222 @@
+*{
+    font-family: IranSans, sans-serif;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html, body { overflow-x: hidden; }
+body {
+    margin: 0;
+    background: #F6F7FB;
+    color: #313C62;
+}
+img, video, svg { max-width: 100%; height: auto; display: block; }
+
+
+/* =============================
+   01) توکن‌ها (CSS Variables)
+   ============================= */
+:root{
+    --page-gap: 24px;
+
+    /* Toolbar */
+    --toolbar-width: 1156px;
+    --toolbar-min-h: 27px;
+    --toolbar-margin-top: -230px;
+    --toolbar-margin-bottom: 230px;
+    --toolbar-color: #ED145B;
+    --toolbar-muted: #313C62;
+    --toolbar-active: #BE1049;
+    --trail-divider: #E6E9F2;
+
+    /* Placeholder کارت‌ها */
+    --card-placeholder-bg: #FFFFFF;
+    --card-placeholder-bd: #E8E8E9;
+}
+
+/* =============================
+   02) چیدمان صفحه (Placeholder ها)
+   ============================= */
+.dscore-layout{
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    grid-template-rows: 64px auto;
+    gap: var(--page-gap);
+    padding: 20px;
+}
+.dscore-header{
+    position: fixed;
+    top: 0; left: 0;
+    grid-column: 1 / -1;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+    display: grid; place-items: center;
+    color: #A3ABB9;
+    width: 1203px;
+    height: 83px;
+}
+.dscore-sidebar{
+    position: fixed;
+    top: 0; right: 0;
+    grid-column: 2; grid-row: 2;
+    background: #fff;
+    -moz-border-radius-topright: 30px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+    width: 263px;
+    height: 953px;
+    color: #A3ABB9;
+}
+.dscore-main{ grid-column: 1; grid-row: 2; }
+
+/* =============================
+   03) نوار زیر هدر (Toolbar)
+   ============================= */
+.dscore-toolbar{
+    width: var(--toolbar-width);
+    min-height: var(--toolbar-min-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--toolbar-color);
+    margin-top: -5px;
+    margin-bottom: -20px;
+    margin-right: 20px;
+    margin-left: -30px;
+}
+
+.dscore-toolbar__trail{
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+}
+.dscore-trail__item{
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--toolbar-color);
+    transition: opacity .15s ease;
+}
+.dscore-trail__item.is-muted{ color: var(--toolbar-muted); }
+.dscore-trail__item.is-active{ color: var(--toolbar-color); font-weight: 500; }
+.dscore-trail__item:hover{ opacity: .85; }
+
+/* جداکنندهٔ کم‌رنگ بین آیتم‌ها */
+.dscore-trail__divider{
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    border-radius: 1px;
+}
+
+/* چپ: متای کوچک (دلخواه) */
+.dscore-toolbar__meta{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--toolbar-muted);
+}
+.dscore-meta__text{ font-size: 16px; font-weight: bold;  }
+
+.dscore-main { display:grid;
+    grid-template-columns: minmax(0,1fr) 405px;  
+    gap:24px;
+    align-items:start;
+}
+
+/* ====== استایل دو کارت وسط ====== */
+:root{
+    --gw-panel:#fff;
+    --gw-ink:#1B2540;
+    --gw-muted:#667085;
+    --gw-line:#EEF1F6;
+    --gw-pink:#ED145B;
+    --gw-pill:#F7F0F4;
+    --gw-shadow:0 18px 40px rgba(34,54,85,.10);
+}
+
+/* گرید دو ستونه برای کارت‌ها */
+.gw-cards{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap:584px;
+    padding:0 8px;
+}
+
+/* خود کارت */
+.gw-card{
+    background:var(--gw-panel);
+    border:1px solid var(--gw-line);
+    border-radius:16px;
+    padding:28px 24px 22px;
+    display:grid;
+    gap:14px;
+    width:566px;
+    height: 424px;
+    margin-top:60px;
+    margin-right: -70px;
+}
+
+/* تصویر دایره‌ای بالای کارت */
+.gw-illus{
+    width:117px; height:117px; margin:-10px auto 0px;
+    border-radius:50%; background:#FDE8EF;
+    display:grid; place-items:center;
+}
+.gw-illus img{ width:150px; height:150px; object-fit:contain ;
+    margin-right: -30px; overflow:hidden;}
+
+.gw-illus2{
+    width:150px; height:150px; margin:-24px auto -10px;
+    border-radius:50%; background:#fff;
+    display:grid; place-items:center; overflow:hidden;
+}
+.gw-illus2 img{ width:150px; height:150px; object-fit:contain }
+
+/* بج قرصی با ایموجی/آیکن */
+.gw-badge{
+    margin:0 auto;
+    background:#FFF3CD;
+    color:#92400E;
+    border-radius:999px;
+    padding:8px 14px;
+    font-size:13px;
+    font-weight:700;
+    display:inline-flex; align-items:center; gap:8px;
+}
+.gw-badge__icon{ font-size:14px; line-height:1 }
+
+/* تیتر و متن */
+.gw-title{
+    margin:0; text-align:center; color:#313C62;
+    font-size:16px; font-weight:900;
+}
+.gw-desc{
+    margin:0; text-align:right; color:#313C62;
+    line-height:2; font-size:14px;
+}
+
+/* دکمه‌ها */
+.gw-actions{
+    display:flex; place-items:center;
+    gap:-20px; margin-top:8px;
+    margin-bottom:15px;
+}
+.gw-btn{
+    height:58px; padding:0 22px; border-radius:999px; cursor:pointer;
+    font-weight:800; font-size:14px; border:1px solid transparent;
+    width: 165px; margin-right: -5px;
+    margin-left:20px;
+}
+.gw-btn--primary{
+    background:#F1416C; color:#fff; box-shadow:0 10px 24px rgba(241,65,108,.25);
+}
+.gw-btn--primary:hover{ filter:brightness(.96) }
+.gw-btn--ghost{
+    background:#fff; color:#667085; border-color:#fff;
+}
+
+/* ریسپانسیو: یک ستونه روی عرض‌های باریک */
+@media (max-width: 1100px){
+    .gw-cards{ grid-template-columns: 1fr; }
+}

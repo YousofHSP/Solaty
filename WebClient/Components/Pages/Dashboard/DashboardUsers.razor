@@ -1,0 +1,144 @@
+@page "/dashboard"
+
+<link href="css/dashboardUsers.css" rel="stylesheet">
+<link rel="stylesheet" href="css/font.css" />
+
+
+<div class="dscore-layout" >
+    <!-- Placeholder هدر و منوی راست (در این مرحله استفاده نمی‌شود) -->
+    <header class="dscore-header">هدر</header>
+
+    <!-- منوی سمت راستِ خالی (Placeholder) -->
+    <aside class="dscore-sidebar">منوی سمت راست</aside>
+
+    <!-- محتوای اصلی: ردیف کارت‌ها (فعلاً یک کارت) -->
+    <main class="content">
+        <section class="cards-row">
+            <article class="kcard kcard--start" aria-label="شروع پریودی پارتنرت">
+                <div class="kcard__top">
+                    <div class="kcard__illus" aria-hidden="true">
+                        <img src="images/_x33_0.svg" alt="لوگو" width="70" height="72.7"/>
+                    </div>
+                    <div class="kcard__text">
+                        <div class="kcard__title">شروع پریودی پارتنرت</div>
+                        <div class="kcard__metric">۱۳۸۱/۰۱/۰۱</div>
+                    </div>
+                </div>
+                <div class="kcard__gap" aria-hidden="true"></div>
+                <div class="kcard__strip">
+                    <div class="kcard__delta">
+                        <span class="kcard__deltaIcon" aria-hidden="true"></span>
+                        <span class="kcard__deltaText">+۴.۶%</span>
+                    </div>
+                    <div class="kcard__helper">نسبت به گذشته</div>
+                </div>
+            </article>
+            
+            <article class="kcard kcard--engage" aria-label="درصد تعامل این هفته">
+                <div class="kcard__top">
+                    <div class="kcard__illus" aria-hidden="true">
+                        <img src="images/_x32_9.svg" alt="لوگو" width="80" height="86.72"/>
+                    </div>
+                    <div class="kcard__text">
+                        <div class="kcard__title">درصد تعامل این هفته</div>
+                        <div class="kcard__metric">۳۶%</div>
+                    </div>
+                </div>
+                <div class="kcard__gap" aria-hidden="true"></div>
+                <div class="kcard__strip">
+                    <div class="kcard__delta">
+                        <span class="kcard__deltaIcon" aria-hidden="true"></span>
+                        <span class="kcard__deltaText">+۴.۶%</span>
+                    </div>
+                    <div class="kcard__helper">نسبت به گذشته</div>
+                </div>
+            </article>
+            
+            <article class="kcard kcard--birthday" aria-label="تولد یارت نزدیکه">
+                <div class="kcard__top">
+                    <div class="kcard__illus" aria-hidden="true">
+                        <img src="images/_x34_6.svg" alt="لوگو" width="85.84" height="73.18"/>
+                    </div>
+                    <div class="kcard__text">
+                        <div class="kcard__title">تولد پارتنرت یادت نره</div>
+                        <div class="kcard__metric">۱۳۸۱/۰۱/۰۱</div>
+                    </div>
+                </div>
+                <div class="kcard__gap" aria-hidden="true"></div>
+                <div class="kcard__strip">
+                    <div class="kcard__delta">
+                        <span class="kcard__deltaIcon" aria-hidden="true"></span>
+                        <span class="kcard__deltaText">+۴.۶%</span>
+                    </div>
+                    <div class="kcard__helper">نسبت به گذشته</div>
+                </div>
+            </article>
+            
+            <article class="kcard kcard--score" aria-label="امتیاز تو تا اینجا توی این رابطه">
+                <!-- ناحیهٔ گرادیان بالا -->
+                <div class="kcard__top">
+                    <div class="kcard__illus" aria-hidden="true">
+                        <img src="images/_x33_.svg" alt="لوگو" width="62.84" height="78.49"/>
+                    </div>
+                    <!-- متن‌های سمت راست (سفید) -->
+                    <div class="kcard__text">
+                        <div class="kcard__title">امتیازِ تو تا اینجا توی این رابطه</div>
+                        <div class="kcard__metric">۴۸۷</div>
+                    </div>
+                </div>
+                <!-- فاصلهٔ 2px بین top و strip طبق Figma Gap -->
+                <div class="kcard__gap" aria-hidden="true"></div>
+                <!-- نوار سفید پایین -->
+                <div class="kcard__strip">
+                    <!-- سمت چپ: فلش سبز + درصد رشد -->
+                    <div class="kcard__delta">
+                        <span class="kcard__deltaIcon" aria-hidden="true"></span>
+                        <span class="kcard__deltaText">+۴.۶%</span>
+                    </div>
+                    <!-- سمت راست: متن کمکی -->
+                    <div class="kcard__helper">نسبت به گذشته</div>
+                </div>
+            </article>
+        </section>
+        
+        <section class="bottom-row">
+            <!-- کارت سمت چپ: حواست باشه -->
+            <article class="notice" aria-label="حواست باشه">
+                <!-- نوتی علامت‌دار گوشهٔ راست-بالا -->
+                <img class="notice__badge" src="images/Frame 61 copy.svg" alt="" aria-hidden="true" />
+                <header class="notice__header">
+                    <h3 class="notice__title">حواست باشه</h3>
+                </header>
+                <div class="notice__body">
+                    وقتی شریک‌تون از یه مشکل یا احساس حرف می‌زنه، لازم نیست فوراً راه‌حل بدید — فقط شنیده‌شدن، با دقت، خودش یه نوع عشق و آرامشه.
+                    <span class="notice__accent">- می‌فهمم چی می‌گی... اگه خواستی، کنارت هستم.</span>
+                </div>
+                <div class="notice__softPlate" aria-hidden="true"></div>
+            </article>
+            <!-- کارت سمت راست: چالش امروزت -->
+            <article class="challenge" aria-label="چالش امروزت">
+                <img class="challenge__cornerArt" src="images/Frame 61.svg" alt="" aria-hidden="true" />
+                <header class="challenge__header">
+                    <h3 class="challenge__title">چالش امروزت</h3>
+                    <!-- دکمهٔ قرص‌شکل سفید -->
+                    <button class="challenge__cta" type="button">
+                        <span class="challenge__ctaIcon" aria-hidden="true">✓</span>
+                        <span class="challenge__ctaText">انجام دادی کلیک کن</span>
+                    </button>
+                </header>
+                <div class="challenge__body">
+                    امروز، بهش ۳ دلیل بگو که چرا دوستش داری. به صورت صدای بلند، پیام متنی یا حتی یه یادداشت دستی روی برگه!
+                </div>
+                <!-- تزئینی کم‌رنگ گوشه‌ها (اختیاری: با CSS پس‌زمینه رسم می‌شود) -->
+                <div class="challenge__decor" aria-hidden="true"></div>
+            </article>
+        </section>
+        <section class="below-placeholder"></section>
+    </main>
+</div>
+
+@code { }
+
+
+
+

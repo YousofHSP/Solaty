@@ -1,0 +1,181 @@
+@page "/auth-register"
+
+<link rel="stylesheet" href="css/auth-register.css" />
+<link rel="stylesheet" href="css/font.css" />
+
+<div class="register-page" >
+
+    <!-- ✅ ستون راست: کارت فرم ثبت‌نام -->
+    <section class="form-col">
+        <div class="form-wrap">
+            <img class="decor decor-left"        src="images/gift_front 1.svg"        alt="" aria-hidden="true" />
+            <img class="decor decor-top-right"   src="images/Rectangle 2.svg"   alt="" aria-hidden="true" />
+            <img class="decor decor-bottom-left" src="images/Rectangle 3.svg" alt="" aria-hidden="true" />
+            <div class="m-hero mobile-only">
+                <div class="m-hero__titles mobile-only">
+                    <h1>لاولایف</h1>
+                    <p>سامانه مدیریت روابط زوجین</p>
+                </div>
+                <img class="m-hero__logo" src="images/Group 1.svg" alt="LoveLife"/>
+            </div>
+            <article class="form-card" role="form" aria-labelledby="regTitle">
+                <header class="form-head">
+                    <h2 id="regTitle" class="form-title">ثبت نام در لاو لایف</h2>
+                    <p class="form-subtitle">لطفاً اطلاعات خود را وارد کنید تا با ما بپیوندید!</p>
+                </header>
+
+                <!-- فیلد: نام و نام خانوادگی -->
+                <label class="field">
+                    <span class="field__icon" aria-hidden="true">
+                        <img src="images/User Rounded 01.41.04.svg" alt=""/>
+                    </span>
+                    <input class="field__input" placeholder="نام و نام خانوادگی"/>
+                </label>
+
+                <!-- فیلد: ایمیل -->
+                <label class="field">
+                    <span class="field__icon" aria-hidden="true">
+                        <img src="images/Letter.svg" alt=""/>
+                    </span>
+                    <input class="field__input" type="email" placeholder="پست الکترونیکی"/>
+                </label>
+
+                <!-- فیلد: تلفن -->
+                <label class="field">
+                    <span class="field__icon" aria-hidden="true">
+                        <img src="images/Phone Rounded.svg" alt=""/>
+                    </span>
+                    <input class="field__input" type="tel" placeholder="تلفن همراه"/>
+                </label>
+
+                <!-- فیلد: کلمه عبور -->
+                <label class="field">
+                    <span class="field__icon" aria-hidden="true">
+                        <img src="images/Lock Password Unlocked.svg" alt=""/>
+                    </span>
+                    <img class="rp-eye" src="images/Eye.svg" alt="" aria-hidden="true"/>
+                    <input class="field__input" type="password" placeholder="کلمه عبور"/>
+                </label>
+
+                <!-- فیلد: کد اتصال -->
+                <label class="field">
+                    <span class="field__icon" aria-hidden="true">
+                        <img src="images/Women.svg" alt=""/>
+                    </span>
+                    <input class="field__input" placeholder="کد اتصال"/>
+                </label>
+
+                <!--  جنسیت -->
+                <div class="gender-row" role="radiogroup" aria-label="جنسیت">
+                    <label class="radio">
+                        <input type="radio" name="gender" value="male" checked/>
+                        <i></i><span>آقا هستم</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="gender" value="female"/>
+                        <i></i><span>خانم هستم</span>
+                    </label>
+                </div>
+
+                <!-- دکمه اصلی -->
+                <button class="btn-primary" type="button">ایجاد حساب در لاو لایف</button>
+
+                <!-- یا ثبت‌نام با… -->
+                <div class="or-social">
+                    <span class="or-line"></span>
+                    <span class="or-text">یا ثبت نام از طریق</span>
+                    <span class="or-line"></span>
+                </div>
+
+                <div class="social-row">
+                    <!-- دکمه‌های سوشال -->
+                    <button class="social-btn" aria-label="Facebook">
+                        <img src="images/Facebook.svg" alt=""/>
+                    </button>
+                    <button class="social-btn" aria-label="Apple">
+                        <img src="images/Apple.svg" alt=""/>
+                    </button>
+                    <button class="social-btn" aria-label="Google">
+                        <img src="images/Google.svg" alt=""/>
+                        <p class="text-Google mobile-only">
+                            حساب گوگل
+                        </p>
+                    </button>
+                </div>
+                <p class="footer-login mobile-only">
+                    حساب کاربری داری؟
+                    <a href="/login">ورود</a>
+                </p>
+                <p class="app-version mobile-only">V 1.0.0.2</p>
+            </article>
+        </div>
+    </section>
+    
+    <!-- ✅ ستون چپ -->
+    <section class="hero">
+        <!-- عنوان و توضیح کوتاه -->
+        <div class="hero-text">
+            <span class="hero-divider" aria-hidden="true"></span>
+            <h1 class="hero-title">دیت لند</h1>
+            <p class="hero-desc">
+                بهترین لوکیشن‌های خاص و نئچ برای قرارهای عاشقانه‌تون رو پیدا کنید.
+                از هوای تازه‌ی کوه تا آرامش پارک! دست‌به‌دست هم بدید و لحظه‌هاتون رو تو لوکیشن‌هایی بسازید که خودشون عاشقانه‌ن.
+            </p>
+
+            <!-- ناوبری اسلاید (دایره‌ها + فلش‌ها؛ فقط ویژوال) -->
+            <div class="hero-pager" aria-hidden="true">
+                <button class="pager-arrow is-left" title="قبلی">→</button>
+                <div class="dots">
+                    <span class="dot is-active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <button class="pager-arrow is-right" title="بعدی">←</button>
+            </div>
+        </div>
+        
+        <!-- 🖼 تصویر اصلی  -->
+        <div class="hero-illustration" aria-hidden="true">
+            <img src="images/7 1.svg" alt="" />
+        </div>
+    </section>
+    
+    <section class="onb mobile-only" aria-labelledby="onbTitle">
+        <!-- لایه‌ی تصویر + دو دایره‌ی تزئینی -->
+        <div class="onb-hero">
+            <img src="images/7 1.svg" alt="" aria-hidden="true" class="onb-illus" />
+            <span class="orange-dot" aria-hidden="true"></span>
+
+        </div>
+
+        <!-- عنوان و توضیح -->
+        <h2 id="onbTitle" class="onb-title">دیت‌ لند</h2>
+        <p class="onb-desc">
+            بهترین لوکیشن‌های خاص و دنج برای قرارهای عاشقانه‌تون رو پیدا کنید، از
+            هوای تازه‌ی کوه تا آرامش پارک!<br />
+            دست‌به‌دست هم بدید و لحظه‌هاتون رو تو لوکیشن‌هایی بسازید که خودشون عاشقانه‌ن.
+        </p>
+
+        <!-- ناوبری اسلاید (صرفاً نمایشی) -->
+        <div class="onb-pager" aria-hidden="true">
+            <button class="onb-arrow is-left" type="button">→</button>
+            <div class="onb-dots">
+                <span class="onb-dot is-active"></span>
+                <span class="onb-dot"></span>
+                <span class="onb-dot"></span>
+                <span class="onb-dot"></span>
+            </div>
+            <button class="onb-arrow is-right" type="button">←</button>
+        </div>
+
+        <!-- ناحیه‌ی پایینی با هاله‌ی سفید و دکمه -->
+        <div class="onb-cta-wrap" aria-hidden="true">
+            <div class="onb-cta-ledge"></div>
+            <button type="button" class="onb-cta-btn">
+                <span class="onb-cta-icon">↑</span>
+                ثبت نام کنید
+            </button>
+        </div>
+    </section>
+</div>
