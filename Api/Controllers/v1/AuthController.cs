@@ -22,7 +22,6 @@ using WebFramework.Api;
 namespace Api.Controllers.v1
 {
     [ApiVersion("1")]
-
     [Display(Name = "حساب کاربری")]
     public class AuthController(
         IJwtService jwtService,
@@ -43,23 +42,26 @@ namespace Api.Controllers.v1
             var maxLoginFails = await settingService.GetValueAsync<int>(SettingKey.MaxLoginFail);
             var maxAccountDisableHours = await settingService.GetValueAsync<int>(SettingKey.MaxAccountDisableHour);
             var user = await repository.Table.FirstOrDefaultAsync(i => i.UserName == tokenRequest.username
-                || i.PhoneNumber == tokenRequest.username, cancellationToken);
+                                                                       || i.PhoneNumber == tokenRequest.username,
+                cancellationToken);
 
             if (user == null)
             {
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است.");
             }
 
-            if (user.LockoutEnd > DateTime.UtcNow || user.Status == UserStatus.Disable)
+            if (user.LockoutEnd > DateTime.UtcNow || !user.Enable)
             {
                 throw new BadRequestException($"کاربر ({user.UserName}) غیرفعال است");
             }
+
             if (user.AccessFailedCount >= maxLoginFails && user.LockoutEnabled)
             {
                 user.LockoutEnd = DateTime.UtcNow.AddHours(maxAccountDisableHours);
                 await repository.UpdateAsync(user, cancellationToken);
                 throw new BadRequestException($"کاربر ({user.UserName}) غیرفعال است");
             }
+
             var isPasswordValid = await userManager.CheckPasswordAsync(user, tokenRequest.password);
             if (!isPasswordValid)
             {
@@ -77,7 +79,9 @@ namespace Api.Controllers.v1
             var jwt = await jwtService.GenerateAsync(user, cancellationToken);
             return new JsonResult(jwt);
         }
-        private async Task<User> CheckUserNameAndPassword(string userName, string? password, string loginType,bool checkOtp , string? otpCode, CancellationToken ct)
+
+        private async Task<User> CheckUserNameAndPassword(string userName, string? password, string loginType,
+            bool checkOtp, string? otpCode, CancellationToken ct)
         {
             var maxLoginFails = await settingService.GetValueAsync<int>(SettingKey.MaxLoginFail);
             var loginWithPhoneNumber = await settingService.GetValueAsync<string>(SettingKey.LoginWithPhoneNumber);
@@ -94,38 +98,42 @@ namespace Api.Controllers.v1
             {
                 query = query.Where(i => i.UserName == userName);
             }
+
             var user = await query.FirstOrDefaultAsync(ct);
 
             if (user == null)
             {
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است.");
             }
-            if (user.LockoutEnd > DateTime.UtcNow || user.Status == UserStatus.Disable)
+
+            if (user.LockoutEnd > DateTime.UtcNow || !user.Enable)
             {
                 throw new BadRequestException($"کاربر ({user.UserName}) غیرفعال است");
             }
+
             if (user.AccessFailedCount >= maxLoginFails && user.LockoutEnabled)
             {
                 user.LockoutEnd = DateTime.UtcNow.AddHours(maxAccountDisableHours);
                 await repository.UpdateAsync(user, ct);
                 throw new BadRequestException($"کاربر ({user.UserName}) غیرفعال است");
             }
+
             var isPasswordValid = true;
             var isValidOtpCode = true;
-            if(loginType is "0" or "1")
+            if (loginType is "0" or "1")
             {
                 if (password is null)
                     throw new BadRequestException("رمز را وارد کنید");
                 isPasswordValid = await userManager.CheckPasswordAsync(user, password);
-
             }
+
             if (loginType is "1" or "2" && checkOtp)
             {
                 if (otpCode is null)
                     throw new BadRequestException("کد یکبار مصرف الزامی است");
                 isValidOtpCode = _otpService.VerifyOtp(user.PhoneNumber, otpCode);
-
             }
+
             if (!isPasswordValid || !isValidOtpCode)
             {
                 user.AccessFailedCount++;
@@ -137,29 +145,73 @@ namespace Api.Controllers.v1
                 user.AccessFailedCount = 0;
                 await repository.UpdateAsync(user, ct);
             }
-            return user;
 
+            return user;
         }
+
         [HttpPost("[action]")]
         [AllowAnonymous]
         [Display(Name = "لاگین")]
         public async Task<ActionResult<LoginResDto>> Login(LoginDto loginRequest, CancellationToken ct)
         {
-
             var loginType = await settingService.GetValueAsync<string>(SettingKey.LoginType);
             // 1 نام کاربری و رمز عبور و کد یکبار مصرف
             // 2 شماره موبایل و کد یکبار مصرف
-            var checkOtp = loginType is "1" or "2"; 
-            var user = await CheckUserNameAndPassword(loginRequest.UserName, loginRequest.Password, loginType, checkOtp, loginRequest.OtpCode, ct);
+            var checkOtp = loginType is "1" or "2";
+            var user = await CheckUserNameAndPassword(loginRequest.UserName, loginRequest.Password, loginType, checkOtp,
+                loginRequest.OtpCode, ct);
             var jwt = await jwtService.GenerateAsync(user, ct);
 
-            var profileImage = await uploadedFileService.GetFilePath(nameof(UserInfo), user.Info.Id, UploadedFileType.UserProfile, ct);
+            var profileImage =
+                await uploadedFileService.GetFilePath(nameof(UserInfo), user.Info.Id, UploadedFileType.UserProfile, ct);
             var result = new LoginResDto()
             {
                 Token = jwt.access_token,
                 AccessCode = jwt.access_code,
-                UserFullName =  user.Info?.FullName ?? "",
+                UserFullName = user.Info?.FullName ?? "",
                 ProfileImage = profileImage,
+                UserName = user.UserName
+            };
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<ActionResult<LoginResDto>> Register(RegisterDto dto, CancellationToken ct)
+        {
+            if (await repository.TableNoTracking.AnyAsync(i => i.PhoneNumber == dto.PhoneNumber, ct))
+                throw new BadRequestException("کاربر با این شماره موبایل قبلا ثبت شده");
+            if (await repository.TableNoTracking.AnyAsync(i => i.Email == dto.Email, ct))
+                throw new BadRequestException("کاربر با این ایمیل قبلا ثبت شده");
+
+            if (!_otpService.VerifyOtp(dto.PhoneNumber, dto.OtpCode))
+            {
+                throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");
+            }
+
+            var user = new User()
+            {
+                PhoneNumber = dto.PhoneNumber,
+                PhoneNumberConfirmed = true,
+                UserName = dto.PhoneNumber,
+                Email = dto.Email,
+                Enable = true,
+                Info = new UserInfo()
+                {
+                    Gender = dto.Gender,
+                    FullName = dto.FullName,
+                    Address = ""
+                }
+            };
+            await userManager.CreateAsync(user, dto.Password);
+
+            var jwt = await jwtService.GenerateAsync(user, ct);
+            var result = new LoginResDto()
+            {
+                Token = jwt.access_token,
+                AccessCode = jwt.access_code,
+                UserFullName = user.Info?.FullName ?? "",
+                ProfileImage = "",
                 UserName = user.UserName
             };
             return Ok(result);
@@ -171,7 +223,6 @@ namespace Api.Controllers.v1
         [Display(Name = "ارسال کد یکبارمصرف")]
         public async Task<ActionResult> SendOtp(SendOtpRequest dto, CancellationToken ct)
         {
-
             var loginType = await settingService.GetValueAsync<string>(SettingKey.LoginType);
             if (loginType is "0" or "1")
                 if (dto.Password is null)
@@ -182,7 +233,6 @@ namespace Api.Controllers.v1
             //await emailService.SendEmailAsync("moinrayat9544@gmail.com", "verify code", $"code: {code}");
             logger.LogInformation($"Send OTP Code for {user.PhoneNumber}");
             return Ok(new { Message = "کد ارسال شد" });
-
         }
 
         [HttpPost("VerifyOtp")]
@@ -199,27 +249,30 @@ namespace Api.Controllers.v1
             {
                 throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");
             }
+
             logger.LogInformation($"User logined with id: {user.Id} and phoneNumber: {user.PhoneNumber}");
 
             var jwt = await jwtService.GenerateAsync(user, ct);
             return new JsonResult(jwt);
-
         }
+
         [HttpPost("[action]")]
         [AllowAnonymous]
         [Display(Name = "ارسال کد یکبار مصرف برای فراموشی رمز")]
-        public async Task<IActionResult> ResetPasswordSendOtp([FromBody]ResetPasswordSendOtpDto dto, CancellationToken ct)
+        public async Task<IActionResult> ResetPasswordSendOtp([FromBody] ResetPasswordSendOtpDto dto,
+            CancellationToken ct)
         {
             var user = await repository.TableNoTracking.FirstOrDefaultAsync(i => i.UserName == dto.UserName);
-            if(user is null)
+            if (user is null)
                 return Ok(new { message = "OTP sent." });
             var code = await _otpService.GenerateOtpAsync(user.PhoneNumber);
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
             //var result = await messageService.SendMessageAsync(dto.PhoneNumber, $"code: {code}");
             //await emailService.SendEmailAsync("moinrayat9544@gmail.com", "verify code", $"code: {code}");
             logger.LogInformation($"Send OTP Code for {user.PhoneNumber} for reset password");
-            return Ok(new { ResetPasswordToken = token});
+            return Ok(new { ResetPasswordToken = token });
         }
+
         [HttpPost("[action]")]
         [AllowAnonymous]
         [Display(Name = "فراموشی رمز")]
@@ -238,12 +291,11 @@ namespace Api.Controllers.v1
 
 
             var result = await userManager.ResetPasswordAsync(user, dto.ResetPasswordToken, dto.Password);
-            if(!result.Succeeded)
+            if (!result.Succeeded)
                 throw new BadRequestException("توکن تغییر رمز اشتباه است");
 
 
-            return Ok(new { Message = "رمز با موفقیت تغییر کرد"});
+            return Ok(new { Message = "رمز با موفقیت تغییر کرد" });
         }
-
     }
 }

@@ -119,27 +119,12 @@ namespace WebFramework.Configuration
                             }
 
 
-                            if (user.Status == UserStatus.Disable)
+                            if (user.Enable)
                             {
                                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                                 context.Fail("کاربر غیرفعال است");
                                 return;
 
-                            }
-                            var path = context.Request.Path.ToString();
-                            if (user.Status == UserStatus.Imperfect &&
-                                !path.Contains("GetProfile") &&
-                                !path.Contains("ChangeProfile") &&
-                                !path.Contains("SetNewPhoneNumber") &&
-                                !path.Contains("ConfirmNewPhoneNumber") &&
-                                !path.Contains("SetNewEmail") &&
-                                !path.Contains("ConfirmNewEmail") &&
-                                !path.Contains("ChangePassword")
-                                )
-                            {
-                                context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                                context.Fail("پروفایل شما تکمیل نیست");
-                                return;
                             }
                             var tokenCode = claimsIdentity.FindFirst("TokenCode")?.Value;
                             if (!string.IsNullOrWhiteSpace(tokenCode))

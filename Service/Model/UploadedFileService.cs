@@ -104,7 +104,6 @@ namespace Service.Model
                 MimeType = file.ContentType,
                 ModelType = modelType,
                 ModelId = modelId,
-                CreatorUserId = userId,
                 Enable= true
             };
 

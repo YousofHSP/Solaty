@@ -23,17 +23,6 @@ namespace Domain.Entities
 
     }
 
-    public class UploadedFileConfiguration : IEntityTypeConfiguration<UploadedFile>
-    {
-        public void Configure(EntityTypeBuilder<UploadedFile> builder)
-        {
-            builder
-                .HasOne(u => u.CreatorUser)
-                .WithMany(u => u.CreatedUploadedFiles)
-                .HasForeignKey(u => u.CreatorUserId);
-        }
-    }
-
     public enum UploadedFileType
     {
         UserProfile,

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251128040000_Initial")]
+    [Migration("20251128071942_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -101,9 +101,6 @@ namespace Data.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<long>("CreatorUserId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("IpRuleId")
                         .HasColumnType("bigint");
 
@@ -111,8 +108,6 @@ namespace Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorUserId");
 
                     b.HasIndex("IpRuleId");
 
@@ -133,9 +128,6 @@ namespace Data.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<long>("CreatorUserId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -151,8 +143,6 @@ namespace Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorUserId");
 
                     b.ToTable("IpRules");
                 });
@@ -226,9 +216,6 @@ namespace Data.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<long>("CreatorUserId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTimeOffset?>("SeenDate")
                         .HasColumnType("datetimeoffset");
 
@@ -246,8 +233,6 @@ namespace Data.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorUserId");
 
                     b.HasIndex("UserId");
 
@@ -365,9 +350,6 @@ namespace Data.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<long>("CreatorUserId")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("Enable")
                         .HasColumnType("bit");
 
@@ -397,8 +379,6 @@ namespace Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorUserId");
 
                     b.ToTable("UploadedFiles");
                 });
@@ -431,8 +411,8 @@ namespace Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("LastLoginDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<bool>("Enable")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -459,9 +439,6 @@ namespace Data.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -501,12 +478,19 @@ namespace Data.Migrations
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ConnectCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -659,49 +643,22 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.IpAccessType", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "CreatorUser")
-                        .WithMany("CreatedIpAccessTypes")
-                        .HasForeignKey("CreatorUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.IpRule", "IpRule")
                         .WithMany("IpAccessTypes")
                         .HasForeignKey("IpRuleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("CreatorUser");
-
                     b.Navigation("IpRule");
-                });
-
-            modelBuilder.Entity("Domain.Entities.IpRule", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "CreatorUser")
-                        .WithMany("CreatedIpRules")
-                        .HasForeignKey("CreatorUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("CreatorUser");
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "CreatorUser")
-                        .WithMany("CreatedNotifications")
-                        .HasForeignKey("CreatorUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("CreatorUser");
 
                     b.Navigation("User");
                 });
@@ -709,7 +666,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Domain.Entities.SmsLog", b =>
                 {
                     b.HasOne("Domain.Entities.User", "CreatorUser")
-                        .WithMany("CreatedSmsLogs")
+                        .WithMany()
                         .HasForeignKey("CreatorUserId");
 
                     b.HasOne("Domain.Entities.User", "ReceiverUser")
@@ -719,17 +676,6 @@ namespace Data.Migrations
                     b.Navigation("CreatorUser");
 
                     b.Navigation("ReceiverUser");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UploadedFile", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "CreatorUser")
-                        .WithMany("CreatedUploadedFiles")
-                        .HasForeignKey("CreatorUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("CreatorUser");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserInfo", b =>
@@ -822,16 +768,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("ApiTokens");
-
-                    b.Navigation("CreatedIpAccessTypes");
-
-                    b.Navigation("CreatedIpRules");
-
-                    b.Navigation("CreatedNotifications");
-
-                    b.Navigation("CreatedSmsLogs");
-
-                    b.Navigation("CreatedUploadedFiles");
 
                     b.Navigation("Info");
 

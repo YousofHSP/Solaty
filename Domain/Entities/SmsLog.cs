@@ -26,9 +26,6 @@ namespace Domain.Entities
     {
         public void Configure(EntityTypeBuilder<SmsLog> builder)
         {
-            builder.HasOne(i => i.CreatorUser)
-                .WithMany(i => i.CreatedSmsLogs)
-                .HasForeignKey(i => i.CreatorUserId);
             builder.HasOne(i => i.ReceiverUser)
                 .WithMany(i => i.ReceivedSms)
                 .HasForeignKey(i => i.ReceiverUserId);
