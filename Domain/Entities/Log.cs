@@ -14,16 +14,16 @@ namespace Domain.Entities
         public long Id { get; set; }
 
         public DateTime TimeStamp { get; set; }
-        public string Level { get; set; }
-        public string Message { get; set; }
-        public string Exception { get; set; }
-        public string CallSite { get; set; }
+        public string Level { get; set; } = string.Empty;
+        public string Message { get; set; }= string.Empty;
+        public string Exception { get; set; }= string.Empty;
+        public string CallSite { get; set; }= string.Empty;
         public int ThreadId { get; set; }
-        public string UserName { get; set; }
-        public string IpAddress { get; set; }
-        public string PhysicalPath { get; set; }
-        public string RequestId { get; set; }
-        public string UserAgent { get; set; }
+        public string UserName { get; set; }= string.Empty;
+        public string IpAddress { get; set; }= string.Empty;
+        public string PhysicalPath { get; set; }= string.Empty;
+        public string RequestId { get; set; }= string.Empty;
+        public string UserAgent { get; set; }= string.Empty;
         public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.Now;
     }
 }

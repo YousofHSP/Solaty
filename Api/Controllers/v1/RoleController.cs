@@ -39,8 +39,8 @@ namespace Api.Controllers.v1
             dto.Permissions = claims.Select(i => i.Value).ToList();
             return Ok(dto);
         }
-        public RoleController(IRepository<Role> repository, IMapper mapper, IHashEntityValidator hashEntityValidator, RoleManager<Role> roleManager)
-            : base(repository, mapper, hashEntityValidator)
+        public RoleController(IRepository<Role> repository, IMapper mapper, RoleManager<Role> roleManager)
+            : base(repository, mapper)
         {
             _mapper = mapper;
             _roleManager = roleManager;

@@ -12,8 +12,8 @@ namespace Domain.Entities
     public class SmsLog : IBaseEntity<long>
     {
         public long Id { get; set; }
-        public string Text { get; set; }
-        public string Mobile { get; set; }
+        public string Text { get; set; } = string.Empty;
+        public string Mobile { get; set; } = string.Empty;
         public long? ReceiverUserId { get; set; }
         public long? CreatorUserId { get; set; }
 

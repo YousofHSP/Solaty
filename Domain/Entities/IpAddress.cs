@@ -11,14 +11,12 @@ namespace Domain.Entities
 {
     public class IpRule : BaseEntity
     {
-        public string Ip { get; set; }
+        public string Ip { get; set; } = string.Empty;
         public string? EndIp { get; set; }
         public string? Cidr { get; set; }
-        public string Description { get; set; }
-        public string Hash { get; set; }
-        public string SaltCode { get; set; }
+        public string Description { get; set; } = string.Empty;
 
-        public List<IpAccessType> IpAccessTypes { get; set; }
+        public List<IpAccessType> IpAccessTypes { get; set; } = [];
     }
 
     public class IpRuleConfiguration : IEntityTypeConfiguration<IpRule>

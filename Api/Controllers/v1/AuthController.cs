@@ -28,7 +28,6 @@ namespace Api.Controllers.v1
         IJwtService jwtService,
         UserManager<User> userManager,
         IUserRepository repository,
-        IPasswordHistoryService passwordHistoryService,
         IUploadedFileService uploadedFileService,
         ISettingService settingService,
         IOtpService _otpService,
@@ -238,12 +237,9 @@ namespace Api.Controllers.v1
             }
 
 
-            var passwordHistory = await passwordHistoryService.CheckPasswordHistoryAsync(dto.Password, user, user.Id, ct);
             var result = await userManager.ResetPasswordAsync(user, dto.ResetPasswordToken, dto.Password);
             if(!result.Succeeded)
                 throw new BadRequestException("توکن تغییر رمز اشتباه است");
-            passwordHistory.PasswordHash = user.PasswordHash!;
-            await passwordHistoryService.AddAsync(passwordHistory, ct);
 
 
             return Ok(new { Message = "رمز با موفقیت تغییر کرد"});

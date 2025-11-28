@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Service.DataInitializer
 {
-    public class ProvinceDataInitializer(IRepository<Province> Repository) : IDataInitializer
+    public class CityDataInitializer(IRepository<City> Repository) : IDataInitializer
     {
         public async Task InitializerData()
         {
-            var list = new List<Province>()
+            var list = new List<City>()
             {
-                new Province() {
+                new City() {
                     Title = "یزد",
                     Cities = new List<City>
                     {

@@ -15,9 +15,7 @@ public class Role : IdentityRole<long>, IBaseEntity<long>
     public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.Now;
     public DateTimeOffset? DeleteDate { get; set; } = null;
     [IgnoreDataMember]
-    public List<User> Users { get; set; }
-    public string Hash { get; set; }
-    public string SaltCode { get; set; }
+    public List<User> Users { get; set; } = [];
 }
 public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {

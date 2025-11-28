@@ -13,15 +13,13 @@ namespace Domain.Entities
 {
     public class UploadedFile : BaseEntity
     {
-        public string SavedName { get; set; }
-        public string OriginalName { get; set; }
-        public string MimeType { get; set; }
+        public string SavedName { get; set; } = string.Empty;
+        public string OriginalName { get; set; } = string.Empty;
+        public string MimeType { get; set; } = string.Empty;
         public UploadedFileType Type { get; set; }
         public bool Enable{ get; set; }
-        public string ModelType { get; set; }
+        public string ModelType { get; set; } = string.Empty;
         public long ModelId { get; set; }
-        public string Hash { get; set; }
-        public string SaltCode { get; set; }
 
     }
 

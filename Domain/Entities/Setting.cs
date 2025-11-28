@@ -11,14 +11,12 @@ namespace Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long Id { get; set; }
-        public string Title { get; set; }
-        public string Value { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
         public int IsSecurity { get; set; }
         public bool Enable{ get; set; }
 
         public string? Description { get; set; }
-        public string Hash { get; set; }
-        public string SaltCode { get; set; }
     }
 
 }

@@ -1,4 +1,3 @@
-using Api.DataInitializer;
 using Common;
 using Common.Utilities;
 using Data.Contracts;
@@ -58,7 +57,6 @@ try
     builder.Services.AddScoped<IJwtService, JwtService>();
     builder.Services.AddScoped<IOtpService, OtpService>();
     builder.Services.AddScoped<ISettingService, SettingService>();
-    builder.Services.AddScoped<IPasswordHistoryService, PasswordHistoryService>();
     builder.Services.AddScoped<IUploadedFileService, UploadedFileService>();
     builder.Services.AddScoped<IWordReportService, WordReportService>();
     builder.Services.AddScoped<IEmailService, SmtpEmailService>();
@@ -67,15 +65,11 @@ try
     builder.Services.AddScoped<ILicenseService, LicenseService>();
     
     
-    builder.Services.AddScoped<IDataInitializer, ProvinceDataInitializer>();
+    builder.Services.AddScoped<IDataInitializer, CityDataInitializer>();
     builder.Services.AddScoped<IDataInitializer, RoleDataInitializer>();
     builder.Services.AddScoped<IDataInitializer, UserDataInitializer>();
     builder.Services.AddScoped<IDataInitializer, SettingDataInitializer>();
-    builder.Services.AddScoped<IDataInitializer, LogCategoryDataInitializer>();
     
-    
-    
-    builder.Services.AddScoped<IHashEntityValidator, HashEntityValidator>();
     
     builder.Services.AddJwtAuthentication();
     

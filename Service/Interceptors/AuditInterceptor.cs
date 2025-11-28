@@ -28,7 +28,6 @@ public class AuditInterceptor(
     )
     : SaveChangesInterceptor
 {
-    private readonly List<PendingAuditEntry> _pendingAuditEntries = new();
 
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
@@ -43,8 +42,6 @@ public class AuditInterceptor(
 
         foreach (var entry in entries)
         {
-            if (entry.Entity is Audit or Log or ArchiveLog)
-                continue;
             var state = entry.State;
             if (state == EntityState.Added)
             {
@@ -74,37 +71,6 @@ public class AuditInterceptor(
                     deletable.DeleteDate = DateTimeOffset.Now;
                 }
             }
-            if (entry.Entity is IHashedEntity hashedEntity)
-            {
-                var currentValues = entry.CurrentValues.Properties
-                        .OrderBy(p => p.Name)
-                        .Where(p => p.Name != "Id" &&
-                                    p.Name != nameof(IHashedEntity.Hash) &&
-                                    p.Name != nameof(IHashedEntity.SaltCode))
-                        .ToDictionary(p => p.Name, p => entry.CurrentValues[p]?.ToString() ?? "");
-                var saltCode = SecurityHelpers.GenerateSalt();
-                var json = System.Text.Json.JsonSerializer.Serialize(currentValues);
-                var hash = SecurityHelpers.GetSha256Hash(json, saltCode);
-
-
-                var oldHash = hashedEntity.Hash;
-                var oldSaltCode = hashedEntity.SaltCode;
-                hashedEntity.SaltCode = saltCode;
-                hashedEntity.Hash = hash;
-
-
-                _pendingAuditEntries.Add(new PendingAuditEntry
-                {
-                    State = state,
-                    NewValueString = JsonConvert.SerializeObject(entry.Entity),
-                    NewHash = hash,
-                    OldHash = oldHash,
-                    OldSaltCode = oldSaltCode,
-                    NewSaltCode = saltCode,
-                    Entity = entry.Entity
-                });
-            }
-
         }
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);
@@ -117,39 +83,8 @@ public class AuditInterceptor(
         userId = userId == 0 ? null : userId;
         var context = eventData.Context;
         if (context == null) return await base.SavedChangesAsync(eventData, result, cancellationToken);
-        var entries = new List<Audit>();
 
-        foreach (var pending in _pendingAuditEntries)
-        {
-            var entry = new Audit
-            {
-                Method = pending.State.ToString(),
-                NewValue = pending.NewValueString,
-                Hash = pending.NewHash,
-                OldHash= pending.OldHash,
-                SaltCode = pending.NewSaltCode,
-                CreateDate = DateTimeOffset.UtcNow,
-                Model = pending.Entity.GetType().Name,
-                ModelId = _getEntityId(pending.Entity),
-                UserId = userId,
-                Ip = httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString() ?? "",
-                ReferrerLink = httpContextAccessor.HttpContext?.Request.Headers["Referer"].ToString() ?? "",
-                Protocol = httpContextAccessor.HttpContext?.Request.Protocol ?? "",
-                PhysicalPath = httpContextAccessor.HttpContext?.Request.Path.ToString() ?? "",
-                RequestId = httpContextAccessor.HttpContext?.TraceIdentifier ?? "",
-                UserAgent = httpContextAccessor.HttpContext?.Request.Headers["User-Agent"].ToString() ?? "",
-
-            };
-            entries.Add(entry);
-
-        }
-        _pendingAuditEntries.Clear();
-        if (entries.Count > 0)
-        {
-            await context.AddRangeAsync(entries);
-            await context.SaveChangesAsync();
-        }
-
+        
 
 
         return await base.SavedChangesAsync(eventData, result, cancellationToken);

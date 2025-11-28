@@ -13,10 +13,8 @@ namespace Domain.Entities
     {
         public long IpRuleId { get; set; }
         public AccessType AccessType { get; set; }
-        public string Hash { get; set; }
-        public string SaltCode { get; set; }
 
-        public IpRule IpRule { get; set; }
+        public IpRule IpRule { get; set; } = null!;
     }
 
     public class IpAccessTypeConfiguration : IEntityTypeConfiguration<IpAccessType>

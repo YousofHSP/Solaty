@@ -14,12 +14,6 @@ public interface ISoftDelete : IEntity<int>
 
 }
 
-public interface IHashedEntity: IEntity<int>
-{
-    string Hash { get; set; }
-    string SaltCode { get; set; }
-}
-
 public interface IEntity<TKey> : IEntity
 {
     TKey Id { get; set; }

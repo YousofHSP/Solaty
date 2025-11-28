@@ -13,11 +13,11 @@ namespace Domain.Entities
 {
     public class Notification : BaseEntity
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         public DateTimeOffset? SeenDate { get; set; }
         public long UserId { get; set; }
 
-        public User User { get; set; }
+        public User User { get; set; } = null!;
         public NotificationStatus Status { get; set; }
     }
     public class NotificationConfiguration : IEntityTypeConfiguration<Notification>

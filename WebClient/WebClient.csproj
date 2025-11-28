@@ -399,6 +399,12 @@
       <_ContentIncludedByDefault Remove="Components\Pages\ProjectKind\ProjectKindModal.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\SubSystem\SubSystemIndex.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\UserGroup\UserGroupIndex.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\ArchiveLog\ArchiveLogIndex.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\ArchiveLog\ArchiveModal.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\AuditLog\AuditLogIndex.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\AuditsCheck\AuditsCheckDetailIndex.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\AuditsCheck\AuditsCheckIndex.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\Backup\BackupIndex.razor" />
     </ItemGroup>
 
     <ItemGroup>

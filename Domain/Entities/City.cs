@@ -12,11 +12,12 @@ namespace Domain.Entities
     public class City : IEntity<long>
     {
         public long Id { get; set; }
-        public string Title { get; set; }
-        public long ProvinceId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public long? ProvinceId { get; set; }
 
 
-        public Province Province { get; set; }
+        public City? Province { get; set; } = null!;
+        public List<City> Cities { get; set; } = [];
     }
     public class CityConfiguration : IEntityTypeConfiguration<City>
     {

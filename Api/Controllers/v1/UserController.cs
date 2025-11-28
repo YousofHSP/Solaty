@@ -29,17 +29,13 @@ public class UserController(
     IMapper mapper,
     IUserRepository repository,
     IRepository<UserInfo> userInfoRepository,
-    IRepository<PhoneNumberHistory> phoneNumberHisoryRepository,
-    IRepository<EmailHistory> emailHisoryRepository,
     IRepository<ApiToken> apiTokenRepository,
     IRepository<Notification> notificationRepository,
-    IHashEntityValidator hashEntityValidator,
     IUploadedFileService uploadedFileService,
-    IPasswordHistoryService passwordHistoryService,
     IOtpService _otpService,
     IRepository<Role> roleRepository,
     RoleManager<Role> roleManager)
-    : CrudController<UserDto, UserResDto, User>(repository, mapper, hashEntityValidator)
+    : CrudController<UserDto, UserResDto, User>(repository, mapper)
 {
     private readonly IJwtService _jwtService = jwtService;
     private readonly IMapper _mapper = mapper;
@@ -129,12 +125,6 @@ public class UserController(
 
         await userManager.RemovePasswordAsync(model);
         await userManager.AddPasswordAsync(model, dto.Password);
-        await passwordHistoryService.AddAsync(new PasswordHistory
-        {
-            UserId = model.Id,
-            CreatorUserId = User.Identity?.GetUserId<int>() ?? 0,
-            PasswordHash = model.PasswordHash!
-        }, cancellationToken);
         var resultDto = UserResDto.FromEntity(model, _mapper);
         return resultDto;
     }
@@ -179,12 +169,6 @@ public class UserController(
         {
             await userManager.RemovePasswordAsync(user);
             await userManager.AddPasswordAsync(user, dto.Password);
-            await passwordHistoryService.AddAsync(new PasswordHistory
-            {
-                UserId = user.Id,
-                CreatorUserId = User.Identity?.GetUserId<int>() ?? 0,
-                PasswordHash = user.PasswordHash!
-            }, cancellationToken);
         }
 
         user.PhoneNumber = dto.PhoneNumber;
@@ -231,10 +215,7 @@ public class UserController(
         var cantDelete = await repository.TableNoTracking
             .Where(i => i.Id == id)
             .AnyAsync(i =>
-                    i.CreatedBackups.Any() ||
-                    i.CreatedNotifications.Any() ||
-                    i.CreatedArchiveLogs.Any() ||
-                    i.CreatedEmailHistories.Any() 
+                    i.CreatedNotifications.Any()
                 , cancellationToken);
         if (cantDelete)
             throw new BadRequestException("نمیتوان کاربر را به دلیل انجام عملیات در سیستم حذف کرد");
@@ -363,16 +344,6 @@ public class UserController(
 
         var otpCode = await _otpService.GenerateOtpAsync(dto.NewPhoneNumber);
 
-        var phoneNumberHistory = new PhoneNumberHistory
-        {
-            PhoneNumber = dto.NewPhoneNumber,
-            UserId = user.Id,
-            CreatorUserId = user.Id,
-            OtpCode = otpCode,
-            IsConfirmed = false,
-        };
-
-        await phoneNumberHisoryRepository.AddAsync(phoneNumberHistory, ct);
         return Ok();
     }
 
@@ -390,17 +361,9 @@ public class UserController(
             throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");
         }
 
-        var phoneNumberHistory =
-            await phoneNumberHisoryRepository.Table.FirstOrDefaultAsync(
-                i => i.PhoneNumber == dto.NewPhoneNumber && i.OtpCode == dto.OtpCode, ct);
-        if (phoneNumberHistory is null)
-            throw new NotFoundException("شماره موبایل صحیح نیست");
 
-        phoneNumberHistory.IsConfirmed = true;
-        await phoneNumberHisoryRepository.UpdateAsync(phoneNumberHistory, ct);
         user.PhoneNumber = dto.NewPhoneNumber;
         user.PhoneNumberConfirmed = true;
-
         await repository.UpdateAsync(user, ct);
         return Ok();
     }
@@ -440,17 +403,6 @@ public class UserController(
         }
 
         var otpCode = await _otpService.GenerateOtpAsync(dto.NewEmail);
-
-        var emailHistory = new EmailHistory
-        {
-            Email = dto.NewEmail,
-            UserId = user.Id,
-            CreatorUserId = user.Id,
-            OtpCode = otpCode,
-            IsConfirmed = false,
-        };
-
-        await emailHisoryRepository.AddAsync(emailHistory, ct);
         return Ok();
     }
 
@@ -468,14 +420,7 @@ public class UserController(
             throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");
         }
 
-        var emailHistory =
-            await emailHisoryRepository.Table.FirstOrDefaultAsync(
-                i => i.Email == dto.NewEmail && i.OtpCode == dto.OtpCode, ct);
-        if (emailHistory is null)
-            throw new NotFoundException("شماره موبایل صحیح نیست");
 
-        emailHistory.IsConfirmed = true;
-        await emailHisoryRepository.UpdateAsync(emailHistory, ct);
         user.Email = dto.NewEmail;
         user.EmailConfirmed = true;
 
@@ -496,15 +441,11 @@ public class UserController(
         var hasPassword = await userManager.HasPasswordAsync(user);
         if (hasPassword)
         {
-            var passwordHistory =
-                await passwordHistoryService.CheckPasswordHistoryAsync(dto.NewPassword, user, user.Id, ct);
             var result = await userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
             if (!result.Succeeded)
                 throw new BadRequestException(
                     result.Errors.Select(i => i.Description).Aggregate((crr, next) => $"{crr}, {next}")
                 );
-            passwordHistory.PasswordHash = user.PasswordHash!;
-            await passwordHistoryService.AddAsync(passwordHistory, ct);
         }
         else
         {

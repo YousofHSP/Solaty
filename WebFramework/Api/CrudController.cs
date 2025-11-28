@@ -24,8 +24,7 @@ namespace WebFramework.Api;
 [Route("api/v{version:ApiVersion}/[controller]")]
 public class CrudController<TDto, TResDto, TEntity, TKey>(
     IRepository<TEntity> repository,
-    IMapper mapper,
-    IHashEntityValidator hashEntityValidator)
+    IMapper mapper)
     : BaseController<TKey>
     where TEntity : class, IEntity<TKey>
     where TDto : BaseDto<TDto, TEntity, TKey>
@@ -33,7 +32,6 @@ public class CrudController<TDto, TResDto, TEntity, TKey>(
 {
     protected readonly IRepository<TEntity> Repository = repository;
     protected readonly IMapper Mapper = mapper;
-    protected readonly IHashEntityValidator HashEntityValidator = hashEntityValidator;
 
     virtual protected async Task<TEntity> setProperty(TEntity entity)
     {
@@ -132,12 +130,6 @@ public class CrudController<TDto, TResDto, TEntity, TKey>(
             .SingleOrDefaultAsync(p => p.Id!.Equals(id), cancellationToken);
         if (model == null)
             return NotFound();
-        if (model is IHashedEntity hashedEntity)
-        {
-            var userId = User.Identity!.GetUserId<int>();
-            await HashEntityValidator.IsValidAsync(hashedEntity, userId, cancellationToken);
-        }
-
         var dto = Mapper.Map<TResDto>(model);
         return dto;
     }
@@ -167,12 +159,6 @@ public class CrudController<TDto, TResDto, TEntity, TKey>(
         if (model is null)
             throw new NotFoundException("پیدا نشد");
 
-        if (model is IHashedEntity hashedEntity)
-        {
-            var userId = User.Identity!.GetUserId<int>();
-            await HashEntityValidator.IsValidAsync(hashedEntity, userId, cancellationToken);
-        }
-
         model = dto.ToEntity(model, Mapper);
         model = await setProperty(model);
 
@@ -190,11 +176,6 @@ public class CrudController<TDto, TResDto, TEntity, TKey>(
         await checkPermission(HttpContext);
         var model = await Repository.GetByIdAsync(cancellationToken, id!);
         if (model is null) throw new NotFoundException();
-        if (model is IHashedEntity hashedEntity)
-        {
-            var userId = User.Identity!.GetUserId<int>();
-            await HashEntityValidator.IsValidAsync(hashedEntity, userId, cancellationToken);
-        }
 
         await Repository.DeleteAsync(model, cancellationToken);
 
@@ -226,18 +207,15 @@ public class CrudController<TDto, TResDto, TEntity, TKey>(
 
 public class CrudController<TDto, TResDto, TEntity>(
     IRepository<TEntity> repository,
-    IMapper mapper,
-    IHashEntityValidator hashEntityValidator
-    )
-    : CrudController<TDto, TResDto, TEntity, long>(repository, mapper, hashEntityValidator)
+    IMapper mapper)
+    : CrudController<TDto, TResDto, TEntity, long>(repository, mapper)
     where TEntity : class, IEntity<long>
     where TDto : BaseDto<TDto, TEntity, long>
     where TResDto : BaseDto<TResDto, TEntity, long>;
 
 public class CrudController<TDto, TEntity>(
     IRepository<TEntity> repository,
-    IMapper mapper,
-    IHashEntityValidator hashEntityValidator)
-    : CrudController<TDto, TDto, TEntity, long>(repository, mapper, hashEntityValidator)
+    IMapper mapper)
+    : CrudController<TDto, TDto, TEntity, long>(repository, mapper)
     where TEntity : class, IEntity<long>
     where TDto : BaseDto<TDto, TEntity, long>;

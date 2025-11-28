@@ -25,7 +25,6 @@ namespace Data
         //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("rad");
 
             base.OnModelCreating(modelBuilder);
 
@@ -105,9 +104,6 @@ namespace Data
             {
                 if (entry.State == EntityState.Deleted && entry.Entity is ISoftDelete softDeleteEntity) // از حذف فیزیکی جلوگیری می‌کنیم
                 {
-                    if (entry.Entity is Audit)
-                        continue;
-
                     entry.State = EntityState.Modified;
                     softDeleteEntity.DeleteDate = DateTimeOffset.Now;
                 }
