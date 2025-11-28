@@ -16,6 +16,8 @@ public static class Permissions
         new() { Controller = "User", Action = "Delete", ControllerLabel = "کاربر", ActionLabel = "حذف" },
         new() { Controller = "User", Action = "GetTokens", ControllerLabel = "کاربر", ActionLabel = "لیست نشست ها" },
         new() { Controller = "User", Action = "DisableTokens", ControllerLabel = "کاربر", ActionLabel = "غیرفعال کردن توکن" },
+        
+        new() { Controller = "Sms", Action = "Index", ControllerLabel = "پیام", ActionLabel = "لیست" },
 
         
         /////////////////////////////////

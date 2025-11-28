@@ -20,7 +20,7 @@ public class UserDataInitializer(UserManager<User> userManager, IRepository<User
                 Enable= true
             };
             await userManager.CreateAsync(user, "1qaz@WSX3edc");
-            var info = new UserInfo { FullName = "سیستم", BirthDate = DateTime.Today, UserId = user.Id };
+            var info = new UserInfo { FullName = "سیستم", BirthDate = DateTime.Today, UserId = user.Id, ConnectCode = ""};
             await userInfoRepository.AddAsync(info, default);
         }
     }

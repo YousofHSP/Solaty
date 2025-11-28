@@ -109,7 +109,7 @@ public partial class UserIndex : ComponentBase
                 _data.BirthDate = result.BirthDate;
                 _data.FullName= result.FullName;
                 _data.Email = result.Email;
-                _data.Status = result.Status;
+                _data.Enable = result.Enable;
                 _data.PhoneNumber = result.PhoneNumber;
                 _data.Id = result.Id;
                 _modalIsBusy = false;
