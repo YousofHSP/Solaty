@@ -30,20 +30,14 @@ namespace Shared.DTOs
 
     public class SendOtpRequest
     {
-        [Display(Name = "نام کاربری")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string UserName { get; set; }
+        public string PhoneNumber { get; set; } = "";
 
-        [Display(Name = "رمز")]
-        public string? Password { get; set; }
     }
     public class VerifyOtpRequest
     {
-        [Required]
-        public string UserName { get; set; }
+        [Required] public string PhoneNumber { get; set; } = "";
 
-        [Required]
-        public string OtpCode { get; set; }
+        [Required] public string OtpCode { get; set; } = "";
 
     }
 
@@ -84,7 +78,7 @@ namespace Shared.DTOs
         [Display(Name = "رمز")]
         public string Password { get; set; }
         [Display(Name = "کد اتصال")]
-        public string ConnectCode { get; set; }
+        public string? ConnectCode { get; set; }
         [Display(Name = "جنسیت")]
         public GenderType Gender { get; set; }
         [Display(Name = "کد یکبار مصرف")]

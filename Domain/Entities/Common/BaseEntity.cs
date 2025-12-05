@@ -8,7 +8,7 @@ public interface IEntity
 {
     
 }
-public interface ISoftDelete : IEntity<int>
+public interface ISoftDelete : IEntity<long>
 {
     DateTimeOffset? DeleteDate { get; set; }
 

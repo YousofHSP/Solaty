@@ -28,6 +28,7 @@ namespace Api.Controllers.v1
         UserManager<User> userManager,
         IUserRepository repository,
         IRepository<UserInfo> userInfoRepository,
+        IRepository<Relationship> relationshipRepository,
         IUploadedFileService uploadedFileService,
         ISettingService settingService,
         IOtpService _otpService,
@@ -190,6 +191,23 @@ namespace Api.Controllers.v1
                 throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");
             }
 
+            UserInfo? partner = null;
+            if (!string.IsNullOrWhiteSpace(dto.ConnectCode))
+            {
+                partner = await userInfoRepository.TableNoTracking
+                    .Include(i => i.MaleRelationships)
+                    .Include(i => i.FemaleRelationships)
+                    .FirstOrDefaultAsync(i => i.ConnectCode == dto.ConnectCode, ct);
+                if (partner == null)
+                    throw new NotFoundException("پارتنر پیدا نشد");
+                if (partner.Gender == dto.Gender)
+                    throw new BadRequestException("امکان اتصال به کاربری با جنسیت مشابه وجود ندارد.");
+
+                if (partner.FemaleRelationships.Any(i => i.Enable) || partner.MaleRelationships.Any(i => i.Enable))
+                    throw new BadRequestException("کاربر مورد نظر در حال حاضر در یک رابطه فعال است.");
+            }
+
+
             string connectCode;
             int retry = 0;
 
@@ -218,6 +236,26 @@ namespace Api.Controllers.v1
                 }
             };
             await userManager.CreateAsync(user, dto.Password);
+            if (partner is not null)
+            {
+                var relationship = new Relationship()
+                {
+                    Status = RelationshipStatus.Pending,
+                    UpdateDate = DateTimeOffset.Now
+                };
+                if (partner.Gender == GenderType.Female)
+                {
+                    relationship.FemaleUserInfoId = partner.Id;
+                    relationship.MaleUserInfoId = user.Info.Id;
+                }
+                else
+                {
+                    relationship.MaleUserInfoId = partner.Id;
+                    relationship.FemaleUserInfoId = user.Info.Id;
+                }
+
+                await relationshipRepository.AddAsync(relationship, ct);
+            }
 
             var jwt = await jwtService.GenerateAsync(user, ct);
             var result = new LoginResDto()
@@ -237,15 +275,9 @@ namespace Api.Controllers.v1
         [Display(Name = "ارسال کد یکبارمصرف")]
         public async Task<ActionResult> SendOtp(SendOtpRequest dto, CancellationToken ct)
         {
-            var loginType = await settingService.GetValueAsync<string>(SettingKey.LoginType);
-            if (loginType is "0" or "1")
-                if (dto.Password is null)
-                    throw new BadRequestException("رمز را وارد کنید");
-            var user = await CheckUserNameAndPassword(dto.UserName, dto.Password, loginType, false, null, ct);
-            var code = await _otpService.GenerateOtpAsync(user.PhoneNumber);
+            var code = await _otpService.GenerateOtpAsync(dto.PhoneNumber);
             //var result = await messageService.SendMessageAsync(dto.PhoneNumber, $"code: {code}");
             //await emailService.SendEmailAsync("moinrayat9544@gmail.com", "verify code", $"code: {code}");
-            logger.LogInformation($"Send OTP Code for {user.PhoneNumber}");
             return Ok(new { Message = "کد ارسال شد" });
         }
 
@@ -254,20 +286,11 @@ namespace Api.Controllers.v1
         [Display(Name = "تایید کد یکبارمصرف")]
         public async Task<ActionResult> VerifyOtp(VerifyOtpRequest dto, CancellationToken ct)
         {
-            var user = await repository.TableNoTracking
-                .FirstOrDefaultAsync(i => i.UserName == dto.UserName || i.PhoneNumber == dto.UserName, ct);
-            if (user is null)
-                throw new NotFoundException($"کاربر {dto.UserName} پیدا نشد");
-
-            if (!_otpService.VerifyOtp(user.PhoneNumber, dto.OtpCode))
+            if (!_otpService.VerifyOtp(dto.PhoneNumber, dto.OtpCode))
             {
                 throw new AppException(ApiResultStatusCode.UnAuthorized, "کد صحیح نیست");
             }
-
-            logger.LogInformation($"User logined with id: {user.Id} and phoneNumber: {user.PhoneNumber}");
-
-            var jwt = await jwtService.GenerateAsync(user, ct);
-            return new JsonResult(jwt);
+            return Ok();
         }
 
         [HttpPost("[action]")]

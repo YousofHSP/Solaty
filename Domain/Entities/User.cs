@@ -42,7 +42,10 @@ public class UserInfo : IBaseEntity<long>
     public GenderType Gender { get; set; }
     public DateTime? BirthDate { get; set; }
     public DateTimeOffset CreateDate { get; set; }
+    public long? PartnerId { get; set; }
     [IgnoreDataMember] public User User { get; set; } = null!;
+    public List<Relationship> MaleRelationships { get; set; } = [];
+    public List<Relationship> FemaleRelationships { get; set; } = [];
 }
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
@@ -65,6 +68,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(i => i.Notifications)
             .WithOne(i => i.User)
             .HasForeignKey(i => i.UserId);
+        
     }
 }
 
@@ -76,5 +80,14 @@ public class UserInfoConfiguration : IEntityTypeConfiguration<UserInfo>
         builder.HasOne(i => i.User)
             .WithOne(u => u.Info)
             .HasForeignKey<UserInfo>(i => i.UserId);
+
+        builder.HasMany(i => i.MaleRelationships)
+            .WithOne(i => i.MaleUserInfo)
+            .HasForeignKey(i => i.MaleUserInfoId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasMany(i => i.FemaleRelationships)
+            .WithOne(i => i.FemaleUserInfo)
+            .HasForeignKey(i => i.FemaleUserInfoId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
